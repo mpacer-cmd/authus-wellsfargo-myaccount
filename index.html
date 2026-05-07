@@ -462,6 +462,7 @@ body { font-family: 'Source Sans 3', sans-serif; background: #e8e8e8; color: var
 // ── STATE MANAGEMENT ──
 const STORE_KEY = 'wf_db';
 const CODES_KEY = 'wf_codes';
+const SESSION_KEY = 'wf_session';
 
 // Default demo user
 const DEFAULT_USER = {
@@ -501,6 +502,29 @@ function saveDB(db) {
 
 let userData = null;
 let pendingTransfer = null;
+
+// ── SESSION MANAGEMENT ──
+function saveSession(user) {
+  const session = {
+    userId: user.id,
+    username: user.username,
+    name: user.name,
+    loginTime: new Date().toISOString()
+  };
+  localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+}
+
+function loadSession() {
+  try {
+    const raw = localStorage.getItem(SESSION_KEY);
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch(e) { return null; }
+}
+
+function clearSession() {
+  localStorage.removeItem(SESSION_KEY);
+}
 
 // ── UTILS ──
 function fmt(n) { return '$' + Number(n || 0).toLocaleString('en-US', {minimumFractionDigits:2,maximumFractionDigits:2}); }
@@ -594,6 +618,10 @@ async function verifySecurityCode() {
 
   // Any 6-digit code works for demo (in real app, validate against server)
   hideLoading();
+
+  // Save session so user stays logged in after browser refresh
+  saveSession(userData);
+
   loadDashboard();
   showPage('pg-dash');
   toast('Sign on successful!');
@@ -614,6 +642,7 @@ function backToLogin() {
 
 function doSignOut() {
   userData = null;
+  clearSession();
   showPage('pg-login');
   document.getElementById('l-user').value = '';
   document.getElementById('l-pass').value = '';
