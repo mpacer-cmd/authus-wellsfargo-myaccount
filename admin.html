@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wells Fargo - Admin Panel</title>
+<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --red: #C8102E; --gold: #FFCD00; --dark: #1a1a1a; --gray: #6b6b6b;
+  --border: #ddd; --blue: #1e6eb5; --sidebar: #2d2d2d; --green: #1a7a1a;
+}
+body { font-family: 'Source Sans 3', sans-serif; background: #f5f5f5; color: var(--dark); min-height: 100vh; }
+
+/* HEADER */
+.admin-header { background: var(--dark); color: #fff; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+.admin-logo { font-family: 'Merriweather', serif; font-size: 1.4rem; color: var(--red); font-weight: 700; }
+.admin-nav { display: flex; gap: 8px; flex-wrap: wrap; }
+.admin-nav a { color: #ccc; text-decoration: none; font-size: 0.85rem; padding: 8px 14px; border-radius: 4px; transition: all 0.2s; white-space: nowrap; }
+.admin-nav a:hover, .admin-nav a.active { color: #fff; background: rgba(255,255,255,0.1); }
+.admin-user { font-size: 0.85rem; color: #888; }
+.mobile-menu-btn { display: none; background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer; }
+
+/* CONTAINER */
+.container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+
+/* CARDS */
+.card { background: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 20px; overflow: hidden; }
+.card-header { background: linear-gradient(135deg, var(--red), #a80d26); color: #fff; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+.card-header h2 { font-size: 1.1rem; font-weight: 600; }
+.card-header .btn-small { background: rgba(255,255,255,0.2); border: none; color: #fff; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-size: 0.85rem; white-space: nowrap; }
+.card-header .btn-small:hover { background: rgba(255,255,255,0.3); }
+.card-body { padding: 20px; }
+
+/* TABLES */
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid #eee; }
+th { background: #f9f9f9; font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--gray); }
+tr:hover { background: #fafafa; }
+tr:last-child td { border-bottom: none; }
+
+/* BADGES */
+.badge { display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; }
+.badge-success { background: #e8f5e9; color: #2e7d32; }
+.badge-danger { background: #ffebee; color: #c62828; }
+.badge-warning { background: #fff8e1; color: #f57f17; }
+.badge-info { background: #e3f2fd; color: #1565c0; }
+
+/* BUTTONS */
+.btn { padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; font-size: 0.85rem; font-weight: 600; transition: all 0.2s; }
+.btn-primary { background: var(--red); color: #fff; }
+.btn-primary:hover { background: #a80d26; }
+.btn-secondary { background: #e0e0e0; color: var(--dark); }
+.btn-secondary:hover { background: #d0d0d0; }
+.btn-small { padding: 5px 10px; font-size: 0.75rem; }
+.btn-danger { background: #ef5350; color: #fff; }
+.btn-danger:hover { background: #e53935; }
+.btn-success { background: var(--green); color: #fff; }
+.btn-success:hover { background: #156a15; }
+
+/* FORMS */
+.form-group { margin-bottom: 16px; }
+.form-label { display: block; font-size: 0.82rem; font-weight: 600; color: var(--gray); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+.form-input, .form-select { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 4px; font-size: 0.92rem; font-family: inherit; }
+.form-input:focus, .form-select:focus { border-color: var(--red); outline: none; box-shadow: 0 0 0 3px rgba(200,16,46,0.1); }
+.form-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+
+/* TOGGLE SWITCH */
+.toggle-group { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+.toggle-switch { position: relative; width: 52px; height: 28px; }
+.toggle-switch input { opacity: 0; width: 0; height: 0; }
+.toggle-slider { position: absolute; cursor: pointer; inset: 0; background: #ccc; border-radius: 28px; transition: 0.3s; }
+.toggle-slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 4px; bottom: 4px; background: white; border-radius: 50%; transition: 0.3s; }
+.toggle-switch input:checked + .toggle-slider { background: var(--green); }
+.toggle-switch input:checked + .toggle-slider:before { transform: translateX(24px); }
+.toggle-label { font-size: 0.9rem; color: var(--dark); }
+
+/* MODAL */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 1000; }
+.modal-overlay.on { display: flex; }
+.modal { background: #fff; border-radius: 8px; width: 500px; max-width: 95vw; max-height: 90vh; overflow-y: auto; animation: slideUp 0.25s ease; }
+@keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.modal-header { background: var(--red); color: #fff; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; }
+.modal-header h3 { font-size: 1rem; font-weight: 600; }
+.modal-close { background: none; border: none; color: #fff; font-size: 1.4rem; cursor: pointer; line-height: 1; }
+.modal-body { padding: 20px; }
+.modal-footer { padding: 14px 20px; border-top: 1px solid #eee; display: flex; justify-content: flex-end; gap: 10px; background: #fafafa; }
+
+/* STATS */
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+.stat-card { background: #fff; border-radius: 8px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+.stat-label { font-size: 0.78rem; color: var(--gray); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+.stat-value { font-size: 1.6rem; font-weight: 700; color: var(--dark); }
+.stat-change { font-size: 0.78rem; margin-top: 4px; }
+.stat-change.up { color: var(--green); }
+.stat-change.down { color: var(--red); }
+
+/* TOAST */
+.toast { position: fixed; bottom: 24px; right: 24px; background: var(--green); color: #fff; padding: 12px 20px; border-radius: 4px; font-size: 0.88rem; font-weight: 600; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 2000; transform: translateY(80px); opacity: 0; transition: all 0.3s ease; }
+.toast.show { transform: translateY(0); opacity: 1; }
+.toast.err { background: var(--red); }
+
+/* LOADING */
+.loading-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 999; display: none; align-items: center; justify-content: center; }
+.loading-overlay.on { display: flex; }
+.loading-box { background: #fff; padding: 24px 40px; border-radius: 8px; text-align: center; }
+.spinner { width: 40px; height: 40px; border: 4px solid #eee; border-top-color: var(--red); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 12px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* TABS */
+.tabs { display: flex; gap: 4px; background: #f5f5f5; padding: 4px; border-radius: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+.tab { padding: 10px 20px; border: none; background: none; color: var(--gray); font-size: 0.88rem; font-weight: 600; cursor: pointer; border-radius: 6px; transition: all 0.2s; }
+.tab:hover { color: var(--dark); }
+.tab.active { background: #fff; color: var(--red); box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+
+/* SECTION */
+.section { display: none; }
+.section.active { display: block; }
+
+/* ALERTS */
+.alert { padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 0.88rem; }
+.alert-info { background: #e3f2fd; color: #1565c0; border-left: 4px solid #1565c0; }
+.alert-warning { background: #fff8e1; color: #f57f17; border-left: 4px solid #f57f17; }
+.alert-danger { background: #ffebee; color: #c62828; border-left: 4px solid #c62828; }
+.alert-success { background: #e8f5e9; color: #2e7d32; border-left: 4px solid #2e7d32; }
+
+/* GRID */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+/* CODE GENERATOR */
+.code-display { background: #1a1a1a; color: var(--gold); padding: 20px; border-radius: 8px; text-align: center; margin: 16px 0; }
+.code-display .code-value { font-size: 2.5rem; font-weight: 700; letter-spacing: 8px; font-family: monospace; }
+.code-display .code-label { font-size: 0.8rem; color: #888; margin-top: 8px; }
+.codes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+.code-card { background: #f8f8f8; border: 1px solid #e0e0e0; border-radius: 6px; padding: 12px; }
+.code-card.used { background: #f0f0f0; opacity: 0.6; }
+.code-card .code { font-size: 1.2rem; font-weight: 700; font-family: monospace; letter-spacing: 2px; }
+.code-card .code-status { font-size: 0.75rem; margin-top: 4px; }
+.code-card .code-date { font-size: 0.7rem; color: #888; margin-top: 2px; }
+
+/* TRANSFER CODES TAB */
+.transfer-codes-section { margin-top: 16px; }
+.user-codes-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.generated-codes-list { display: flex; flex-direction: column; gap: 8px; }
+.generated-code-item { display: flex; justify-content: space-between; align-items: center; background: #f8f8f8; padding: 12px 16px; border-radius: 6px; border: 1px solid #e0e0e0; }
+.generated-code-item.used { background: #e8f5e9; border-color: #a5d6a7; }
+.generated-code-item .code-info { display: flex; flex-direction: column; gap: 4px; }
+.generated-code-item .code-num { font-weight: 700; font-family: monospace; letter-spacing: 2px; font-size: 1.1rem; }
+.generated-code-item .code-meta { font-size: 0.75rem; color: #666; }
+.generated-code-item .code-status { font-size: 0.75rem; font-weight: 600; }
+.generated-code-item .code-actions { display: flex; gap: 8px; align-items: center; }
+
+/* DEBUG SECTION */
+.debug-section { background: #f0f0f0; border: 2px dashed #ccc; padding: 16px; margin-top: 20px; border-radius: 8px; }
+.debug-section h3 { font-size: 0.9rem; margin-bottom: 12px; color: #666; }
+.debug-btn { padding: 6px 12px; font-size: 0.75rem; margin-right: 8px; margin-bottom: 8px; }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .admin-header { flex-wrap: wrap; gap: 12px; }
+  .mobile-menu-btn { display: block; }
+  .admin-nav { display: none; width: 100%; }
+  .admin-nav.open { display: flex; flex-direction: column; }
+  .admin-nav a { border-radius: 4px; }
+
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .form-row, .grid-2 { grid-template-columns: 1fr; }
+
+  .container { padding: 16px; }
+
+  table { display: block; overflow-x: auto; }
+
+  .codes-grid { grid-template-columns: 1fr; }
+
+  .generated-code-item { flex-direction: column; gap: 8px; text-align: center; }
+  .generated-code-item .code-info { align-items: center; }
+}
+
+@media (max-width: 480px) {
+  .admin-logo { font-size: 1.1rem; }
+  .stats-grid { grid-template-columns: 1fr; }
+  .card-header { padding: 12px 14px; }
+  .card-body { padding: 14px; }
+}
+</style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div class="loading-overlay" id="loading">
+  <div class="loading-box">
+    <div class="spinner"></div>
+    <div id="loading-text">Loading...</div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header class="admin-header">
+  <button class="mobile-menu-btn" onclick="toggleMobileNav()">☰</button>
+  <div class="admin-logo">WELLS FARGO ADMIN</div>
+  <nav class="admin-nav" id="admin-nav">
+    <a href="#" class="active" onclick="showSection('dashboard', event)">Dashboard</a>
+    <a href="#" onclick="showSection('users', event)">Users</a>
+    <a href="#" onclick="showSection('transactions', event)">Transactions</a>
+    <a href="#" onclick="showSection('add-transaction', event)">Add Transaction</a>
+    <a href="#" onclick="showSection('transfer-codes', event)">Transfer Codes</a>
+    <a href="#" onclick="openBankingPage()" style="color: var(--gold);">Open Banking</a>
+  </nav>
+  <div class="admin-user">Admin Panel</div>
+</header>
+
+<!-- CONTAINER -->
+<div class="container">
+
+  <!-- DASHBOARD SECTION -->
+  <div id="section-dashboard" class="section active">
+    <div class="alert alert-info">
+      <strong>Admin Dashboard</strong> - Manage users, view transactions, add transactions, and generate transfer codes.
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Total Users</div>
+        <div class="stat-value" id="stat-users">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Total Transactions</div>
+        <div class="stat-value" id="stat-txns">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Total Balance</div>
+        <div class="stat-value" id="stat-balance">$0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Active Codes</div>
+        <div class="stat-value" id="stat-codes">0</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h2>Recent Transactions</h2>
+        <button class="btn-small" onclick="showSection('transactions', event)">View All</button>
+      </div>
+      <div class="card-body" style="padding:0">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>User</th>
+              <th>Description</th>
+              <th>Type</th>
+              <th>Amount</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="recent-txns"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- USERS SECTION -->
+  <div id="section-users" class="section">
+    <div class="card">
+      <div class="card-header">
+        <h2>User Management</h2>
+        <button class="btn-small" onclick="openModal('add-user')">+ Add User</button>
+      </div>
+      <div class="card-body" style="padding:0">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Username</th>
+              <th>Checking</th>
+              <th>Savings</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="users-table"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRANSACTIONS SECTION -->
+  <div id="section-transactions" class="section">
+    <div class="card">
+      <div class="card-header">
+        <h2>All Transactions</h2>
+        <button class="btn-small" onclick="showSection('add-transaction', event)">+ Add Transaction</button>
+      </div>
+      <div class="card-body" style="padding:0">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>User</th>
+              <th>Description</th>
+              <th>Account</th>
+              <th>Type</th>
+              <th>Amount</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="all-txns"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADD TRANSACTION SECTION -->
+  <div id="section-add-transaction" class="section">
+    <div class="card">
+      <div class="card-header">
+        <h2>Add Transaction to User</h2>
+      </div>
+      <div class="card-body">
+        <div class="alert alert-warning">
+          <strong>Note:</strong> This will add a transaction that appears on the user's dashboard under "Recent Transactions".
+        </div>
+        <form id="add-txn-form" onsubmit="handleAddTransaction(event)">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Select User</label>
+              <select class="form-select" id="txn-user" required>
+                <option value="">Select a user...</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Transaction Type</label>
+              <select class="form-select" id="txn-type" required>
+                <option value="credit">Credit (Money In)</option>
+                <option value="debit">Debit (Money Out)</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Amount ($)</label>
+              <input type="number" class="form-input" id="txn-amount" placeholder="0.00" min="0.01" step="0.01" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Account</label>
+              <select class="form-select" id="txn-account" required>
+                <option value="Everyday Checking (...7406)">Everyday Checking (...7406)</option>
+                <option value="Way2Save Savings (...3182)">Way2Save Savings (...3182)</option>
+                <option value="Way2Save Retire (...0441)">Way2Save Retire (...0441)</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Description</label>
+            <input type="text" class="form-input" id="txn-desc" placeholder="e.g., Direct Deposit, Online Purchase, ATM Withdrawal" required>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Date</label>
+              <input type="date" class="form-input" id="txn-date" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Status</label>
+              <select class="form-select" id="txn-status">
+                <option value="success">Success</option>
+                <option value="pending">Pending</option>
+                <option value="declined">Declined</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Memo (optional)</label>
+            <input type="text" class="form-input" id="txn-memo" placeholder="Add a note...">
+          </div>
+          <div style="display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap;">
+            <button type="submit" class="btn btn-primary">Add Transaction</button>
+            <button type="button" class="btn btn-secondary" onclick="showSection('transactions', event)">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRANSFER CODES SECTION -->
+  <div id="section-transfer-codes" class="section">
+    <div class="card">
+      <div class="card-header">
+        <h2>Generate Transfer Code</h2>
+      </div>
+      <div class="card-body">
+        <div class="alert alert-info">
+          <strong>How it works:</strong> Generate a 6-digit code for a user. The user must enter this code when making a transfer. Each code can only be used once.
+        </div>
+        <div class="form-group">
+          <label class="form-label">Select User</label>
+          <select class="form-select" id="code-user" onchange="loadUserCodes()">
+            <option value="">Select a user...</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Number of Codes to Generate</label>
+          <select class="form-select" id="code-count">
+            <option value="1">1 Code</option>
+            <option value="3">3 Codes</option>
+            <option value="5">5 Codes</option>
+            <option value="10">10 Codes</option>
+          </select>
+        </div>
+        <button class="btn btn-primary" onclick="generateCodes()" style="margin-bottom: 20px;">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle; margin-right: 6px;"><path d="M12 5v14M5 12h14"/></svg>
+          Generate Code(s)
+        </button>
+
+        <div id="generated-code-display" style="display:none;">
+          <div class="code-display">
+            <div class="code-label">Generated Code</div>
+            <div class="code-value" id="new-code-value">------</div>
+          </div>
+          <div class="alert alert-success" id="code-copy-note">
+            Code copied to clipboard! Share this code with the user.
+          </div>
+        </div>
+
+        <div class="transfer-codes-section" id="user-codes-section" style="display:none;">
+          <div class="user-codes-header">
+            <h3 style="font-size:1rem;font-weight:600;">User's Transfer Codes</h3>
+            <button class="btn btn-secondary btn-small" onclick="loadUserCodes()">Refresh</button>
+          </div>
+          <div class="generated-codes-list" id="user-codes-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h2>All Active Transfer Codes</h2>
+        <button class="btn-small" onclick="exportCodes()">Export</button>
+      </div>
+      <div class="card-body">
+        <div id="all-codes-grid" class="codes-grid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DEBUG SECTION -->
+  <div class="debug-section">
+    <h3>Debug Tools (For Testing)</h3>
+    <button class="btn debug-btn btn-secondary" onclick="openBankingPage()">Open Banking Page</button>
+    <button class="btn debug-btn btn-secondary" onclick="refreshData()">Refresh Data</button>
+    <button class="btn debug-btn btn-danger" onclick="clearAllData()">Clear All Data</button>
+    <button class="btn debug-btn btn-warning" onclick="showLocalStorage()">Show localStorage</button>
+  </div>
+
+</div>
+
+<!-- ADD USER MODAL -->
+<div class="modal-overlay" id="modal-add-user">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Add New User</h3>
+      <button class="modal-close" onclick="closeModal('add-user')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <form id="add-user-form">
+        <div class="form-group">
+          <label class="form-label">Full Name</label>
+          <input type="text" class="form-input" id="user-name" placeholder="John Smith" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Username</label>
+            <input type="text" class="form-input" id="user-username" placeholder="jsmith" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <input type="password" class="form-input" id="user-password" placeholder="****" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Checking Balance</label>
+            <input type="number" class="form-input" id="user-checking" placeholder="0.00" min="0" step="0.01" value="1000">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Savings Balance</label>
+            <input type="number" class="form-input" id="user-savings" placeholder="0.00" min="0" step="0.01" value="500">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Retire Balance</label>
+          <input type="number" class="form-input" id="user-retire" placeholder="0.00" min="0" step="0.01" value="0">
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('add-user')">Cancel</button>
+      <button class="btn btn-primary" onclick="addUser()">Add User</button>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT USER MODAL -->
+<div class="modal-overlay" id="modal-edit-user">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Edit User</h3>
+      <button class="modal-close" onclick="closeModal('edit-user')">&times;</button>
+    </div>
+    <div class="modal-body">
+      <form id="edit-user-form">
+        <input type="hidden" id="edit-user-id">
+        <div class="form-group">
+          <label class="form-label">Full Name</label>
+          <input type="text" class="form-input" id="edit-name" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Checking Balance</label>
+            <input type="number" class="form-input" id="edit-checking" step="0.01">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Savings Balance</label>
+            <input type="number" class="form-input" id="edit-savings" step="0.01">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Retire Balance</label>
+          <input type="number" class="form-input" id="edit-retire" step="0.01">
+        </div>
+
+        <!-- TRANSACTION CONTROL -->
+        <div style="margin-top: 20px; padding-top: 20px; border-top: 2px solid #eee;">
+          <h4 style="font-size: 0.9rem; margin-bottom: 12px; color: var(--dark);">Transaction Controls</h4>
+
+          <div class="alert alert-danger" style="margin-bottom: 12px;">
+            <strong>Decline Mode:</strong> When enabled, ALL transactions for this user will be declined with a "Contact Support" message.
+          </div>
+
+          <div class="toggle-group">
+            <label class="toggle-switch">
+              <input type="checkbox" id="edit-decline-mode">
+              <span class="toggle-slider"></span>
+            </label>
+            <label class="toggle-label">Enable Decline Mode</label>
+          </div>
+          <p style="font-size: 0.8rem; color: #666; margin-top: 4px;">
+            When ON: All transfer attempts will show a 4-second loading then "Contact Support" message.<br>
+            When OFF: All transactions will be processed successfully.
+          </p>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="closeModal('edit-user')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveUser()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ── STATE MANAGEMENT ──
+const STORE_KEY = 'wf_db';
+
+// Default demo user
+const DEFAULT_USER = {
+  id: 'demo-user',
+  name: 'Andrew Johnson',
+  username: 'andrew',
+  password: '1234',
+  checking: 3241.64,
+  savings: 1087.58,
+  retire: 8924.05,
+  declineMode: false
+};
+
+// Initialize database
+function initDB() {
+  let db = loadDB();
+  if (!db.users || db.users.length === 0) {
+    db.users = [DEFAULT_USER];
+    db.transactions = [];
+    db.codes = [];
+    saveDB(db);
+    console.log('Database initialized with default user');
+  }
+  if (!db.codes) db.codes = [];
+  if (!db.transactions) db.transactions = [];
+  saveDB(db);
+  console.log('Current database:', db);
+}
+
+// Load from localStorage
+function loadDB() {
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    const db = raw ? JSON.parse(raw) : { users: [], transactions: [], codes: [] };
+    console.log('Loaded database:', db);
+    return db;
+  } catch(e) {
+    console.error('Error loading database:', e);
+    return { users: [], transactions: [], codes: [] };
+  }
+}
+
+// Save to localStorage
+function saveDB(db) {
+  try {
+    localStorage.setItem(STORE_KEY, JSON.stringify(db));
+    console.log('Database saved:', db);
+  } catch(e) {
+    console.error('Error saving database:', e);
+  }
+}
+
+let users = [];
+let transactions = [];
+let codes = [];
+
+function toggleMobileNav() {
+  document.getElementById('admin-nav').classList.toggle('open');
+}
+
+// ── UTILS ──
+function fmt(n) { return '$' + Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+function formatDate(d) { return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); }
+function showLoading(text = 'Loading...') { document.getElementById('loading-text').textContent = text; document.getElementById('loading').classList.add('on'); }
+function hideLoading() { document.getElementById('loading').classList.remove('on'); }
+function showSection(id, e) {
+  if (e) e.preventDefault();
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById('section-' + id).classList.add('active');
+  document.querySelectorAll('.admin-nav a').forEach(a => a.classList.remove('active'));
+  if (e && e.target) e.target.classList.add('active');
+  toggleMobileNav();
+
+  if (id === 'transfer-codes') {
+    loadAllCodes();
+    populateCodeUserSelect();
+  }
+
+  // Refresh data when showing transactions section
+  if (id === 'transactions' || id === 'add-transaction') {
+    refreshData();
+  }
+}
+function openModal(id) { document.getElementById('modal-' + id).classList.add('on'); }
+function closeModal(id) { document.getElementById('modal-' + id).classList.remove('on'); }
+function toast(msg, isErr = false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = 'toast' + (isErr ? ' err' : '');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3200);
+}
+
+// ── DATA LOADING ──
+function loadData() {
+  showLoading('Loading data...');
+
+  setTimeout(() => {
+    const db = loadDB();
+    users = db.users || [];
+    transactions = db.transactions || [];
+    codes = db.codes || [];
+
+    console.log('Data loaded - Users:', users.length, 'Transactions:', transactions.length, 'Codes:', codes.length);
+
+    updateDashboard();
+    renderUsers();
+    renderTransactions();
+    populateUserSelect();
+    hideLoading();
+  }, 300);
+}
+
+// ── REFRESH DATA ──
+function refreshData() {
+  const db = loadDB();
+  users = db.users || [];
+  transactions = db.transactions || [];
+  codes = db.codes || [];
+
+  console.log('Data refreshed - Users:', users.length, 'Transactions:', transactions.length);
+
+  updateDashboard();
+  renderUsers();
+  renderTransactions();
+  populateUserSelect();
+}
+
+// ── DASHBOARD ──
+function updateDashboard() {
+  document.getElementById('stat-users').textContent = users.length;
+  document.getElementById('stat-txns').textContent = transactions.length;
+
+  const totalBal = users.reduce((sum, u) => sum + (u.checking || 0) + (u.savings || 0) + (u.retire || 0), 0);
+  document.getElementById('stat-balance').textContent = fmt(totalBal);
+
+  // Active codes (not used)
+  const activeCodes = codes.filter(c => !c.used);
+  document.getElementById('stat-codes').textContent = activeCodes.length;
+
+  // Recent transactions
+  const recent = document.getElementById('recent-txns');
+  const last5 = transactions.slice(0, 5);
+  if (last5.length > 0) {
+    recent.innerHTML = last5.map(t => {
+      const u = users.find(u => u.id === t.userId) || {};
+      return `<tr>
+        <td>${t.date}</td>
+        <td>${u.name || 'Unknown'}</td>
+        <td>${t.desc}</td>
+        <td><span class="badge ${t.type === 'credit' ? 'badge-success' : 'badge-danger'}">${t.type}</span></td>
+        <td>${fmt(t.amount)}</td>
+        <td><span class="badge badge-${t.status === 'success' ? 'success' : t.status === 'declined' ? 'danger' : 'warning'}">${t.status || 'success'}</span></td>
+      </tr>`;
+    }).join('');
+  } else {
+    recent.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:#888">No transactions yet</td></tr>';
+  }
+}
+
+// ── RENDER USERS ──
+function renderUsers() {
+  const tbody = document.getElementById('users-table');
+  if (users.length > 0) {
+    tbody.innerHTML = users.map(u => {
+      const declineStatus = u.declineMode
+        ? '<span class="badge badge-danger">Decline Mode ON</span>'
+        : '<span class="badge badge-success">Normal</span>';
+      return `<tr>
+        <td><strong>${u.name}</strong></td>
+        <td>${u.username}</td>
+        <td>${fmt(u.checking)}</td>
+        <td>${fmt(u.savings)}</td>
+        <td>${declineStatus}</td>
+        <td>
+          <button class="btn btn-small btn-secondary" onclick="editUser('${u.id}')">Edit</button>
+          <button class="btn btn-small btn-primary" onclick="quickGenerateCode('${u.id}')">Generate Code</button>
+        </td>
+      </tr>`;
+    }).join('');
+  } else {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:#888">No users found. Add a user to get started.</td></tr>';
+  }
+}
+
+// ── RENDER TRANSACTIONS ──
+function renderTransactions() {
+  const tbody = document.getElementById('all-txns');
+  console.log('Rendering transactions, count:', transactions.length);
+
+  if (transactions.length > 0) {
+    tbody.innerHTML = transactions.map(t => {
+      const u = users.find(u => u.id === t.userId) || {};
+      return `<tr>
+        <td>${t.date}</td>
+        <td>${u.name || 'Unknown'}</td>
+        <td>${t.desc}</td>
+        <td>${t.acct || '-'}</td>
+        <td><span class="badge ${t.type === 'credit' ? 'badge-success' : 'badge-danger'}">${t.type}</span></td>
+        <td>${fmt(t.amount)}</td>
+        <td><span class="badge badge-${t.status === 'success' ? 'success' : t.status === 'declined' ? 'danger' : 'warning'}">${t.status || 'success'}</span></td>
+      </tr>`;
+    }).join('');
+  } else {
+    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:20px;color:#888">No transactions found.</td></tr>';
+  }
+}
+
+// ── POPULATE USER SELECT ──
+function populateUserSelect() {
+  const select = document.getElementById('txn-user');
+  select.innerHTML = '<option value="">Select a user...</option>' +
+    users.map(u => `<option value="${u.id}">${u.name} (${u.username})</option>`).join('');
+}
+
+// ── CODE USER SELECT ──
+function populateCodeUserSelect() {
+  const select = document.getElementById('code-user');
+  select.innerHTML = '<option value="">Select a user...</option>' +
+    users.map(u => `<option value="${u.id}">${u.name} (${u.username})</option>`).join('');
+}
+
+// ── ADD USER ──
+function addUser() {
+  const name = document.getElementById('user-name').value.trim();
+  const username = document.getElementById('user-username').value.trim();
+  const password = document.getElementById('user-password').value;
+  const checking = parseFloat(document.getElementById('user-checking').value) || 0;
+  const savings = parseFloat(document.getElementById('user-savings').value) || 0;
+  const retire = parseFloat(document.getElementById('user-retire').value) || 0;
+
+  if (!name || !username || !password) {
+    toast('Please fill in all required fields.', true);
+    return;
+  }
+
+  showLoading('Adding user...');
+  const newUser = {
+    id: 'user-' + Date.now(),
+    name, username, password,
+    checking, savings, retire,
+    declineMode: false
+  };
+
+  const db = loadDB();
+  db.users.push(newUser);
+  saveDB(db);
+  users = db.users;
+
+  closeModal('add-user');
+  document.getElementById('add-user-form').reset();
+
+  setTimeout(() => {
+    renderUsers();
+    updateDashboard();
+    populateUserSelect();
+    hideLoading();
+    toast('User added successfully!');
+  }, 300);
+}
+
+// ── EDIT USER ──
+function editUser(id) {
+  const u = users.find(u => u.id === id);
+  if (!u) return;
+
+  document.getElementById('edit-user-id').value = u.id;
+  document.getElementById('edit-name').value = u.name;
+  document.getElementById('edit-checking').value = u.checking;
+  document.getElementById('edit-savings').value = u.savings;
+  document.getElementById('edit-retire').value = u.retire;
+  document.getElementById('edit-decline-mode').checked = u.declineMode || false;
+
+  openModal('edit-user');
+}
+
+function saveUser() {
+  const id = document.getElementById('edit-user-id').value;
+  const name = document.getElementById('edit-name').value.trim();
+  const checking = parseFloat(document.getElementById('edit-checking').value) || 0;
+  const savings = parseFloat(document.getElementById('edit-savings').value) || 0;
+  const retire = parseFloat(document.getElementById('edit-retire').value) || 0;
+  const declineMode = document.getElementById('edit-decline-mode').checked;
+
+  showLoading('Saving...');
+
+  const db = loadDB();
+  const idx = db.users.findIndex(u => u.id === id);
+  if (idx !== -1) {
+    db.users[idx].name = name;
+    db.users[idx].checking = checking;
+    db.users[idx].savings = savings;
+    db.users[idx].retire = retire;
+    db.users[idx].declineMode = declineMode;
+    saveDB(db);
+    users = db.users;
+  }
+
+  setTimeout(() => {
+    closeModal('edit-user');
+    renderUsers();
+    updateDashboard();
+    hideLoading();
+    toast('User updated successfully!');
+  }, 300);
+}
+
+// ── ADD TRANSACTION (HANDLER) ──
+function handleAddTransaction(e) {
+  e.preventDefault();
+  console.log('Form submitted, calling addTransaction');
+  addTransaction();
+}
+
+// ── ADD TRANSACTION ──
+function addTransaction() {
+  console.log('addTransaction called');
+
+  const userId = document.getElementById('txn-user').value;
+  const type = document.getElementById('txn-type').value;
+  const amount = parseFloat(document.getElementById('txn-amount').value);
+  const account = document.getElementById('txn-account').value;
+  const desc = document.getElementById('txn-desc').value.trim();
+  const date = document.getElementById('txn-date').value;
+  const status = document.getElementById('txn-status').value;
+  const memo = document.getElementById('txn-memo').value;
+
+  console.log('Form values - userId:', userId, 'type:', type, 'amount:', amount, 'desc:', desc);
+
+  if (!userId || !amount || !desc || !date) {
+    toast('Please fill in all required fields.', true);
+    return;
+  }
+
+  showLoading('Adding transaction...');
+
+  const newTxn = {
+    id: 'tx' + Date.now(),
+    userId: userId,
+    type: type,
+    amount: amount,
+    desc: desc,
+    acct: account,
+    date: formatDate(new Date(date)),
+    status: status,
+    memo: memo,
+    from: account,
+    to: account
+  };
+
+  console.log('Creating transaction:', newTxn);
+
+  const db = loadDB();
+
+  // Add transaction to beginning of array
+  db.transactions.unshift(newTxn);
+  console.log('Transactions after add:', db.transactions.length);
+
+  // Update user balance if credit
+  if (type === 'credit' && status === 'success') {
+    const userIdx = db.users.findIndex(u => u.id === userId);
+    if (userIdx !== -1) {
+      if (account.includes('Checking')) {
+        db.users[userIdx].checking += amount;
+        console.log('Added to checking:', amount);
+      }
+      else if (account.includes('Savings')) {
+        db.users[userIdx].savings += amount;
+        console.log('Added to savings:', amount);
+      }
+      else if (account.includes('Retire')) {
+        db.users[userIdx].retire += amount;
+        console.log('Added to retire:', amount);
+      }
+    }
+  }
+
+  saveDB(db);
+  transactions = db.transactions;
+  users = db.users;
+
+  console.log('Database saved, transactions:', transactions.length);
+
+  document.getElementById('add-txn-form').reset();
+  document.getElementById('txn-date').valueAsDate = new Date();
+
+  setTimeout(() => {
+    renderTransactions();
+    renderUsers();
+    updateDashboard();
+    hideLoading();
+    toast('Transaction added to user dashboard!');
+    console.log('UI updated');
+  }, 300);
+}
+
+// ── TRANSFER CODES ──
+function generateCodes() {
+  const userId = document.getElementById('code-user').value;
+  const count = parseInt(document.getElementById('code-count').value) || 1;
+
+  if (!userId) {
+    toast('Please select a user first.', true);
+    return;
+  }
+
+  showLoading('Generating codes...');
+
+  const db = loadDB();
+  const generatedCodes = [];
+
+  for (let i = 0; i < count; i++) {
+    const code = generateRandomCode();
+    const codeEntry = {
+      id: 'code-' + Date.now() + '-' + i,
+      code: code,
+      userId: userId,
+      createdAt: new Date().toISOString(),
+      used: false,
+      usedAt: null
+    };
+    db.codes.push(codeEntry);
+    generatedCodes.push(codeEntry);
+  }
+
+  saveDB(db);
+  codes = db.codes;
+
+  setTimeout(() => {
+    hideLoading();
+
+    if (generatedCodes.length === 1) {
+      document.getElementById('new-code-value').textContent = generatedCodes[0].code;
+      document.getElementById('generated-code-display').style.display = 'block';
+
+      // Copy to clipboard
+      navigator.clipboard.writeText(generatedCodes[0].code).catch(() => {});
+    } else {
+      document.getElementById('new-code-value').textContent = generatedCodes.length + ' codes generated';
+      document.getElementById('generated-code-display').style.display = 'block';
+    }
+
+    loadUserCodes();
+    loadAllCodes();
+    updateDashboard();
+    toast(count + ' code(s) generated successfully!');
+  }, 300);
+}
+
+function generateRandomCode() {
+  let code = '';
+  for (let i = 0; i < 6; i++) {
+    code += Math.floor(Math.random() * 10);
+  }
+  return code;
+}
+
+function quickGenerateCode(userId) {
+  document.getElementById('code-user').value = userId;
+  loadUserCodes();
+  showSection('transfer-codes', { preventDefault: () => {}, target: document.querySelector('.admin-nav a[onclick*="transfer-codes"]') });
+  setTimeout(() => generateCodes(), 100);
+}
+
+function loadUserCodes() {
+  const userId = document.getElementById('code-user').value;
+  if (!userId) {
+    document.getElementById('user-codes-section').style.display = 'none';
+    return;
+  }
+
+  const userCodes = codes.filter(c => c.userId === userId);
+  const userCodesSection = document.getElementById('user-codes-section');
+  const userCodesList = document.getElementById('user-codes-list');
+
+  if (userCodes.length > 0) {
+    userCodesSection.style.display = 'block';
+    userCodesList.innerHTML = userCodes.map(c => {
+      const statusClass = c.used ? 'used' : '';
+      const statusText = c.used ? 'Used' : 'Active';
+      const statusColor = c.used ? '#2e7d32' : '#f57f17';
+      return `<div class="generated-code-item ${statusClass}">
+        <div class="code-info">
+          <div class="code-num">${c.code}</div>
+          <div class="code-meta">Created: ${formatDate(c.createdAt)}${c.used ? ' | Used: ' + formatDate(c.usedAt) : ''}</div>
+        </div>
+        <div class="code-actions">
+          <span class="code-status" style="color:${statusColor};font-weight:600;">${statusText}</span>
+        </div>
+      </div>`;
+    }).join('');
+  } else {
+    userCodesSection.style.display = 'block';
+    userCodesList.innerHTML = '<div class="alert alert-info">No transfer codes for this user yet. Generate one above.</div>';
+  }
+}
+
+function loadAllCodes() {
+  const codesGrid = document.getElementById('all-codes-grid');
+  const activeCodes = codes.filter(c => !c.used);
+  const usedCodes = codes.filter(c => c.used);
+
+  if (codes.length > 0) {
+    const allCodesSorted = [...activeCodes, ...usedCodes];
+    codesGrid.innerHTML = allCodesSorted.map(c => {
+      const u = users.find(user => user.id === c.userId) || {};
+      const cardClass = c.used ? 'used' : '';
+      const statusClass = c.used ? 'badge-danger' : 'badge-success';
+      const statusText = c.used ? 'Used' : 'Active';
+      return `<div class="code-card ${cardClass}">
+        <div class="code">${c.code}</div>
+        <div class="code-status">${u.name || 'Unknown'} | <span class="badge ${statusClass}">${statusText}</span></div>
+        <div class="code-date">${formatDate(c.createdAt)}</div>
+      </div>`;
+    }).join('');
+  } else {
+    codesGrid.innerHTML = '<div class="alert alert-info">No transfer codes generated yet.</div>';
+  }
+}
+
+function exportCodes() {
+  const activeCodes = codes.filter(c => !c.used);
+  if (activeCodes.length === 0) {
+    toast('No active codes to export.', true);
+    return;
+  }
+
+  let csv = 'Code,User,Created,Status\n';
+  activeCodes.forEach(c => {
+    const u = users.find(user => user.id === c.userId) || {};
+    csv += `${c.code},${u.name || 'Unknown'},${c.createdAt},${c.used ? 'Used' : 'Active'}\n`;
+  });
+
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'transfer-codes-' + new Date().toISOString().split('T')[0] + '.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('Codes exported successfully!');
+}
+
+// ── DEBUG FUNCTIONS ──
+function openBankingPage() {
+  // Try to open the banking page if it exists in the same directory
+  const bankingPages = ['wells-fargo-banking.html', 'banking.html', 'index.html'];
+  for (const page of bankingPages) {
+    if (confirm(`Open ${page}?`)) {
+      window.open(page, '_blank');
+      break;
+    }
+  }
+}
+
+function clearAllData() {
+  if (confirm('Are you sure you want to clear ALL data? This will reset the database to default.')) {
+    localStorage.removeItem(STORE_KEY);
+    initDB();
+    loadData();
+    toast('All data cleared and reset!');
+  }
+}
+
+function showLocalStorage() {
+  const db = loadDB();
+  alert('localStorage["wf_db"] contains:\n\n' + JSON.stringify(db, null, 2));
+}
+
+// Set default date
+document.getElementById('txn-date').valueAsDate = new Date();
+
+// Init
+initDB();
+loadData();
+</script>
+</body>
+</html>
