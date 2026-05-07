@@ -593,7 +593,7 @@ function initDB() {
   console.log('Current database:', db);
 }
 
-// Load from localStorage
+// Load from localStorage with error handling for mobile browsers
 function loadDB() {
   try {
     const raw = localStorage.getItem(STORE_KEY);
@@ -602,17 +602,39 @@ function loadDB() {
     return db;
   } catch(e) {
     console.error('Error loading database:', e);
-    return { users: [], transactions: [], codes: [] };
+    // Try to handle Safari private mode or restricted storage
+    try {
+      localStorage.setItem('wf_test', 'test');
+      localStorage.removeItem('wf_test');
+      // Storage works now, retry
+      const raw = localStorage.getItem(STORE_KEY);
+      const db = raw ? JSON.parse(raw) : { users: [], transactions: [], codes: [] };
+      console.log('Loaded database after retry:', db);
+      return db;
+    } catch(e2) {
+      console.error('localStorage unavailable:', e2);
+      return { users: [], transactions: [], codes: [] };
+    }
   }
 }
 
-// Save to localStorage
+// Save to localStorage with error handling
 function saveDB(db) {
   try {
     localStorage.setItem(STORE_KEY, JSON.stringify(db));
     console.log('Database saved:', db);
   } catch(e) {
     console.error('Error saving database:', e);
+    // Storage might be full, try to clean up and retry
+    try {
+      // Remove old transactions to free space
+      if (db.transactions && db.transactions.length > 50) {
+        db.transactions = db.transactions.slice(0, 50);
+      }
+      localStorage.setItem(STORE_KEY, JSON.stringify(db));
+    } catch(e2) {
+      console.error('Failed to save after cleanup:', e2);
+    }
   }
 }
 
