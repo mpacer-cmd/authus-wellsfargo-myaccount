@@ -429,86 +429,22 @@ body { font-family: 'Source Sans 3', sans-serif; background: #e8e8e8; color: var
 
 <div class="toast" id="toast"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-// ── SHARED STORAGE KEY — must match admin.html exactly ──
-var STORE_KEY   = 'wf_db';
-var SESSION_KEY = 'wf_session';
+// ── SUPABASE CONFIG ──
+const SUPABASE_URL = 'https://vlsnstzqwqformfgmtgi.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZsc25zdHpxd3Fmb3JtZmdtdGdpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxNjkzOTMsImV4cCI6MjA5Mzc0NTM5M30.l01mCGL56mIiuz07CJltGULXMrnpKS5xHZwimHFm7Kk';
+
+const { createClient } = supabase;
+const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 var userData = null;
-
-var DEFAULT_USER = {
-  id: 'demo-user',
-  name: 'Andrew Johnson',
-  username: 'andrew',
-  password: '1234',
-  checking: 3241.64,
-  savings: 1087.58,
-  retire: 8924.05,
-  declineMode: false
-};
 
 var ACCT = {
   checking: 'Everyday Checking (...7406)',
   savings:  'Way2Save Savings (...3182)',
   retire:   'Way2Save Retire (...0441)'
 };
-
-// ── LOCAL STORAGE HELPERS ──
-function isLSAvailable() {
-  try { localStorage.setItem('__t','1'); localStorage.removeItem('__t'); return true; }
-  catch(e) { return false; }
-}
-
-function loadDB() {
-  if (!isLSAvailable()) return { users: [], transactions: [], codes: [] };
-  try {
-    var raw = localStorage.getItem(STORE_KEY);
-    if (!raw) return { users: [], transactions: [], codes: [] };
-    var db = JSON.parse(raw);
-    if (!db.users)        db.users        = [];
-    if (!db.transactions) db.transactions = [];
-    if (!db.codes)        db.codes        = [];
-    return db;
-  } catch(e) {
-    try { localStorage.removeItem(STORE_KEY); } catch(e2) {}
-    return { users: [], transactions: [], codes: [] };
-  }
-}
-
-function saveDB(db) {
-  if (!isLSAvailable()) return;
-  try { localStorage.setItem(STORE_KEY, JSON.stringify(db)); } catch(e) {}
-}
-
-function initDB() {
-  var db = loadDB();
-  if (!db.users || db.users.length === 0) {
-    db.users        = [DEFAULT_USER];
-    db.transactions = [];
-    db.codes        = [];
-    saveDB(db);
-  }
-  if (!db.codes)        { db.codes = [];        saveDB(db); }
-  if (!db.transactions) { db.transactions = []; saveDB(db); }
-}
-
-function saveSession(user) {
-  try {
-    localStorage.setItem(SESSION_KEY, JSON.stringify({
-      userId: user.id, username: user.username,
-      name: user.name, loginTime: new Date().toISOString()
-    }));
-  } catch(e) {}
-}
-
-function loadSession() {
-  if (!isLSAvailable()) return null;
-  try { var r = localStorage.getItem(SESSION_KEY); return r ? JSON.parse(r) : null; } catch(e) { return null; }
-}
-
-function clearSession() {
-  try { localStorage.removeItem(SESSION_KEY); } catch(e) {}
-}
 
 // ── UTILS ──
 function fmt(n) {
@@ -553,7 +489,7 @@ function toast(msg, isErr) {
 }
 
 // ── LOGIN ──
-function doLogin() {
+async function doLogin() {
   var u = document.getElementById('l-user').value.trim().toLowerCase();
   var p = document.getElementById('l-pass').value;
   var errEl = document.getElementById('l-err');
@@ -568,30 +504,34 @@ function doLogin() {
 
   showLoading('Signing in...');
 
-  // Check localStorage (shared with admin.html)
-  var db = loadDB();
-  var foundUser = null;
+  try {
+    // Query Supabase users table
+    const { data: users, error } = await supabaseClient
+      .from('users')
+      .select('*')
+      .eq('username', u)
+      .eq('password', p)
+      .limit(1);
 
-  for (var i = 0; i < db.users.length; i++) {
-    var dbUser = db.users[i];
-    if (dbUser.username && dbUser.username.toLowerCase() === u && dbUser.password === p) {
-      foundUser = dbUser;
-      break;
-    }
-  }
+    if (error) throw error;
 
-  setTimeout(function() {
-    hideLoading();
-    if (foundUser) {
-      userData = foundUser;
+    if (users && users.length > 0) {
+      userData = users[0];
       clearSecurityCode();
+      hideLoading();
       showPage('pg-security');
     } else {
+      hideLoading();
       errEl.textContent = 'Invalid username or password.';
       errEl.style.display = 'block';
       document.getElementById('l-pass').value = '';
     }
-  }, 600);
+  } catch (err) {
+    hideLoading();
+    errEl.textContent = 'Login failed. Please try again.';
+    errEl.style.display = 'block';
+    console.error('Login error:', err);
+  }
 }
 
 // ── SECURITY CODE ──
@@ -629,7 +569,12 @@ function verifySecurityCode() {
   setTimeout(function() {
     hideLoading();
     if (!userData) { showPage('pg-login'); return; }
-    saveSession(userData);
+    // Save session to sessionStorage (session only, not persistent)
+    sessionStorage.setItem('wf_session', JSON.stringify({
+      userId: userData.id,
+      username: userData.username,
+      name: userData.name
+    }));
     loadDashboard();
     showPage('pg-dash');
     toast('Sign on successful!');
@@ -644,9 +589,9 @@ function backToLogin() {
   clearSecurityCode();
 }
 
-function doSignOut() {
+async function doSignOut() {
   userData = null;
-  clearSession();
+  sessionStorage.removeItem('wf_session');
   showPage('pg-login');
   document.getElementById('l-user').value = '';
   document.getElementById('l-pass').value = '';
@@ -656,13 +601,23 @@ function doSignOut() {
 }
 
 // ── DASHBOARD ──
-function loadDashboard() {
+async function loadDashboard() {
   if (!userData) return;
 
-  // Always re-read from localStorage so admin changes appear instantly
-  var db = loadDB();
-  var fresh = db.users.find(function(x) { return x.id === userData.id; });
-  if (fresh) userData = fresh;
+  // Reload user data from Supabase
+  try {
+    const { data: freshData, error } = await supabaseClient
+      .from('users')
+      .select('*')
+      .eq('id', userData.id)
+      .single();
+
+    if (!error && freshData) {
+      userData = freshData;
+    }
+  } catch (err) {
+    console.error('Error refreshing user data:', err);
+  }
 
   var firstName = (userData.name || 'User').split(' ')[0].toUpperCase();
   document.getElementById('dash-welcome').textContent = 'Welcome, ' + firstName;
@@ -674,34 +629,45 @@ function loadDashboard() {
   renderTransactions();
 }
 
-function renderTransactions() {
+async function renderTransactions() {
   var list = document.getElementById('txn-list');
   if (!list || !userData) return;
 
-  var db   = loadDB();
-  var txns = db.transactions.filter(function(t) { return t.userId === userData.id; });
+  try {
+    const { data: txns, error } = await supabaseClient
+      .from('transactions')
+      .select('*')
+      .eq('user_id', userData.id)
+      .order('created_at', { ascending: false })
+      .limit(20);
 
-  if (txns.length > 0) {
-    list.innerHTML = txns.map(function(t) {
-      var typeClass = t.type === 'credit' ? 'credit' : 'debit';
-      var amtClass  = (t.status === 'declined') ? 'debit' : typeClass;
-      var displayAmt;
-      if (t.status === 'declined') {
-        displayAmt = fmt(t.amount);
-      } else {
-        displayAmt = (t.type === 'debit' ? '-' : '+') + fmt(t.amount);
-      }
-      var rowStyle = t.status === 'declined' ? 'opacity:0.7' : '';
-      return '<div class="txn-row" style="' + rowStyle + '">' +
-        '<div class="txn-dot ' + typeClass + '"></div>' +
-        '<div style="flex:1"><div class="txn-desc">' + (t.desc || '') + '</div>' +
-        '<div class="txn-acct">' + (t.acct || '') + '</div></div>' +
-        '<div class="txn-date">' + (t.date || '') + '</div>' +
-        '<div class="txn-amt ' + amtClass + '">' + displayAmt + '</div>' +
-      '</div>';
-    }).join('');
-  } else {
-    list.innerHTML = '<div class="txn-empty">No transactions yet.</div>';
+    if (error) throw error;
+
+    if (txns && txns.length > 0) {
+      list.innerHTML = txns.map(function(t) {
+        var typeClass = t.type === 'credit' ? 'credit' : 'debit';
+        var amtClass  = (t.status === 'declined') ? 'debit' : typeClass;
+        var displayAmt;
+        if (t.status === 'declined') {
+          displayAmt = fmt(t.amount);
+        } else {
+          displayAmt = (t.type === 'debit' ? '-' : '+') + fmt(t.amount);
+        }
+        var rowStyle = t.status === 'declined' ? 'opacity:0.7' : '';
+        return '<div class="txn-row" style="' + rowStyle + '">' +
+          '<div class="txn-dot ' + typeClass + '"></div>' +
+          '<div style="flex:1"><div class="txn-desc">' + (t.description || '') + '</div>' +
+          '<div class="txn-acct">' + (t.account || '') + '</div></div>' +
+          '<div class="txn-date">' + (t.date || '') + '</div>' +
+          '<div class="txn-amt ' + amtClass + '">' + displayAmt + '</div>' +
+        '</div>';
+      }).join('');
+    } else {
+      list.innerHTML = '<div class="txn-empty">No transactions yet.</div>';
+    }
+  } catch (err) {
+    console.error('Error loading transactions:', err);
+    list.innerHTML = '<div class="txn-empty">Error loading transactions.</div>';
   }
 }
 
@@ -872,7 +838,7 @@ function clearTransferCode() {
   if (err) err.style.display = 'none';
 }
 
-function submitTransfer() {
+async function submitTransfer() {
   if (!userData) { toast('Session expired. Please sign in again.', true); doSignOut(); return; }
 
   var fromEl      = document.getElementById('tf-from');
@@ -914,7 +880,7 @@ function submitTransfer() {
     return;
   }
 
-  // Step 2: validate code
+  // Step 2: validate code from Supabase
   var code = getTransferCode();
   if (!code || code.length !== 6) {
     var cErr = document.getElementById('code-error');
@@ -922,50 +888,48 @@ function submitTransfer() {
     return;
   }
 
-  var db        = loadDB();
-  var user      = db.users.find(function(x) { return x.id === userData.id; });
-  var toLabel   = ACCT[to] || 'External Account';
-  var codes     = db.codes || [];
+  try {
+    // Check if code exists and is valid
+    const { data: codeEntries, error: codeError } = await supabaseClient
+      .from('transfer_codes')
+      .select('*')
+      .eq('code', code)
+      .eq('user_id', userData.id)
+      .eq('used', false)
+      .limit(1);
 
-  // Find matching unused code for this user
-  var codeEntry = null;
-  for (var ci = 0; ci < codes.length; ci++) {
-    if (codes[ci].code === code && codes[ci].userId === user.id && !codes[ci].used) {
-      codeEntry = codes[ci];
-      break;
+    if (codeError) throw codeError;
+
+    var codeEntry = codeEntries && codeEntries.length > 0 ? codeEntries[0] : null;
+
+    if (!codeEntry) {
+      showLoading('Verifying transfer code...');
+      setTimeout(function() {
+        hideLoading();
+        var cErr2 = document.getElementById('code-error');
+        if (cErr2) { cErr2.textContent = 'Invalid or already used code. Please contact your banker for a new code.'; cErr2.style.display = 'block'; }
+      }, 2000);
+      return;
     }
-  }
 
-  if (!codeEntry) {
-    showLoading('Verifying transfer code...');
-    setTimeout(function() {
-      hideLoading();
-      var cErr2 = document.getElementById('code-error');
-      if (cErr2) { cErr2.textContent = 'Invalid or already used code. Please contact your banker for a new code.'; cErr2.style.display = 'block'; }
-    }, 2000);
-    return;
-  }
+    showLoading('Processing transfer...');
 
-  showLoading('Processing transfer...');
+    // Check decline mode
+    if (userData.decline_mode) {
+      // Insert declined transaction
+      await supabaseClient.from('transactions').insert([{
+        user_id: userData.id,
+        type: 'debit',
+        amount: amount,
+        description: 'Transfer Declined - Contact Support',
+        account: ACCT[from],
+        date: today(),
+        status: 'declined',
+        memo: 'Transaction declined by system.',
+        from_account: ACCT[from],
+        to_account: ACCT[to] || 'External Account'
+      }]);
 
-  setTimeout(function() {
-    var freshDB   = loadDB();
-    var freshUser = freshDB.users.find(function(x) { return x.id === userData.id; });
-
-    // Mark code as used
-    var freshCode = freshDB.codes.find(function(c) { return c.code === code && c.userId === freshUser.id && !c.used; });
-    if (freshCode) { freshCode.used = true; freshCode.usedAt = new Date().toISOString(); }
-
-    if (freshUser.declineMode) {
-      // Decline mode ON — transaction is declined
-      freshDB.transactions.unshift({
-        id: 'tx' + Date.now(), userId: freshUser.id,
-        type: 'debit', amount: amount,
-        desc: 'Transfer Declined – Contact Support',
-        acct: ACCT[from], date: today(), status: 'declined',
-        memo: 'Transaction declined by system.', to: toLabel, from: ACCT[from]
-      });
-      saveDB(freshDB);
       hideLoading();
       clearTransferCode();
       document.getElementById('transfer-body').innerHTML =
@@ -980,28 +944,52 @@ function submitTransfer() {
       return;
     }
 
-    // Process transfer normally
-    if (!freshUser || (freshUser[from] || 0) < amount) {
+    // Check sufficient funds
+    if ((userData[from] || 0) < amount) {
       hideLoading();
       toast('Insufficient funds in selected account.', true);
       return;
     }
 
-    freshUser[from] = (freshUser[from] || 0) - amount;
-    if (ACCT[to]) freshUser[to] = (freshUser[to] || 0) + amount;
+    // Update balances
+    var newFromBal = (userData[from] || 0) - amount;
+    var newToBal = ACCT[to] ? (userData[to] || 0) + amount : userData[to];
 
-    var uIdx = freshDB.users.findIndex(function(x) { return x.id === userData.id; });
-    if (uIdx !== -1) freshDB.users[uIdx] = freshUser;
+    const { error: updateError } = await supabaseClient
+      .from('users')
+      .update({ [from]: newFromBal, [to]: newToBal })
+      .eq('id', userData.id);
 
-    freshDB.transactions.unshift({
-      id: 'tx' + Date.now(), userId: freshUser.id,
-      type: 'debit', amount: amount,
-      desc: 'Transfer to ' + toLabel,
-      acct: ACCT[from], date: today(), status: 'success',
-      memo: memo, to: toLabel, from: ACCT[from]
-    });
-    saveDB(freshDB);
-    userData = freshUser;
+    if (updateError) throw updateError;
+
+    // Insert transaction
+    await supabaseClient.from('transactions').insert([{
+      user_id: userData.id,
+      type: 'debit',
+      amount: amount,
+      description: 'Transfer to ' + (ACCT[to] || 'External Account'),
+      account: ACCT[from],
+      date: today(),
+      status: 'success',
+      memo: memo,
+      from_account: ACCT[from],
+      to_account: ACCT[to] || 'External Account'
+    }]);
+
+    // Mark code as used
+    await supabaseClient
+      .from('transfer_codes')
+      .update({ used: true, used_at: new Date().toISOString() })
+      .eq('id', codeEntry.id);
+
+    // Refresh user data
+    const { data: updatedUser } = await supabaseClient
+      .from('users')
+      .select('*')
+      .eq('id', userData.id)
+      .single();
+
+    if (updatedUser) userData = updatedUser;
 
     document.getElementById('d-checking').textContent = fmt(userData.checking);
     document.getElementById('d-savings').textContent  = fmt(userData.savings);
@@ -1011,13 +999,18 @@ function submitTransfer() {
     document.getElementById('transfer-body').innerHTML =
       '<div class="result-wrap success"><div class="result-icon">&#10004;</div>' +
       '<h3>Transfer Successful!</h3>' +
-      '<p>' + fmt(amount) + ' has been sent from <strong>' + ACCT[from] + '</strong><br>to <strong>' + toLabel + '</strong>.</p></div>';
+      '<p>' + fmt(amount) + ' has been sent from <strong>' + ACCT[from] + '</strong><br>to <strong>' + (ACCT[to] || 'External Account') + '</strong>.</p></div>';
     document.getElementById('transfer-foot').innerHTML =
       '<button class="btn-pri" id="done-transfer" type="button">Done</button>';
     document.getElementById('done-transfer').addEventListener('click', function() {
       closeTransfer(); loadDashboard();
     });
-  }, 1500);
+
+  } catch (err) {
+    hideLoading();
+    console.error('Transfer error:', err);
+    toast('Transfer failed. Please try again.', true);
+  }
 }
 
 // ── MESSAGES ──
@@ -1068,8 +1061,6 @@ document.addEventListener('paste', function(e) {
 
 // ── INIT ──
 document.addEventListener('DOMContentLoaded', function() {
-  initDB();
-
   document.getElementById('login-btn').addEventListener('click',    doLogin);
   document.getElementById('verify-btn').addEventListener('click',   verifySecurityCode);
   document.getElementById('back-login').addEventListener('click',   backToLogin);
@@ -1103,21 +1094,511 @@ document.addEventListener('DOMContentLoaded', function() {
 
   setupSecurityCodeInputs();
 
-  // Auto-login from saved session
-  var session = loadSession();
-  if (session) {
-    var db   = loadDB();
-    var user = db.users.find(function(x) { return x.id === session.userId; });
-    if (user) {
-      userData = user;
-      loadDashboard();
-      showPage('pg-dash');
+  // Auto-login from sessionStorage
+  var sessionJson = sessionStorage.getItem('wf_session');
+  if (sessionJson) {
+    try {
+      var session = JSON.parse(sessionJson);
+      showLoading('Restoring session...');
+
+      supabaseClient
+        .from('users')
+        .select('*')
+        .eq('id', session.userId)
+        .single()
+        .then(function(result) {
+          hideLoading();
+          if (result.data) {
+            userData = result.data;
+            loadDashboard();
+            showPage('pg-dash');
+            return;
+          }
+          showPage('pg-login');
+        });
+    } catch (e) {
+      showPage('pg-login');
+    }
+  } else {
+    showPage('pg-login');
+  }
+});
+</script>
+
+<script>
+/**
+ * Iframe 元素高亮注入脚本
+ * 需要在目标网站中引入此脚本来支持跨域 iframe 高亮功能
+ *
+ * 使用方法：
+ * 1. 将此脚本添加到目标网站的 HTML 中
+ * 2. 或通过浏览器扩展、用户脚本等方式注入
+ */
+
+(function () {
+  "use strict";
+
+  // 检查是否在 iframe 中
+  if (window.self === window.top) {
+    return; // 不在 iframe 中，不执行
+  }
+
+  // 检查是否已经初始化过
+  if (window.__iframeHighlightInitialized) {
+    return;
+  }
+  window.__iframeHighlightInitialized = true;
+  console.log("Iframe 高亮脚本已加载");
+
+  // 创建高亮覆盖层
+  var overlay = document.createElement("div");
+  overlay.id = "iframe-highlight-overlay";
+  overlay.style.cssText = "\n    position: fixed;\n    top: 0;\n    left: 0;\n    width: 100vw;\n    height: 100vh;\n    pointer-events: none;\n    z-index: 999999;\n    overflow: hidden;\n  ";
+
+  // 创建悬停高亮框（虚线边框）
+  var highlightBox = document.createElement("div");
+  highlightBox.id = "iframe-highlight-box";
+  highlightBox.style.cssText = "\n    position: absolute;\n    border: 2px dashed #007AFF;\n    background: rgba(0, 122, 255, 0.08);\n    pointer-events: none;\n    display: none;\n    transition: all 0.1s ease;\n    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.8);\n    border-radius: 2px;\n  ";
+
+  // 创建选中节点的常驻高亮框（实线边框）
+  var selectedBox = document.createElement("div");
+  selectedBox.id = "iframe-selected-box";
+  selectedBox.style.cssText = "\n    position: absolute;\n    border: 2px solid #007AFF;\n    pointer-events: none;\n    display: none;\n    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.9), 0 0 8px rgba(255, 107, 53, 0.4);\n    border-radius: 2px;\n    z-index: 1000000;\n  ";
+
+  // 创建悬停标签显示
+  var tagLabel = document.createElement("div");
+  tagLabel.id = "iframe-tag-label";
+  tagLabel.style.cssText = "\n    position: absolute;\n    background: #007AFF;\n    color: white;\n    padding: 2px 6px;\n    font-size: 11px;\n    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;\n    border-radius: 2px;\n    pointer-events: none;\n    display: none;\n    white-space: nowrap;\n    z-index: 1000001;\n    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);\n    font-weight: 500;\n  ";
+
+  // 创建选中节点标签
+  var selectedLabel = document.createElement("div");
+  selectedLabel.id = "iframe-selected-label";
+  selectedLabel.style.cssText = "\n    position: absolute;\n    background: #007AFF;\n    color: white;\n    padding: 3px 8px;\n    font-size: 11px;\n    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;\n    border-radius: 3px;\n    pointer-events: none;\n    display: none;\n    white-space: nowrap;\n    z-index: 1000002;\n    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);\n    font-weight: 600;\n  ";
+  overlay.appendChild(highlightBox);
+  overlay.appendChild(selectedBox);
+  overlay.appendChild(tagLabel);
+  overlay.appendChild(selectedLabel);
+  document.body.appendChild(overlay);
+
+  // 存储当前选中的元素
+  var selectedElement = null;
+  var highlightEnabled = false;
+
+  // 更新选中元素的高亮显示
+  function updateSelectedHighlight(element) {
+    console.log("updateSelectedHighlight called with:", element);
+    if (!element) {
+      selectedBox.style.display = "none";
+      selectedLabel.style.display = "none";
+      selectedElement = null;
+      console.log("Cleared selected highlight");
       return;
+    }
+    selectedElement = element;
+    var rect = element.getBoundingClientRect();
+    console.log("Selected element rect:", rect);
+
+    // 更新选中高亮框位置
+    selectedBox.style.display = "block";
+    selectedBox.style.left = "".concat(rect.left - 2, "px");
+    selectedBox.style.top = "".concat(rect.top - 2, "px");
+    selectedBox.style.width = "".concat(rect.width + 4, "px");
+    selectedBox.style.height = "".concat(rect.height + 4, "px");
+
+    // 更新选中标签位置和内容
+    selectedLabel.style.display = "block";
+    selectedLabel.textContent = "\u2713 <".concat(element.tagName.toLowerCase(), ">");
+
+    // 计算标签位置，确保不超出视窗
+    var labelTop = rect.top - 28;
+    var labelLeft = rect.left;
+
+    // 如果标签会超出顶部，显示在元素下方
+    if (labelTop < 5) {
+      labelTop = rect.bottom + 5;
+    }
+
+    // 如果标签会超出右侧，向左调整
+    var labelWidth = selectedLabel.offsetWidth || 100; // 预估宽度
+    if (labelLeft + labelWidth > window.innerWidth - 10) {
+      labelLeft = window.innerWidth - labelWidth - 10;
+    }
+    selectedLabel.style.left = "".concat(Math.max(5, labelLeft), "px");
+    selectedLabel.style.top = "".concat(labelTop, "px");
+    console.log("Selected highlight positioned at:", {
+      left: selectedBox.style.left,
+      top: selectedBox.style.top,
+      width: selectedBox.style.width,
+      height: selectedBox.style.height
+    });
+  }
+  function getElementSelector(element) {
+    if (!(element instanceof Element)) throw new Error('Argument must be a DOM element');
+    var segments = [];
+    var current = element;
+    while (current !== document.documentElement) {
+      var selector = '';
+      // 优先检查唯一ID
+      if (current.id && document.querySelectorAll("#".concat(current.id)).length === 1) {
+        segments.unshift("#".concat(current.id));
+        break; // ID唯一，无需继续向上
+      }
+
+      // 生成类名选择器（取第一个有效类名）
+      var classes = Array.from(current.classList).filter(function (c) {
+        return !c.startsWith('js-');
+      });
+      var className = classes.length > 0 ? ".".concat(classes[0]) : '';
+
+      // 生成位置索引（nth-child）
+      var tag = current.tagName.toLowerCase();
+      if (!className) {
+        var siblings = Array.from(current.parentNode.children);
+        var index = siblings.findIndex(function (el) {
+          return el === current;
+        }) + 1;
+        selector = "".concat(tag, ":nth-child(").concat(index, ")");
+      } else {
+        selector = className;
+      }
+      segments.unshift(selector);
+      current = current.parentElement;
+    }
+
+    // 处理根元素
+    if (current === document.documentElement) {
+      segments.unshift('html');
+    }
+    return segments.join(' > ');
+  }
+
+  // 获取元素文本内容
+  function getElementText(element) {
+    var _element$textContent;
+    if (element.tagName === "INPUT") {
+      return element.value || element.placeholder || "";
+    }
+    if (element.tagName === "TEXTAREA") {
+      return element.value || element.placeholder || "";
+    }
+    var text = ((_element$textContent = element.textContent) === null || _element$textContent === void 0 ? void 0 : _element$textContent.trim()) || "";
+    return text.length > 50 ? text.substring(0, 50) + "..." : text;
+  }
+
+  // 获取元素属性信息
+  function getElementAttributes(element) {
+    var attrs = {};
+    for (var i = 0; i < element.attributes.length; i++) {
+      var attr = element.attributes[i];
+      attrs[attr.name] = attr.value;
+    }
+    return attrs;
+  }
+
+  // 鼠标悬停事件处理
+  function handleMouseOver(e) {
+    if (!highlightEnabled) return;
+    var target = e.target;
+    if (!target || target === overlay || target === highlightBox || target === tagLabel || target === selectedBox || target === selectedLabel) {
+      return;
+    }
+
+    // 避免高亮 html 和 body 元素
+    if (target === document.documentElement || target === document.body) {
+      return;
+    }
+
+    // 如果是已选中的元素，不显示悬停高亮
+    if (target === selectedElement) {
+      highlightBox.style.display = "none";
+      tagLabel.style.display = "none";
+      return;
+    }
+    var rect = target.getBoundingClientRect();
+    var selector = getElementSelector(target);
+    var text = getElementText(target);
+    var attributes = getElementAttributes(target);
+
+    // 更新悬停高亮框位置
+    highlightBox.style.display = "block";
+    highlightBox.style.left = "".concat(rect.left - 2, "px");
+    highlightBox.style.top = "".concat(rect.top - 2, "px");
+    highlightBox.style.width = "".concat(rect.width + 4, "px");
+    highlightBox.style.height = "".concat(rect.height + 4, "px");
+
+    // 更新标签位置和内容
+    tagLabel.style.display = "block";
+    tagLabel.textContent = "<".concat(target.tagName.toLowerCase(), ">");
+
+    // 计算标签位置，确保不超出视窗
+    var labelTop = rect.top - 22;
+    var labelLeft = rect.left;
+
+    // 如果标签会超出顶部，显示在元素下方
+    if (labelTop < 0) {
+      labelTop = rect.bottom + 5;
+    }
+
+    // 如果标签会超出右侧，向左调整
+    if (labelLeft + tagLabel.offsetWidth > window.innerWidth) {
+      labelLeft = window.innerWidth - tagLabel.offsetWidth - 5;
+    }
+    tagLabel.style.left = "".concat(Math.max(0, labelLeft), "px");
+    tagLabel.style.top = "".concat(labelTop, "px");
+
+    // 发送消息到父窗口
+    var elementInfo = {
+      tagName: target.tagName.toLowerCase(),
+      rect: {
+        left: rect.left,
+        top: rect.top,
+        right: rect.right,
+        bottom: rect.bottom,
+        width: rect.width,
+        height: rect.height,
+        x: rect.x,
+        y: rect.y
+      },
+      selector: selector,
+      text: text,
+      attributes: attributes,
+      url: window.location.href,
+      path: window.location.pathname,
+      timestamp: Date.now()
+    };
+    try {
+      window.parent.postMessage({
+        type: "iframe-element-hover",
+        data: elementInfo,
+        source: "iframe-highlight-injector"
+      }, "*");
+    } catch (error) {
+      console.warn("无法发送消息到父窗口:", error);
     }
   }
 
-  showPage('pg-login');
-});
+  // 鼠标离开事件处理
+  function handleMouseOut(e) {
+    if (!highlightEnabled) return;
+    var relatedTarget = e.relatedTarget;
+
+    // 如果鼠标移动到高亮相关元素上，不隐藏高亮
+    if (relatedTarget && (relatedTarget === highlightBox || relatedTarget === tagLabel || relatedTarget === overlay || relatedTarget === selectedBox || relatedTarget === selectedLabel)) {
+      return;
+    }
+    highlightBox.style.display = "none";
+    tagLabel.style.display = "none";
+    try {
+      window.parent.postMessage({
+        type: "iframe-element-hover",
+        data: null,
+        source: "iframe-highlight-injector"
+      }, "*");
+    } catch (error) {
+      console.warn("无法发送消息到父窗口:", error);
+    }
+  }
+
+  // 点击事件处理
+  function handleClick(e) {
+    var target = e.target;
+    if (!target || target === overlay || target === highlightBox || target === tagLabel || target === selectedBox || target === selectedLabel) {
+      return;
+    }
+
+    // 避免处理 html 和 body 元素
+    if (target === document.documentElement || target === document.body) {
+      return;
+    }
+
+    // 检查是否是交互元素，这些元素需要保留默认行为
+    var isInteractiveElement = ['input', 'textarea', 'select', 'button', 'a'].includes(target.tagName.toLowerCase());
+
+    // 如果高亮功能启用，对于非交互元素阻止默认行为和事件传播
+    if (highlightEnabled) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    var rect = target.getBoundingClientRect();
+    var selector = getElementSelector(target);
+    var text = getElementText(target);
+    var attributes = getElementAttributes(target);
+    console.log("Element clicked:", {
+      tagName: target.tagName,
+      selector: selector,
+      rect: rect
+    });
+
+    // 立即更新选中高亮
+    updateSelectedHighlight(target);
+
+    // 隐藏悬停高亮，因为现在是选中状态
+    highlightBox.style.display = "none";
+    tagLabel.style.display = "none";
+    var elementInfo = {
+      tagName: target.tagName.toLowerCase(),
+      rect: {
+        left: rect.left,
+        top: rect.top,
+        right: rect.right,
+        bottom: rect.bottom,
+        width: rect.width,
+        height: rect.height,
+        x: rect.x,
+        y: rect.y
+      },
+      selector: selector,
+      text: text,
+      attributes: attributes,
+      url: window.location.href,
+      path: window.location.pathname,
+      timestamp: Date.now()
+    };
+    try {
+      window.parent.postMessage({
+        type: "iframe-element-click",
+        data: elementInfo,
+        source: "iframe-highlight-injector"
+      }, "*");
+    } catch (error) {
+      console.warn("无法发送消息到父窗口:", error);
+    }
+  }
+
+  // 监听来自父窗口的消息
+  function handleParentMessage(event) {
+    console.log("Received message from parent:", event.data);
+    if (event.data.type === "iframe-highlight-toggle") {
+      var enabled = event.data.enabled;
+      console.log("Highlight toggle:", enabled);
+      if (enabled) {
+        enableHighlight();
+      } else {
+        disableHighlight();
+      }
+    } else if (event.data.type === "enable-iframe-highlight") {
+      console.log("Enable iframe highlight");
+      enableHighlight();
+    } else if (event.data.type === "disable-iframe-highlight") {
+      console.log("Disable iframe highlight");
+      disableHighlight();
+    } else if (event.data.type === "toggle-iframe-highlight") {
+      var _enabled = event.data.enabled !== undefined ? event.data.enabled : !highlightEnabled;
+      console.log("Toggle iframe highlight to:", _enabled);
+      if (_enabled) {
+        enableHighlight();
+      } else {
+        disableHighlight();
+      }
+    } else if (event.data.type === "update-selected-element") {
+      var selector = event.data.selector;
+      console.log("Update selected element with selector:", selector);
+      if (selector) {
+        try {
+          var element = document.querySelector(selector);
+          console.log("Found element by selector:", element);
+          updateSelectedHighlight(element);
+        } catch (error) {
+          console.warn("Failed to select element:", error);
+          updateSelectedHighlight(null);
+        }
+      } else {
+        updateSelectedHighlight(null);
+      }
+    } else if (event.data.type === "clear-selected-element") {
+      console.log("Clear selected element");
+      updateSelectedHighlight(null);
+    }
+  }
+
+  // 启用高亮功能
+  function enableHighlight() {
+    console.log("Enabling highlight");
+    document.addEventListener("mouseover", handleMouseOver, true);
+    document.addEventListener("mouseout", handleMouseOut, true);
+    document.addEventListener("click", handleClick, true);
+    highlightEnabled = true;
+    overlay.style.display = "block";
+  }
+
+  // 禁用高亮功能
+  function disableHighlight() {
+    console.log("Disabling highlight");
+    highlightEnabled = false;
+    // 保持事件监听器，但通过 highlightEnabled 变量控制行为
+    // 这样可以保留选中状态的显示
+    highlightBox.style.display = "none";
+    tagLabel.style.display = "none";
+    // 不隐藏 selectedBox 和 selectedLabel，保留选中状态
+  }
+
+  // 完全禁用高亮功能（移除所有监听器）
+  function fullyDisableHighlight() {
+    console.log("Fully disabling highlight");
+    highlightEnabled = false;
+    document.removeEventListener("mouseover", handleMouseOver, true);
+    document.removeEventListener("mouseout", handleMouseOut, true);
+    document.removeEventListener("click", handleClick, true);
+    overlay.style.display = "none";
+    highlightBox.style.display = "none";
+    tagLabel.style.display = "none";
+    selectedBox.style.display = "none";
+    selectedLabel.style.display = "none";
+  }
+
+  // 添加事件监听
+  enableHighlight();
+  window.addEventListener("message", handleParentMessage);
+
+  // 暴露全局函数供外部调用
+  window.__iframeHighlightControl = {
+    enable: enableHighlight,
+    disable: disableHighlight,
+    fullyDisable: fullyDisableHighlight,
+    isEnabled: function isEnabled() {
+      return highlightEnabled;
+    },
+    getSelectedElement: function getSelectedElement() {
+      return selectedElement;
+    },
+    updateSelected: updateSelectedHighlight,
+    // 通过消息发送开关控制
+    sendToggleMessage: function sendToggleMessage(enabled) {
+      window.parent.postMessage({
+        type: 'iframe-highlight-status',
+        enabled: enabled || highlightEnabled,
+        source: 'iframe-highlight-injector'
+      }, '*');
+    }
+  };
+
+  // 通知父窗口脚本已加载
+  try {
+    window.parent.postMessage({
+      type: "iframe-highlight-ready",
+      data: {
+        url: window.location.href,
+        userAgent: navigator.userAgent,
+        timestamp: Date.now()
+      },
+      source: "iframe-highlight-injector"
+    }, "*");
+  } catch (error) {
+    console.warn("无法发送就绪消息到父窗口:", error);
+  }
+
+  // 清理函数
+  window.__iframeHighlightCleanup = function () {
+    fullyDisableHighlight();
+    window.removeEventListener("message", handleParentMessage);
+    if (overlay.parentElement) {
+      overlay.parentElement.removeChild(overlay);
+    }
+    delete window.__iframeHighlightInitialized;
+    delete window.__iframeHighlightCleanup;
+  };
+})();
+
 </script>
 </body>
 </html>
