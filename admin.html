@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-<title>Wells Fargo Online Banking</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wells Fargo - Admin Panel</title>
 <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -11,226 +11,162 @@
   --red: #C8102E; --gold: #FFCD00; --dark: #1a1a1a; --gray: #6b6b6b;
   --border: #ddd; --blue: #1e6eb5; --sidebar: #2d2d2d; --green: #1a7a1a;
 }
-body { font-family: 'Source Sans 3', sans-serif; background: #e8e8e8; color: var(--dark); -webkit-text-size-adjust: 100%; }
-.page { display: none; }
-.page.active { display: flex; flex-direction: column; min-height: 100vh; }
-.loading-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 999; display: none; align-items: center; justify-content: center; }
+body { font-family: 'Source Sans 3', sans-serif; background: #f5f5f5; color: var(--dark); min-height: 100vh; -webkit-text-size-adjust: 100%; }
+
+/* HEADER */
+.admin-header { background: var(--dark); color: #fff; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+.admin-logo { font-family: 'Merriweather', serif; font-size: 1.4rem; color: var(--red); font-weight: 700; }
+.admin-nav { display: flex; gap: 8px; flex-wrap: wrap; }
+.admin-nav a { color: #ccc; text-decoration: none; font-size: 0.85rem; padding: 8px 14px; border-radius: 4px; transition: all 0.2s; white-space: nowrap; }
+.admin-nav a:hover, .admin-nav a.active { color: #fff; background: rgba(255,255,255,0.1); }
+.admin-user { font-size: 0.85rem; color: #888; }
+.mobile-menu-btn { display: none; background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer; }
+
+/* CONTAINER */
+.container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+
+/* CARDS */
+.card { background: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 20px; overflow: hidden; }
+.card-header { background: linear-gradient(135deg, var(--red), #a80d26); color: #fff; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+.card-header h2 { font-size: 1.1rem; font-weight: 600; }
+.card-header .btn-small { background: rgba(255,255,255,0.2); border: none; color: #fff; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-size: 0.85rem; white-space: nowrap; }
+.card-header .btn-small:hover { background: rgba(255,255,255,0.3); }
+.card-body { padding: 20px; }
+
+/* TABLES */
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid #eee; }
+th { background: #f9f9f9; font-weight: 600; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--gray); }
+tr:hover { background: #fafafa; }
+tr:last-child td { border-bottom: none; }
+
+/* BADGES */
+.badge { display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; }
+.badge-success { background: #e8f5e9; color: #2e7d32; }
+.badge-danger { background: #ffebee; color: #c62828; }
+.badge-warning { background: #fff8e1; color: #f57f17; }
+.badge-info { background: #e3f2fd; color: #1565c0; }
+
+/* BUTTONS */
+.btn { padding: 8px 16px; border: none; border-radius: 4px; cursor: pointer; font-size: 0.85rem; font-weight: 600; transition: all 0.2s; }
+.btn-primary { background: var(--red); color: #fff; }
+.btn-primary:hover { background: #a80d26; }
+.btn-secondary { background: #e0e0e0; color: var(--dark); }
+.btn-secondary:hover { background: #d0d0d0; }
+.btn-small { padding: 5px 10px; font-size: 0.75rem; }
+.btn-danger { background: #ef5350; color: #fff; }
+.btn-danger:hover { background: #e53935; }
+.btn-success { background: var(--green); color: #fff; }
+.btn-success:hover { background: #156a15; }
+
+/* FORMS */
+.form-group { margin-bottom: 16px; }
+.form-label { display: block; font-size: 0.82rem; font-weight: 600; color: var(--gray); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+.form-input, .form-select { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 4px; font-size: 16px; font-family: inherit; -webkit-appearance: none; -moz-appearance: none; appearance: none; }
+.form-input:focus, .form-select:focus { border-color: var(--red); outline: none; box-shadow: 0 0 0 3px rgba(200,16,46,0.1); }
+.form-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+
+/* TOGGLE SWITCH */
+.toggle-group { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+.toggle-switch { position: relative; width: 52px; height: 28px; }
+.toggle-switch input { opacity: 0; width: 0; height: 0; }
+.toggle-slider { position: absolute; cursor: pointer; inset: 0; background: #ccc; border-radius: 28px; transition: 0.3s; }
+.toggle-slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 4px; bottom: 4px; background: white; border-radius: 50%; transition: 0.3s; }
+.toggle-switch input:checked + .toggle-slider { background: var(--green); }
+.toggle-switch input:checked + .toggle-slider:before { transform: translateX(24px); }
+.toggle-label { font-size: 0.9rem; color: var(--dark); }
+
+/* MODAL */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 1000; }
+.modal-overlay.on { display: flex; }
+.modal { background: #fff; border-radius: 8px; width: 500px; max-width: 95vw; max-height: 90vh; overflow-y: auto; animation: slideUp 0.25s ease; }
+@keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.modal-header { background: var(--red); color: #fff; padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; }
+.modal-header h3 { font-size: 1rem; font-weight: 600; }
+.modal-close { background: none; border: none; color: #fff; font-size: 1.4rem; cursor: pointer; line-height: 1; }
+.modal-body { padding: 20px; }
+.modal-footer { padding: 14px 20px; border-top: 1px solid #eee; display: flex; justify-content: flex-end; gap: 10px; background: #fafafa; }
+
+/* STATS */
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+.stat-card { background: #fff; border-radius: 8px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+.stat-label { font-size: 0.78rem; color: var(--gray); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+.stat-value { font-size: 1.6rem; font-weight: 700; color: var(--dark); }
+
+/* TOAST */
+.toast { position: fixed; bottom: 24px; right: 24px; background: var(--green); color: #fff; padding: 12px 20px; border-radius: 4px; font-size: 0.88rem; font-weight: 600; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 2000; transform: translateY(80px); opacity: 0; transition: all 0.3s ease; }
+.toast.show { transform: translateY(0); opacity: 1; }
+.toast.err { background: var(--red); }
+
+/* LOADING */
+.loading-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 999; display: none; align-items: center; justify-content: center; }
 .loading-overlay.on { display: flex; }
 .loading-box { background: #fff; padding: 24px 40px; border-radius: 8px; text-align: center; }
 .spinner { width: 40px; height: 40px; border: 4px solid #eee; border-top-color: var(--red); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 12px; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* LOGIN PAGE */
-#pg-login { background: linear-gradient(135deg, #b0001e 0%, #7a0013 55%, #3a0008 100%); align-items: center; justify-content: center; }
-#pg-login::before { content:''; position:fixed; inset:0; background: radial-gradient(ellipse at 50% 40%, rgba(255,205,0,.07) 0%, transparent 65%); pointer-events: none; }
-.login-logo { color:var(--gold); font-family:'Merriweather',serif; font-size:2rem; font-weight:700; letter-spacing:2px; position:relative; z-index:1; }
-.login-sub  { color:rgba(255,255,255,.5); font-size:.78rem; letter-spacing:1px; margin-bottom:36px; position:relative; z-index:1; }
-.login-card { background:#fff; border-radius:4px; padding:38px 42px; width:100%; max-width:410px; box-shadow:0 20px 60px rgba(0,0,0,.4); position:relative; z-index:1; }
-.login-card h2 { font-size:1.15rem; margin-bottom:24px; font-weight:600; }
-.fg { margin-bottom:18px; }
-.fg label { display:block; font-size:.82rem; font-weight:700; color:var(--gray); margin-bottom:5px; text-transform:uppercase; letter-spacing:.4px; }
-.fg input { width:100%; padding:10px 13px; border:1px solid var(--border); border-radius:3px; font-size:16px; font-family:inherit; outline:none; transition:border-color .2s; -webkit-appearance: none; }
-.fg input:focus { border-color:var(--red); box-shadow:0 0 0 2px rgba(200,16,46,.1); }
-.btn-red { width:100%; padding:12px; background:var(--red); color:#fff; border:none; border-radius:3px; font-size:.95rem; font-weight:700; cursor:pointer; font-family:inherit; transition:background .2s; touch-action: manipulation; }
-.btn-red:hover { background:#a80d26; }
-.btn-red:active { background:#8a0018; }
-.login-links { display:flex; justify-content:space-between; margin-top:14px; }
-.login-links a { font-size:.8rem; color:var(--blue); text-decoration:none; }
-.err-msg { color:var(--red); font-size:.82rem; margin-top:8px; display:none; }
+/* SECTION */
+.section { display: none; }
+.section.active { display: block; }
 
-/* SECURITY PAGE - FULLY RESPONSIVE */
-#pg-security { background: linear-gradient(135deg, #b0001e 0%, #7a0013 55%, #3a0008 100%); align-items: center; justify-content: center; padding: 20px; }
-.security-card { background:#fff; border-radius:4px; padding:30px 28px; width:100%; max-width:460px; box-shadow:0 20px 60px rgba(0,0,0,.4); text-align:center; margin: 0 auto; }
-.security-icon { font-size:3rem; margin-bottom:16px; }
-.security-card h2 { font-size:1.25rem; margin-bottom:12px; font-weight:600; }
-.security-card p { font-size:.9rem; color:var(--gray); margin-bottom:24px; line-height:1.4; }
-.code-inputs { display:flex; gap:12px; justify-content:center; margin-bottom:20px; flex-wrap: wrap; }
-.code-digit { width:clamp(42px, 12vw, 56px); height:clamp(48px, 12vw, 64px); border:2px solid var(--border); border-radius:8px; font-size:clamp(1.2rem, 5vw, 1.8rem); text-align:center; font-weight:700; outline:none; -webkit-appearance: none; background: #fff; transition: all 0.2s; }
-.code-digit:focus { border-color:var(--red); box-shadow:0 0 0 2px rgba(200,16,46,.15); }
-@media (max-width: 500px) {
-  .security-card { padding: 24px 20px; }
-  .code-inputs { gap: 8px; }
-  .code-digit { width: 46px; height: 52px; font-size: 1.4rem; }
-}
-@media (max-width: 380px) {
-  .code-digit { width: 38px; height: 46px; font-size: 1.2rem; }
-  .code-inputs { gap: 6px; }
-}
+/* ALERTS */
+.alert { padding: 12px 16px; border-radius: 4px; margin-bottom: 16px; font-size: 0.88rem; }
+.alert-info { background: #e3f2fd; color: #1565c0; border-left: 4px solid #1565c0; }
+.alert-warning { background: #fff8e1; color: #f57f17; border-left: 4px solid #f57f17; }
+.alert-danger { background: #ffebee; color: #c62828; border-left: 4px solid #c62828; }
+.alert-success { background: #e8f5e9; color: #2e7d32; border-left: 4px solid #2e7d32; }
 
-/* HEADER */
-.wf-header { background:var(--red); height:54px; padding:0 22px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; box-shadow:0 2px 8px rgba(0,0,0,.3); }
-.wf-logo { color:var(--gold); font-family:'Merriweather',serif; font-size:1.25rem; font-weight:700; letter-spacing:1px; }
-.hdr-actions { display:flex; align-items:center; gap:4px; }
-.hdr-btn { background:none; border:none; color:#fff; font-family:inherit; font-size:.83rem; cursor:pointer; padding:7px 13px; border-radius:3px; display:flex; align-items:center; gap:5px; font-weight:600; transition:background .15s; touch-action: manipulation; }
-.hdr-btn:hover { background:rgba(255,255,255,.15); }
-.hdr-btn.accent { background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.28); }
-.hdr-btn.accent:hover { background:rgba(255,255,255,.22); }
-.mobile-menu-btn { display:none; background:none; border:none; color:#fff; font-size:1.5rem; cursor:pointer; touch-action: manipulation; }
+/* CODE GENERATOR */
+.code-display { background: #1a1a1a; color: var(--gold); padding: 20px; border-radius: 8px; text-align: center; margin: 16px 0; }
+.code-display .code-value { font-size: 2.5rem; font-weight: 700; letter-spacing: 8px; font-family: monospace; }
+.code-display .code-label { font-size: 0.8rem; color: #888; margin-top: 8px; }
+.codes-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+.code-card { background: #f8f8f8; border: 1px solid #e0e0e0; border-radius: 6px; padding: 12px; }
+.code-card.used { background: #f0f0f0; opacity: 0.6; }
+.code-card .code { font-size: 1.2rem; font-weight: 700; font-family: monospace; letter-spacing: 2px; }
+.code-card .code-status { font-size: 0.75rem; margin-top: 4px; }
+.code-card .code-date { font-size: 0.7rem; color: #888; margin-top: 2px; }
 
-/* LAYOUT */
-.wf-body { display:flex; flex:1; }
-.wf-main { flex:1; padding:26px 22px; max-width:860px; }
-.wf-sidebar { width:285px; background:var(--sidebar); padding:18px 0; }
-.sidebar-open { display:none; position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:50; }
+/* TRANSFER CODES */
+.transfer-codes-section { margin-top: 16px; }
+.user-codes-header { display: flex; justify-content: space-between align-items: center; margin-bottom: 12px; }
+.generated-codes-list { display: flex; flex-direction: column; gap: 8px; }
+.generated-code-item { display: flex; justify-content: space-between; align-items: center; background: #f8f8f8; padding: 12px 16px; border-radius: 6px; border: 1px solid #e0e0e0; }
+.generated-code-item.used { background: #e8f5e9; border-color: #a5d6a7; }
+.generated-code-item .code-info { display: flex; flex-direction: column; gap: 4px; }
+.generated-code-item .code-num { font-weight: 700; font-family: monospace; letter-spacing: 2px; font-size: 1.1rem; }
+.generated-code-item .code-meta { font-size: 0.75rem; color: #666; }
+.generated-code-item .code-status { font-size: 0.75rem; font-weight: 600; }
+.generated-code-item .code-actions { display: flex; gap: 8px; align-items: center; }
 
-/* DASHBOARD */
-.section-title { font-size:1.45rem; font-family:'Merriweather',serif; font-weight:400; margin-bottom:14px; }
-.welcome-bar { background:#fff; padding:13px 18px; margin-bottom:18px; border-radius:3px; border-left:4px solid var(--gold); }
-.welcome-bar h3 { font-size:.97rem; margin-bottom:2px; }
-.welcome-bar p  { font-size:.78rem; color:var(--gray); }
-
-/* ACCOUNT CARDS */
-.acct-card { background:#fff; border-radius:3px; margin-bottom:11px; box-shadow:0 1px 3px rgba(0,0,0,.08); border:1px solid #ddd; overflow:hidden; }
-.acct-hdr  { display:flex; align-items:center; padding:15px 17px; gap:13px; }
-.acct-icon { width:36px; height:36px; background:#eee; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-.acct-info { flex:1; }
-.acct-name { color:var(--red); font-weight:700; font-size:.92rem; text-transform:uppercase; letter-spacing:.3px; }
-.acct-num  { color:var(--gray); font-size:.78rem; margin-top:2px; }
-.acct-bal-col { text-align:right; }
-.acct-bal   { font-size:1.15rem; font-weight:700; }
-.acct-bal-lbl { font-size:.73rem; color:var(--gray); margin-top:2px; }
-.acct-sub { background:#f9f9f9; padding:9px 17px 9px 66px; display:flex; gap:22px; border-top:1px solid #eee; }
-.acct-sub a { font-size:.8rem; color:var(--blue); text-decoration:none; }
-.acct-sub a:hover { text-decoration:underline; }
-
-/* TRANSACTIONS */
-.txn-section { background:#fff; border-radius:3px; border:1px solid #ddd; margin-top:20px; overflow:hidden; }
-.txn-header  { padding:14px 18px; border-bottom:1px solid #eee; display:flex; justify-content:space-between; align-items:center; }
-.txn-header h3 { font-size:.97rem; font-weight:700; }
-.txn-row { display:flex; align-items:center; padding:11px 18px; border-bottom:1px solid #f0f0f0; font-size:.85rem; gap:12px; }
-.txn-row:last-child { border-bottom:none; }
-.txn-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
-.txn-dot.debit  { background:var(--red); }
-.txn-dot.credit { background:var(--green); }
-.txn-desc { flex:1; color:var(--dark); }
-.txn-acct { font-size:.75rem; color:var(--gray); }
-.txn-date { color:var(--gray); font-size:.78rem; width:90px; text-align:right; }
-.txn-amt  { font-weight:700; width:100px; text-align:right; }
-.txn-amt.debit  { color:var(--red); }
-.txn-amt.credit { color:var(--green); }
-.txn-empty { padding:24px 18px; text-align:center; color:var(--gray); font-size:.85rem; }
-
-/* PROMO & FOOTER SECTIONS */
-.promo { background:#fff; border-radius:3px; padding:26px; margin-top:18px; display:grid; grid-template-columns:repeat(3,1fr); border:1px solid #ddd; }
-.promo-item { padding:0 18px; border-right:1px solid #e0e0e0; }
-.promo-item:first-child { padding-left:0; }
-.promo-item:last-child  { border-right:none; }
-.promo-item h4 { font-size:.9rem; font-weight:700; margin-bottom:6px; }
-.promo-item p  { font-size:.8rem; color:var(--gray); line-height:1.5; }
-.disclosures { background:#fff; border-radius:3px; padding:18px; margin-top:18px; border:1px solid #ddd; }
-.disclosures h4 { font-size:.88rem; margin-bottom:8px; }
-.disclosures p  { font-size:.76rem; color:var(--gray); line-height:1.6; }
-
-/* SIDEBAR */
-.sb-section { padding:14px 18px; border-bottom:1px solid #444; }
-.sb-title   { font-size:.78rem; font-weight:700; color:var(--gold); text-transform:uppercase; letter-spacing:1px; margin-bottom:9px; }
-.sb-link    { display:flex; justify-content:space-between; align-items:center; padding:9px 0; color:#e0e0e0; font-size:.85rem; border-bottom:1px solid #3a3a3a; cursor:pointer; transition:color .15s; }
-.sb-link:last-child { border-bottom:none; }
-.sb-link:hover { color:var(--gold); }
-.sb-link span:last-child { color:#888; }
-
-/* MODALS / OVERLAYS */
-.overlay { position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:200; display:none; align-items:center; justify-content:center; }
-.overlay.on { display:flex; }
-.modal { background:#fff; border-radius:4px; width:540px; max-width:95vw; max-height:90vh; overflow-y:auto; box-shadow:0 24px 80px rgba(0,0,0,.4); animation:slideUp .25s ease; }
-@keyframes slideUp { from{transform:translateY(28px);opacity:0} to{transform:translateY(0);opacity:1} }
-.modal-hdr { background:var(--red); color:#fff; padding:16px 22px; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; }
-.modal-hdr h3 { font-size:1.05rem; font-weight:700; }
-.modal-x  { background:none; border:none; color:#fff; font-size:1.3rem; cursor:pointer; line-height:1; touch-action: manipulation; }
-.modal-body { padding:26px 22px; }
-.modal-foot { padding:14px 22px; border-top:1px solid #eee; display:flex; justify-content:flex-end; gap:11px; background:#fafafa; }
-.btn-pri { padding:10px 26px; background:var(--red); color:#fff; border:none; border-radius:3px; font-size:.88rem; font-weight:700; cursor:pointer; font-family:inherit; transition:background .15s; touch-action: manipulation; }
-.btn-pri:hover { background:#a80d26; }
-.btn-sec { padding:10px 26px; background:#fff; color:var(--gray); border:1px solid #ccc; border-radius:3px; font-size:.88rem; cursor:pointer; font-family:inherit; transition:background .15s; touch-action: manipulation; }
-.btn-sec:hover { background:#f0f0f0; }
-
-/* TRANSFER FORM */
-.tf-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px; }
-.tf-full { margin-bottom:16px; }
-.tf-label { display:block; font-size:.8rem; font-weight:700; color:var(--gray); margin-bottom:5px; text-transform:uppercase; letter-spacing:.4px; }
-.tf-inp, .tf-sel { width:100%; padding:10px 12px; border:1px solid var(--border); border-radius:3px; font-size:16px; font-family:inherit; outline:none; transition:border-color .2s; -webkit-appearance: none; }
-.tf-inp:focus, .tf-sel:focus { border-color:var(--red); box-shadow:0 0 0 2px rgba(200,16,46,.1); }
-.amt-wrap { position:relative; }
-.amt-pre { position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--gray); }
-.amt-wrap .tf-inp { padding-left:24px; }
-.ext-fields { background:#f8f8f8; border:1px solid #e0e0e0; border-radius:3px; padding:14px; margin-top:8px; display:none; }
-.ext-fields.show { display:block; }
-.ext-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:10px; }
-
-/* TRANSFER CODE */
-.transfer-code-section { background:#fff8e7; border:2px solid var(--gold); border-radius:4px; padding:20px; margin-bottom:16px; text-align:center; }
-.transfer-code-section h4 { color:var(--dark); margin-bottom:8px; }
-.code-input-row { display:flex; gap:8px; justify-content:center; margin-top:12px; flex-wrap: wrap; }
-.code-input { width:48px; height:52px; border:2px solid var(--gold); border-radius:4px; font-size:1.4rem; text-align:center; font-weight:700; outline:none; -webkit-appearance: none; touch-action: manipulation; }
-.code-input:focus { border-color:var(--red); }
-.code-error { color:var(--red); font-size:.8rem; margin-top:8px; display:none; }
-
-/* RESULTS */
-.result-wrap { text-align:center; padding:20px; }
-.result-icon { font-size:3rem; margin-bottom:10px; }
-.result-wrap h3 { font-size:1.15rem; margin-bottom:8px; }
-.result-wrap p  { color:var(--gray); font-size:.85rem; line-height:1.6; }
-.result-wrap.success h3 { color:var(--green); }
-.result-wrap.declined h3 { color:var(--red); }
-
-/* SUMMARY */
-.sum-box { background:#fff8e7; border:1px solid var(--gold); border-radius:3px; padding:14px; margin-top:6px; display:none; }
-.sum-box.show { display:block; }
-.sum-box h4 { font-size:.88rem; font-weight:700; margin-bottom:9px; }
-.sum-row { display:flex; justify-content:space-between; font-size:.82rem; padding:3px 0; color:var(--gray); }
-.sum-row strong { color:var(--dark); }
-
-/* TOAST */
-.toast { position:fixed; bottom:28px; right:28px; background:#1a7a1a; color:#fff; padding:12px 20px; border-radius:4px; font-size:.88rem; font-weight:600; box-shadow:0 8px 24px rgba(0,0,0,.3); z-index:400; transform:translateY(70px); opacity:0; transition:all .3s ease; }
-.toast.show { transform:translateY(0); opacity:1; }
-.toast.err  { background:var(--red); }
-
-/* PAGE FOOTER */
-.wf-footer { background:#222; color:#aaa; padding:12px 22px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; font-size:.76rem; }
-.wf-footer a { color:#aaa; text-decoration:none; margin:0 6px; }
-.wf-footer a:hover { color:var(--gold); }
+/* DEBUG */
+.debug-section { background: #f0f0f0; border: 2px dashed #ccc; padding: 16px; margin-top: 20px; border-radius: 8px; }
+.debug-section h3 { font-size: 0.9rem; margin-bottom: 12px; color: #666; }
+.debug-btn { padding: 6px 12px; font-size: 0.75rem; margin-right: 8px; margin-bottom: 8px; }
 
 /* RESPONSIVE */
 @media (max-width: 768px) {
-  .login-card, .security-card { padding: 28px 24px; margin: 0 16px; }
-  .login-logo { font-size: 1.5rem; }
-  .wf-header { padding: 0 12px; }
+  .admin-header { flex-wrap: wrap; gap: 12px; }
   .mobile-menu-btn { display: block; }
-  .hdr-actions { gap: 2px; }
-  .hdr-btn { padding: 7px 8px; font-size: .75rem; }
-  .hdr-btn span { display: none; }
-  .hdr-btn.accent span { display: inline; }
-  .wf-body { flex-direction: column; }
-  .wf-sidebar { display: none; width: 100%; position: fixed; top: 54px; left: 0; bottom: 0; z-index: 60; overflow-y: auto; }
-  .wf-sidebar.open { display: block; }
-  .wf-main { padding: 16px 12px; }
-  .acct-hdr { flex-wrap: wrap; }
-  .acct-bal-col { width: 100%; text-align: left; margin-top: 8px; padding-top: 8px; border-top: 1px solid #eee; }
-  .acct-sub { padding: 9px 17px; flex-wrap: wrap; gap: 12px; }
-  .promo { grid-template-columns: 1fr; }
-  .promo-item { padding: 0; border-right: none; border-bottom: 1px solid #e0e0e0; padding-bottom: 12px; margin-bottom: 12px; }
-  .promo-item:last-child { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
-  .tf-row { grid-template-columns: 1fr; }
-  .ext-row { grid-template-columns: 1fr; }
-  .modal { width: 100%; max-width: 100%; max-height: 100%; border-radius: 0; }
-  .txn-row { flex-wrap: wrap; }
-  .txn-date { width: auto; text-align: left; }
-  .txn-amt { width: auto; text-align: left; }
-  .wf-footer { flex-direction: column; text-align: center; }
-  .code-inputs, .code-input-row { gap: 4px; }
-  .code-digit, .code-input { width: 40px; height: 48px; font-size: 1.2rem; }
+  .admin-nav { display: none; width: 100%; }
+  .admin-nav.open { display: flex; flex-direction: column; }
+  .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .form-row { grid-template-columns: 1fr; }
+  .container { padding: 16px; }
+  table { display: block; overflow-x: auto; }
+  .codes-grid { grid-template-columns: 1fr; }
+  .generated-code-item { flex-direction: column; gap: 8px; text-align: center; }
+  .generated-code-item .code-info { align-items: center; }
   input, select, textarea { font-size: 16px !important; }
 }
 @media (max-width: 480px) {
-  .login-card, .security-card { padding: 24px 18px; }
-  .fg { margin-bottom: 14px; }
-  .btn-red { padding: 10px; }
-  .code-digit, .code-input { width: 36px; height: 44px; font-size: 1.1rem; }
+  .stats-grid { grid-template-columns: 1fr; }
 }
 </style>
 </head>
 <body>
 
+<!-- LOADING -->
 <div class="loading-overlay" id="loading">
   <div class="loading-box">
     <div class="spinner"></div>
@@ -238,221 +174,836 @@ body { font-family: 'Source Sans 3', sans-serif; background: #e8e8e8; color: var
   </div>
 </div>
 
-<!-- LOGIN PAGE -->
-<div id="pg-login" class="page active">
-  <div class="login-logo">WELLS FARGO</div>
-  <div class="login-sub">Online Banking · Secure Access</div>
-  <div class="login-card">
-    <h2>Sign On to Wells Fargo</h2>
-    <div class="fg">
-      <label>Username</label>
-      <input type="text" id="l-user" placeholder="Enter your username" autocomplete="username" autocapitalize="none" autocomplete="off">
-    </div>
-    <div class="fg">
-      <label>Password</label>
-      <input type="password" id="l-pass" placeholder="Enter your password" autocomplete="current-password">
-    </div>
-    <button class="btn-red" id="login-btn" type="button">Sign On</button>
-    <div class="err-msg" id="l-err">Invalid username or password.</div>
-    <div class="login-links">
-      <a href="#">Forgot Username / Password?</a>
-      <a href="#">Enroll Now</a>
-    </div>
-  </div>
-</div>
+<!-- HEADER -->
+<header class="admin-header">
+  <button class="mobile-menu-btn" id="mobile-menu-btn">&#9776;</button>
+  <div class="admin-logo">WELLS FARGO ADMIN</div>
+  <nav class="admin-nav" id="admin-nav">
+    <a href="#" class="active" id="nav-dashboard">Dashboard</a>
+    <a href="#" id="nav-users">Users</a>
+    <a href="#" id="nav-transactions">Transactions</a>
+    <a href="#" id="nav-add-transaction">Add Transaction</a>
+    <a href="#" id="nav-transfer-codes">Transfer Codes</a>
+    <a href="index.html" target="_blank" style="color: var(--gold);">Open Banking Page</a>
+  </nav>
+  <div class="admin-user">Admin Panel</div>
+</header>
 
-<!-- SECURITY PAGE - RESPONSIVE DESIGN -->
-<div id="pg-security" class="page">
-  <div class="security-card">
-    <div class="security-icon">&#128241;</div>
-    <h2>Verification Required</h2>
-    <p>Please enter the 6-digit security code we sent to your phone</p>
-    <div class="code-inputs">
-      <input type="text" class="code-digit" maxlength="1" id="sec-code-1" inputmode="numeric" pattern="[0-9]*" autocomplete="off">
-      <input type="text" class="code-digit" maxlength="1" id="sec-code-2" inputmode="numeric" pattern="[0-9]*" autocomplete="off">
-      <input type="text" class="code-digit" maxlength="1" id="sec-code-3" inputmode="numeric" pattern="[0-9]*" autocomplete="off">
-      <input type="text" class="code-digit" maxlength="1" id="sec-code-4" inputmode="numeric" pattern="[0-9]*" autocomplete="off">
-      <input type="text" class="code-digit" maxlength="1" id="sec-code-5" inputmode="numeric" pattern="[0-9]*" autocomplete="off">
-      <input type="text" class="code-digit" maxlength="1" id="sec-code-6" inputmode="numeric" pattern="[0-9]*" autocomplete="off">
-    </div>
-    <div class="err-msg" id="sec-err" style="display:none">Invalid security code. Please try again.</div>
-    <button class="btn-red" style="margin-top:16px" id="verify-btn" type="button">Verify</button>
-    <p style="margin-top:16px;font-size:.8rem;color:var(--gray)">Didn't receive a code? <a href="#" id="resend-code">Resend</a></p>
-    <button class="btn-sec" style="margin-top:10px;width:100%;padding:10px 26px;" id="back-login" type="button">Back to Sign On</button>
-  </div>
-</div>
+<!-- CONTAINER -->
+<div class="container">
 
-<!-- DASHBOARD PAGE -->
-<div id="pg-dash" class="page">
-  <header class="wf-header">
-    <button class="mobile-menu-btn" id="menu-btn" type="button">&#9776;</button>
-    <div class="wf-logo">WELLS FARGO</div>
-    <div class="hdr-actions">
-      <button class="hdr-btn accent" id="transfer-btn" type="button"><span>Transfer and Pay</span></button>
-      <button class="hdr-btn" id="msgs-btn" type="button">Messages</button>
-      <button class="hdr-btn" id="signoff-btn" type="button">Sign Off</button>
+  <!-- DASHBOARD SECTION -->
+  <div id="section-dashboard" class="section active">
+    <div class="alert alert-info">
+      <strong>Admin Dashboard</strong> — Manage users, transactions, and transfer codes.
+      <a href="index.html" target="_blank" style="margin-left:12px;font-weight:700;">Open Banking Page</a>
     </div>
-  </header>
-  <div class="wf-body">
-    <div class="sidebar-open" id="sidebar-overlay"></div>
-    <main class="wf-main">
-      <div class="welcome-bar">
-        <h3 id="dash-welcome">Welcome</h3>
-        <p id="dash-last">Your last sign on was today</p>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Total Users</div>
+        <div class="stat-value" id="stat-users">0</div>
       </div>
-      <h2 class="section-title">Account Summary</h2>
-      <div class="acct-card">
-        <div class="acct-hdr">
-          <div class="acct-icon"><svg width="20" height="20" fill="none" stroke="#C8102E" stroke-width="1.5" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
-          <div class="acct-info"><div class="acct-name">Everyday Checking</div><div class="acct-num">...7406</div></div>
-          <div class="acct-bal-col"><div class="acct-bal" id="d-checking">$0.00</div><div class="acct-bal-lbl">Available balance</div></div>
+      <div class="stat-card">
+        <div class="stat-label">Total Transactions</div>
+        <div class="stat-value" id="stat-txns">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Total Balance</div>
+        <div class="stat-value" id="stat-balance">$0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Active Codes</div>
+        <div class="stat-value" id="stat-codes">0</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h2>Recent Transactions</h2>
+        <button class="btn-small" id="view-all-txns">View All</button>
+      </div>
+      <div class="card-body" style="padding:0">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>User</th>
+              <th>Description</th>
+              <th>Type</th>
+              <th>Amount</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="recent-txns"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- USERS SECTION -->
+  <div id="section-users" class="section">
+    <div class="card">
+      <div class="card-header">
+        <h2>User Management</h2>
+        <button class="btn-small" id="add-user-btn">+ Add User</button>
+      </div>
+      <div class="card-body" style="padding:0">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Username</th>
+              <th>Password</th>
+              <th>Checking</th>
+              <th>Savings</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="users-table"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRANSACTIONS SECTION -->
+  <div id="section-transactions" class="section">
+    <div class="card">
+      <div class="card-header">
+        <h2>All Transactions</h2>
+        <button class="btn-small" id="add-txn-nav">+ Add Transaction</button>
+      </div>
+      <div class="card-body" style="padding:0">
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>User</th>
+              <th>Description</th>
+              <th>Account</th>
+              <th>Type</th>
+              <th>Amount</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="all-txns"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADD TRANSACTION SECTION -->
+  <div id="section-add-transaction" class="section">
+    <div class="card">
+      <div class="card-header">
+        <h2>Add Transaction to User</h2>
+      </div>
+      <div class="card-body">
+        <div class="alert alert-warning">
+          <strong>Note:</strong> This will add a transaction visible on the user's banking dashboard.
         </div>
-        <div class="acct-sub"><a href="#">Build or rebuild credit</a><a href="#">Way2Save Savings</a></div>
+        <form id="add-txn-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Select User</label>
+              <select class="form-select" id="txn-user" required>
+                <option value="">Select a user...</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Transaction Type</label>
+              <select class="form-select" id="txn-type" required>
+                <option value="credit">Credit (Money In)</option>
+                <option value="debit">Debit (Money Out)</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Amount ($)</label>
+              <input type="number" class="form-input" id="txn-amount" placeholder="0.00" min="0.01" step="0.01" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Account</label>
+              <select class="form-select" id="txn-account" required>
+                <option value="Everyday Checking (...7406)">Everyday Checking (...7406)</option>
+                <option value="Way2Save Savings (...3182)">Way2Save Savings (...3182)</option>
+                <option value="Way2Save Retire (...0441)">Way2Save Retire (...0441)</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Description</label>
+            <input type="text" class="form-input" id="txn-desc" placeholder="e.g., Direct Deposit, Online Purchase, ATM Withdrawal" required>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Date</label>
+              <input type="date" class="form-input" id="txn-date" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Status</label>
+              <select class="form-select" id="txn-status">
+                <option value="success">Success</option>
+                <option value="pending">Pending</option>
+                <option value="declined">Declined</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Memo (optional)</label>
+            <input type="text" class="form-input" id="txn-memo" placeholder="Add a note...">
+          </div>
+          <div style="display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap;">
+            <button type="submit" class="btn btn-primary" id="submit-txn">Add Transaction</button>
+            <button type="button" class="btn btn-secondary" id="cancel-txn">Cancel</button>
+          </div>
+        </form>
       </div>
-      <div class="acct-card"><div class="acct-hdr"><div class="acct-icon"><svg width="20" height="20" fill="none" stroke="#C8102E" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div><div class="acct-info"><div class="acct-name">Way2Save Savings</div><div class="acct-num">...3182</div></div><div class="acct-bal-col"><div class="acct-bal" id="d-savings">$0.00</div><div class="acct-bal-lbl">Available balance</div></div></div></div>
-      <div class="acct-card"><div class="acct-hdr"><div class="acct-icon"><svg width="20" height="20" fill="none" stroke="#888" stroke-width="1.5" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2"/></svg></div><div class="acct-info"><div class="acct-name">Way2Save Retire</div><div class="acct-num">...0441</div></div><div class="acct-bal-col"><div class="acct-bal" id="d-retire">$0.00</div><div class="acct-bal-lbl">Account balance</div></div></div></div>
-      <div class="txn-section"><div class="txn-header"><h3>Recent Transactions</h3><span style="font-size:.78rem;color:var(--gray)">Last 30 days</span></div><div id="txn-list"><div class="txn-empty">Loading transactions...</div></div></div>
-      <div class="promo"><div class="promo-item"><h4>As unique as you are</h4><p>Customize your Wells Fargo Debit Card today</p></div><div class="promo-item"><h4>Bank your way</h4><p>Personalizing your account can help</p></div><div class="promo-item"><h4>Get started</h4><p>Check out our Checking Account Quick Start guide</p></div></div>
-      <div class="disclosures"><h4>* Account Disclosures</h4><p>Deposit products offered by Wells Fargo Bank, N.A. Member FDIC. Equal Housing Lender</p></div>
-    </main>
-    <aside class="wf-sidebar" id="wf-sidebar"><div class="sb-section"><div class="sb-title">Messages</div><div class="sb-link" id="sb-msgs"><span>View or send messages</span><span>&#8250;</span></div><div class="sb-link" id="sb-signoff"><span>Sign Off</span><span>&#8250;</span></div></div><div class="sb-section"><div class="sb-title">Planning &amp; Tools</div><div class="sb-link"><span>Calculate debt-to-income ratio</span><span>&#8250;</span></div><div class="sb-link"><span>View My Retirement Plan</span><span>&#8250;</span></div></div><div class="sb-section"><div class="sb-title">Service offers</div><div class="sb-link" id="sb-transfer"><span>Set up direct deposit</span><span>&#8250;</span></div></div></aside>
+    </div>
   </div>
-  <footer class="wf-footer"><div>Wells Fargo Online  |  <a href="#">Online Security Guarantee</a></div><div><a href="#" id="footer-signoff">Sign Off</a></div></footer>
+
+  <!-- TRANSFER CODES SECTION -->
+  <div id="section-transfer-codes" class="section">
+    <div class="card">
+      <div class="card-header">
+        <h2>Generate Transfer Code</h2>
+      </div>
+      <div class="card-body">
+        <div class="alert alert-info">
+          <strong>How it works:</strong> Generate a 6-digit code for a user. The user enters this code when making a transfer. Each code can only be used once.
+        </div>
+        <div class="form-group">
+          <label class="form-label">Select User</label>
+          <select class="form-select" id="code-user">
+            <option value="">Select a user...</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Number of Codes</label>
+          <select class="form-select" id="code-count">
+            <option value="1">1 Code</option>
+            <option value="3">3 Codes</option>
+            <option value="5">5 Codes</option>
+            <option value="10">10 Codes</option>
+          </select>
+        </div>
+        <button class="btn btn-primary" id="generate-codes-btn" style="margin-bottom: 20px;">Generate Code(s)</button>
+
+        <div id="generated-code-display" style="display:none;">
+          <div class="code-display">
+            <div class="code-label">Generated Code</div>
+            <div class="code-value" id="new-code-value">------</div>
+          </div>
+          <div class="alert alert-success">Code generated! Share this with the user.</div>
+        </div>
+
+        <div class="transfer-codes-section" id="user-codes-section" style="display:none;">
+          <div class="user-codes-header">
+            <h3 style="font-size:1rem;font-weight:600;">User's Transfer Codes</h3>
+            <button class="btn btn-secondary btn-small" id="refresh-codes">Refresh</button>
+          </div>
+          <div class="generated-codes-list" id="user-codes-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h2>All Active Transfer Codes</h2>
+        <button class="btn-small" id="export-codes">Export CSV</button>
+      </div>
+      <div class="card-body">
+        <div id="all-codes-grid" class="codes-grid"></div>
+      </div>
+    </div>
+  </div>
+
 </div>
 
-<!-- TRANSFER MODAL & MESSAGES -->
-<div class="overlay" id="ov-transfer"><div class="modal"><div class="modal-hdr"><h3>Transfer and Pay</h3><button class="modal-x" id="close-transfer" type="button">&#10005;</button></div><div class="modal-body" id="transfer-body"></div><div class="modal-foot" id="transfer-foot"><button class="btn-sec" id="cancel-transfer" type="button">Cancel</button><button class="btn-pri" id="submit-transfer" type="button">Continue</button></div></div></div>
-<div class="overlay" id="ov-msgs"><div class="modal"><div class="modal-hdr"><h3>Messages</h3><button class="modal-x" id="close-msgs" type="button">&#10005;</button></div><div class="modal-body"><div style="padding:11px 0;border-bottom:1px solid #eee"><div style="font-size:.9rem;font-weight:700">Welcome to Wells Fargo Online!</div><div style="font-size:.78rem;color:var(--gray);margin-top:2px">Today</div></div><div style="padding:11px 0;color:var(--gray);font-size:.82rem;text-align:center;margin-top:14px">No more messages.</div><div style="margin-top:18px"><div class="tf-label">Send a Message</div><textarea class="tf-inp" rows="3" id="msg-text" placeholder="Type your message..." style="resize:vertical"></textarea></div></div><div class="modal-foot"><button class="btn-sec" id="close-msgs2" type="button">Close</button><button class="btn-pri" id="send-msg" type="button">Send</button></div></div></div>
+<!-- ADD USER MODAL -->
+<div class="modal-overlay" id="modal-add-user">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Add New User</h3>
+      <button class="modal-close" id="close-add-user">&times;</button>
+    </div>
+    <div class="modal-body">
+      <form id="add-user-form">
+        <div class="form-group">
+          <label class="form-label">Full Name</label>
+          <input type="text" class="form-input" id="user-name" placeholder="John Smith" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Username</label>
+            <input type="text" class="form-input" id="user-username" placeholder="jsmith" required autocapitalize="none" autocorrect="off">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <input type="text" class="form-input" id="user-password" placeholder="Enter password" required>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Checking Balance</label>
+            <input type="number" class="form-input" id="user-checking" placeholder="0.00" min="0" step="0.01" value="1000">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Savings Balance</label>
+            <input type="number" class="form-input" id="user-savings" placeholder="0.00" min="0" step="0.01" value="500">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Retire Balance</label>
+          <input type="number" class="form-input" id="user-retire" placeholder="0.00" min="0" step="0.01" value="0">
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" id="cancel-add-user">Cancel</button>
+      <button class="btn btn-primary" id="confirm-add-user">Add User</button>
+    </div>
+  </div>
+</div>
+
+<!-- EDIT USER MODAL -->
+<div class="modal-overlay" id="modal-edit-user">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Edit User</h3>
+      <button class="modal-close" id="close-edit-user">&times;</button>
+    </div>
+    <div class="modal-body">
+      <form id="edit-user-form">
+        <input type="hidden" id="edit-user-id">
+        <div class="form-group">
+          <label class="form-label">Full Name</label>
+          <input type="text" class="form-input" id="edit-name" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Username</label>
+            <input type="text" class="form-input" id="edit-username" autocapitalize="none" autocorrect="off">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <input type="text" class="form-input" id="edit-password">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Checking Balance</label>
+            <input type="number" class="form-input" id="edit-checking" step="0.01">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Savings Balance</label>
+            <input type="number" class="form-input" id="edit-savings" step="0.01">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Retire Balance</label>
+          <input type="number" class="form-input" id="edit-retire" step="0.01">
+        </div>
+
+        <div style="margin-top: 20px; padding-top: 20px; border-top: 2px solid #eee;">
+          <h4 style="font-size: 0.9rem; margin-bottom: 12px;">Transaction Controls</h4>
+          <div class="alert alert-danger" style="margin-bottom: 12px;">
+            <strong>Decline Mode:</strong> When ON, ALL transfer attempts will be declined.
+          </div>
+          <div class="toggle-group">
+            <label class="toggle-switch">
+              <input type="checkbox" id="edit-decline-mode">
+              <span class="toggle-slider"></span>
+            </label>
+            <label class="toggle-label">Enable Decline Mode</label>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" id="cancel-edit-user">Cancel</button>
+      <button class="btn btn-primary" id="save-edit-user">Save Changes</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-// SHARED STORAGE KEY (matches admin.html)
-const STORE_KEY = 'wf_db';
-const SESSION_KEY = 'wf_session';
+// ── SUPABASE CONFIG ──
+const SUPABASE_URL = 'https://vlsnstzqwqformfgmtgi.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZsc25zdHpxd3Fmb3JtZmdtdGdpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxNjkzOTMsImV4cCI6MjA5Mzc0NTM5M30.l01mCGL56mIiuz07CJltGULXMrnpKS5xHZwimHFm7Kk';
 
-function isLSAvailable() { try { localStorage.setItem('__t','1'); localStorage.removeItem('__t'); return true; } catch(e) { return false; } }
-function loadDB() { if(!isLSAvailable()) return { users: [], transactions: [], codes: [] }; try { const raw = localStorage.getItem(STORE_KEY); if(!raw) return { users: [], transactions: [], codes: [] }; const db = JSON.parse(raw); if(!db.users) db.users = []; if(!db.transactions) db.transactions = []; if(!db.codes) db.codes = []; return db; } catch(e) { return { users: [], transactions: [], codes: [] }; } }
-function saveDB(db) { if(isLSAvailable()) try { localStorage.setItem(STORE_KEY, JSON.stringify(db)); } catch(e) {} }
+const { createClient } = supabase;
+const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-const DEFAULT_USER = { id: 'demo-user', name: 'Andrew Johnson', username: 'andrew', password: '1234', checking: 3241.64, savings: 1087.58, retire: 8924.05, declineMode: false };
-function initDB() { let db = loadDB(); if(!db.users || db.users.length === 0) { db.users = [DEFAULT_USER]; db.transactions = []; db.codes = []; saveDB(db); } if(!db.codes) db.codes = []; if(!db.transactions) db.transactions = []; saveDB(db); }
+let users = [], transactions = [], codes = [];
 
-let userData = null;
-function saveSession(user) { try { localStorage.setItem(SESSION_KEY, JSON.stringify({ userId: user.id, username: user.username, name: user.name, loginTime: new Date().toISOString() })); } catch(e) {} }
-function loadSession() { try { const r = localStorage.getItem(SESSION_KEY); return r ? JSON.parse(r) : null; } catch(e) { return null; } }
-function clearSession() { try { localStorage.removeItem(SESSION_KEY); } catch(e) {} }
-
+// ── UTILS ──
 function fmt(n) { return '$' + Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
-function today() { return new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); }
-function showPage(id) { document.querySelectorAll('.page').forEach(p => p.classList.remove('active')); document.getElementById(id).classList.add('active'); }
-function openOverlay(id) { document.getElementById(id).classList.add('on'); }
-function closeOverlay(id) { document.getElementById(id).classList.remove('on'); }
-function showLoading(txt) { document.getElementById('loading-text').textContent = txt || 'Loading...'; document.getElementById('loading').classList.add('on'); }
+function formatDate(d) { return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); }
+function showLoading(text) { document.getElementById('loading-text').textContent = text || 'Loading...'; document.getElementById('loading').classList.add('on'); }
 function hideLoading() { document.getElementById('loading').classList.remove('on'); }
-function toast(msg, isErr) { const t = document.getElementById('toast'); t.textContent = msg; t.className = 'toast' + (isErr ? ' err' : ''); t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 3200); }
 
-function doLogin() {
-  const u = document.getElementById('l-user').value.trim().toLowerCase();
-  const p = document.getElementById('l-pass').value;
-  const errEl = document.getElementById('l-err');
-  errEl.style.display = 'none';
-  if(!u || !p) { errEl.textContent = 'Please enter both username and password.'; errEl.style.display = 'block'; return; }
-  showLoading('Signing in...');
-  const db = loadDB();
-  const found = db.users.find(user => user.username && user.username.toLowerCase() === u && user.password === p);
-  hideLoading();
-  if(found) { userData = found; clearSecurityCode(); showPage('pg-security'); }
-  else { errEl.textContent = 'Invalid username or password.'; errEl.style.display = 'block'; document.getElementById('l-pass').value = ''; }
-}
-function clearSecurityCode() { for(let i=1;i<=6;i++){ const el=document.getElementById('sec-code-'+i); if(el) el.value=''; } const err=document.getElementById('sec-err'); if(err) err.style.display='none'; }
-function getSecurityCode() { let code=''; for(let i=1;i<=6;i++){ const el=document.getElementById('sec-code-'+i); code+=el?.value||''; } return code; }
-function verifySecurityCode() {
-  const code = getSecurityCode();
-  if(code.length !== 6) { document.getElementById('sec-err').textContent='Please enter complete 6-digit code.'; document.getElementById('sec-err').style.display='block'; return; }
-  showLoading('Verifying...');
-  setTimeout(() => { hideLoading(); if(!userData) { showPage('pg-login'); return; } saveSession(userData); loadDashboard(); showPage('pg-dash'); toast('Sign on successful!'); }, 500);
-}
-function backToLogin() { userData=null; showPage('pg-login'); document.getElementById('l-user').value=''; document.getElementById('l-pass').value=''; clearSecurityCode(); }
-function doSignOut() { userData=null; clearSession(); showPage('pg-login'); document.getElementById('l-user').value=''; document.getElementById('l-pass').value=''; clearSecurityCode(); const sb=document.getElementById('wf-sidebar'); if(sb) sb.classList.remove('open'); document.getElementById('sidebar-overlay')?.classList.remove('on'); }
-
-function loadDashboard() {
-  if(!userData) return;
-  const db = loadDB();
-  const fresh = db.users.find(x => x.id === userData.id);
-  if(fresh) userData = fresh;
-  const firstName = (userData.name || 'User').split(' ')[0];
-  document.getElementById('dash-welcome').textContent = `Welcome, ${firstName}`;
-  document.getElementById('dash-last').textContent = `Your last sign on was ${today()}`;
-  document.getElementById('d-checking').textContent = fmt(userData.checking);
-  document.getElementById('d-savings').textContent = fmt(userData.savings);
-  document.getElementById('d-retire').textContent = fmt(userData.retire);
-  const db2 = loadDB();
-  const txns = db2.transactions.filter(t => t.userId === userData.id);
-  const list = document.getElementById('txn-list');
-  if(txns.length) list.innerHTML = txns.map(t => `<div class="txn-row"><div class="txn-dot ${t.type}"></div><div style="flex:1"><div class="txn-desc">${t.desc||''}</div><div class="txn-acct">${t.acct||''}</div></div><div class="txn-date">${t.date||''}</div><div class="txn-amt ${t.type}">${t.type==='debit'?'-':'+'}${fmt(t.amount)}</div></div>`).join('');
-  else list.innerHTML = '<div class="txn-empty">No transactions yet.</div>';
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  const section = document.getElementById('section-' + id);
+  if (section) section.classList.add('active');
+  document.querySelectorAll('.admin-nav a').forEach(a => a.classList.remove('active'));
+  const navLink = document.getElementById('nav-' + id);
+  if (navLink) navLink.classList.add('active');
+  document.getElementById('admin-nav').classList.remove('open');
+  if (id === 'transfer-codes') { loadAllCodes(); populateCodeUserSelect(); }
+  if (id === 'users') renderUsers();
+  if (id === 'transactions') renderTransactions();
+  if (id === 'add-transaction') populateUserSelect();
 }
 
-// Minimal transfer integration (works with admin codes)
-const ACCT = { checking:'Everyday Checking (...7406)', savings:'Way2Save Savings (...3182)', retire:'Way2Save Retire (...0441)' };
-function openTransfer() { renderTransferForm(); openOverlay('ov-transfer'); if(window.innerWidth<=768 && document.getElementById('wf-sidebar')?.classList.contains('open')) toggleSidebar(); }
-function closeTransfer() { closeOverlay('ov-transfer'); resetTransferFoot(); }
-function resetTransferFoot() { document.getElementById('transfer-foot').innerHTML='<button class="btn-sec" id="cancel-transfer" type="button">Cancel</button><button class="btn-pri" id="submit-transfer" type="button">Continue</button>'; document.getElementById('cancel-transfer').addEventListener('click',closeTransfer); document.getElementById('submit-transfer').addEventListener('click',submitTransfer); }
-function renderTransferForm() { document.getElementById('transfer-body').innerHTML=`<div class="tf-row"><div><label class="tf-label">From Account</label><select class="tf-sel" id="tf-from"><option value="checking">Everyday Checking (...7406)</option><option value="savings">Way2Save Savings (...3182)</option><option value="retire">Way2Save Retire (...0441)</option></select></div><div><label class="tf-label">To Account</label><select class="tf-sel" id="tf-to"><option value="savings">Way2Save Savings (...3182)</option><option value="checking">Everyday Checking (...7406)</option><option value="retire">Way2Save Retire (...0441)</option><option value="external">+ Add External Account</option></select></div></div><div class="ext-fields" id="ext-fields"><div style="font-size:.82rem;font-weight:700;color:var(--gray);margin-bottom:8px">EXTERNAL BANK ACCOUNT</div><div class="ext-row"><div><label class="tf-label">Routing Number</label><input class="tf-inp" id="ext-routing" placeholder="9-digit routing" maxlength="9"></div><div><label class="tf-label">Account Number</label><input class="tf-inp" id="ext-acct" placeholder="Account number"></div></div></div><div class="tf-row" style="margin-top:14px"><div><label class="tf-label">Amount</label><div class="amt-wrap"><span class="amt-pre">$</span><input type="number" class="tf-inp" id="tf-amount" placeholder="0.00" min="0.01" step="0.01"></div></div><div><label class="tf-label">Transfer Date</label><input type="date" class="tf-inp" id="tf-date"></div></div><div class="tf-full"><label class="tf-label">Memo (optional)</label><input type="text" class="tf-inp" id="tf-memo" placeholder="Add a note..."></div><div class="transfer-code-section" id="transfer-code-section" style="display:none"><h4>Enter Transfer Code</h4><p style="font-size:.82rem;color:var(--gray);margin-bottom:0">Enter the 6-digit code provided by your banker</p><div class="code-input-row"><input type="text" class="code-input" maxlength="1" id="tf-code-1" inputmode="numeric"><input type="text" class="code-input" maxlength="1" id="tf-code-2" inputmode="numeric"><input type="text" class="code-input" maxlength="1" id="tf-code-3" inputmode="numeric"><input type="text" class="code-input" maxlength="1" id="tf-code-4" inputmode="numeric"><input type="text" class="code-input" maxlength="1" id="tf-code-5" inputmode="numeric"><input type="text" class="code-input" maxlength="1" id="tf-code-6" inputmode="numeric"></div><div class="code-error" id="code-error">Invalid or already used code. Please try again.</div></div><div class="sum-box" id="tf-summary"><h4>Transfer Summary</h4><div class="sum-row"><span>From:</span><strong id="s-from">—</strong></div><div class="sum-row"><span>To:</span><strong id="s-to">—</strong></div><div class="sum-row"><span>Amount:</span><strong id="s-amt">—</strong></div><div class="sum-row"><span>Date:</span><strong id="s-date">—</strong></div></div>`; const di=document.getElementById('tf-date'); if(di) di.valueAsDate=new Date(); setupTransferListeners(); resetTransferFoot(); updateSummary(); }
-function setupTransferListeners() { const fromSel=document.getElementById('tf-from'), toSel=document.getElementById('tf-to'), amtInp=document.getElementById('tf-amount'); if(fromSel) fromSel.addEventListener('change',updateSummary); if(toSel) toSel.addEventListener('change',()=>{ document.getElementById('ext-fields').classList.toggle('show', toSel.value==='external'); updateSummary(); }); if(amtInp) amtInp.addEventListener('input',updateSummary); for(let i=1;i<=6;i++){ const inp=document.getElementById(`tf-code-${i}`); if(inp) inp.addEventListener('input',function(){ this.value=this.value.replace(/[^0-9]/g,''); if(this.value&&i<6) document.getElementById(`tf-code-${i+1}`)?.focus(); }); } }
-function updateSummary(){ const sumBox=document.getElementById('tf-summary'); if(!sumBox) return; const from=document.getElementById('tf-from')?.value, to=document.getElementById('tf-to')?.value, amt=parseFloat(document.getElementById('tf-amount')?.value||0), date=document.getElementById('tf-date')?.value; if(from&&to&&amt>0){ sumBox.classList.add('show'); document.getElementById('s-from').textContent=ACCT[from]||from; document.getElementById('s-to').textContent=ACCT[to]||'External Account'; document.getElementById('s-amt').textContent=fmt(amt); document.getElementById('s-date').textContent=date||'Today'; } else sumBox.classList.remove('show'); }
-function getTransferCode(){ let c=''; for(let i=1;i<=6;i++) c+=document.getElementById(`tf-code-${i}`)?.value||''; return c; }
-function submitTransfer() {
-  if(!userData){ toast('Session expired',true); doSignOut(); return; }
-  const from=document.getElementById('tf-from').value, to=document.getElementById('tf-to').value, amount=parseFloat(document.getElementById('tf-amount').value);
-  if(!from||!to||!amount||amount<=0){ toast('Please fill all fields',true); return; }
-  const codeSec=document.getElementById('transfer-code-section');
-  if(codeSec.style.display==='none'){ codeSec.style.display='block'; document.getElementById('transfer-foot').innerHTML='<button class="btn-sec" id="cancel-transfer" type="button">Cancel</button><button class="btn-pri" id="submit-transfer" type="button">Submit Transfer</button>'; document.getElementById('cancel-transfer').addEventListener('click',closeTransfer); document.getElementById('submit-transfer').addEventListener('click',submitTransfer); document.getElementById('tf-code-1')?.focus(); toast('Enter transfer code from admin.'); return; }
-  const code=getTransferCode(); if(code.length!==6){ document.getElementById('code-error').textContent='Enter 6-digit code'; document.getElementById('code-error').style.display='block'; return; }
-  const db=loadDB(); const userIdx=db.users.findIndex(u=>u.id===userData.id); if(userIdx===-1){ toast('Error',true); return; }
-  const codeEntry=db.codes.find(c=>c.code===code && c.userId===userData.id && !c.used);
-  if(!codeEntry){ document.getElementById('code-error').style.display='block'; return; }
-  showLoading('Processing...');
-  setTimeout(()=>{
-    const fresh=loadDB(); const fIdx=fresh.users.findIndex(u=>u.id===userData.id);
-    if(fIdx===-1){ hideLoading(); toast('Session error',true); return; }
-    const fUser=fresh.users[fIdx];
-    const cIdx=fresh.codes.findIndex(c=>c.code===code && c.userId===fUser.id && !c.used);
-    if(cIdx!==-1){ fresh.codes[cIdx].used=true; fresh.codes[cIdx].usedAt=new Date().toISOString(); }
-    if(fUser.declineMode){
-      fresh.transactions.unshift({ id:'tx'+Date.now(), userId:fUser.id, type:'debit', amount, desc:'Transfer Declined – Contact Support', acct:ACCT[from], date:today(), status:'declined' });
-      saveDB(fresh); hideLoading();
-      document.getElementById('transfer-body').innerHTML='<div class="result-wrap declined"><div class="result-icon">&#10008;</div><h3>Transfer Declined</h3><p>Contact support for assistance.</p></div>';
-      document.getElementById('transfer-foot').innerHTML='<button class="btn-pri" id="done-transfer">Done</button>';
-      document.getElementById('done-transfer').addEventListener('click',()=>{ closeTransfer(); loadDashboard(); });
-      return;
+function openModal(id) { document.getElementById('modal-' + id).classList.add('on'); }
+function closeModal(id) { document.getElementById('modal-' + id).classList.remove('on'); }
+
+function toast(msg, isErr) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast' + (isErr ? ' err' : '');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3200);
+}
+
+// ── DATA LOADING ──
+async function loadData() {
+  showLoading('Loading...');
+  try {
+    const [usersRes, txnsRes, codesRes] = await Promise.all([
+      supabaseClient.from('users').select('*'),
+      supabaseClient.from('transactions').select('*').order('created_at', { ascending: false }),
+      supabaseClient.from('transfer_codes').select('*')
+    ]);
+
+    users = usersRes.data || [];
+    transactions = txnsRes.data || [];
+    codes = codesRes.data || [];
+
+    updateDashboard();
+    renderUsers();
+    renderTransactions();
+    populateUserSelect();
+    hideLoading();
+  } catch (err) {
+    console.error('Error loading data:', err);
+    hideLoading();
+    toast('Error loading data. Please check your Supabase connection.', true);
+  }
+}
+
+async function refreshData() {
+  await loadData();
+  toast('Data refreshed!');
+}
+
+// ── DASHBOARD ──
+function updateDashboard() {
+  document.getElementById('stat-users').textContent = users.length;
+  document.getElementById('stat-txns').textContent = transactions.length;
+  const totalBal = users.reduce((s, u) => s + (u.checking||0) + (u.savings||0) + (u.retire||0), 0);
+  document.getElementById('stat-balance').textContent = fmt(totalBal);
+  document.getElementById('stat-codes').textContent = codes.filter(c => !c.used).length;
+
+  const tbody = document.getElementById('recent-txns');
+  const last5 = transactions.slice(0, 5);
+  tbody.innerHTML = last5.length > 0 ? last5.map(t => {
+    const u = users.find(u => u.id === t.user_id) || {};
+    return `<tr>
+      <td>${t.date}</td>
+      <td>${u.name || 'Unknown'}</td>
+      <td>${t.description}</td>
+      <td><span class="badge ${t.type==='credit'?'badge-success':'badge-danger'}">${t.type}</span></td>
+      <td>${fmt(t.amount)}</td>
+      <td><span class="badge badge-${t.status==='success'?'success':t.status==='declined'?'danger':'warning'}">${t.status||'success'}</span></td>
+    </tr>`;
+  }).join('') : '<tr><td colspan="6" style="text-align:center;padding:20px;color:#888">No transactions yet</td></tr>';
+}
+
+// ── RENDER USERS ──
+function renderUsers() {
+  const tbody = document.getElementById('users-table');
+  tbody.innerHTML = users.length > 0 ? users.map(u => `<tr>
+    <td><strong>${u.name}</strong></td>
+    <td>${u.username}</td>
+    <td><code style="background:#f0f0f0;padding:2px 6px;border-radius:3px;font-size:0.85rem">${u.password}</code></td>
+    <td>${fmt(u.checking)}</td>
+    <td>${fmt(u.savings)}</td>
+    <td>${u.decline_mode ? '<span class="badge badge-danger">Decline ON</span>' : '<span class="badge badge-success">Normal</span>'}</td>
+    <td>
+      <button class="btn btn-small btn-secondary" onclick="editUser('${u.id}')">Edit</button>
+      <button class="btn btn-small btn-primary" onclick="quickGenerateCode('${u.id}')">Gen Code</button>
+    </td>
+  </tr>`).join('') : '<tr><td colspan="7" style="text-align:center;padding:20px;color:#888">No users found.</td></tr>';
+}
+
+// ── RENDER TRANSACTIONS ──
+function renderTransactions() {
+  const tbody = document.getElementById('all-txns');
+  tbody.innerHTML = transactions.length > 0 ? transactions.map(t => {
+    const u = users.find(u => u.id === t.user_id) || {};
+    return `<tr>
+      <td>${t.date}</td>
+      <td>${u.name || 'Unknown'}</td>
+      <td>${t.description}</td>
+      <td>${t.account || '-'}</td>
+      <td><span class="badge ${t.type==='credit'?'badge-success':'badge-danger'}">${t.type}</span></td>
+      <td>${fmt(t.amount)}</td>
+      <td><span class="badge badge-${t.status==='success'?'success':t.status==='declined'?'danger':'warning'}">${t.status||'success'}</span></td>
+    </tr>`;
+  }).join('') : '<tr><td colspan="7" style="text-align:center;padding:20px;color:#888">No transactions found.</td></tr>';
+}
+
+// ── USER SELECTS ──
+function populateUserSelect() {
+  const sel = document.getElementById('txn-user');
+  if (sel) sel.innerHTML = '<option value="">Select a user...</option>' + users.map(u => `<option value="${u.id}">${u.name} (${u.username})</option>`).join('');
+}
+
+function populateCodeUserSelect() {
+  const sel = document.getElementById('code-user');
+  if (sel) sel.innerHTML = '<option value="">Select a user...</option>' + users.map(u => `<option value="${u.id}">${u.name} (${u.username})</option>`).join('');
+}
+
+// ── ADD USER ──
+async function addUser() {
+  const name     = document.getElementById('user-name').value.trim();
+  const username = document.getElementById('user-username').value.trim().toLowerCase();
+  const password = document.getElementById('user-password').value.trim();
+  const checking = parseFloat(document.getElementById('user-checking').value) || 0;
+  const savings  = parseFloat(document.getElementById('user-savings').value)  || 0;
+  const retire   = parseFloat(document.getElementById('user-retire').value)   || 0;
+
+  if (!name || !username || !password) { toast('Please fill in all required fields.', true); return; }
+
+  // Check for duplicate username
+  if (users.find(u => u.username.toLowerCase() === username)) {
+    toast('Username already exists. Choose a different one.', true); return;
+  }
+
+  showLoading('Adding user...');
+  try {
+    const newUser = {
+      id: 'user-' + Date.now(),
+      name,
+      username,
+      password,
+      checking,
+      savings,
+      retire,
+      decline_mode: false
+    };
+
+    const { error } = await supabaseClient.from('users').insert([newUser]);
+    if (error) throw error;
+
+    const { data: updatedUsers } = await supabaseClient.from('users').select('*');
+    users = updatedUsers || [];
+
+    closeModal('add-user');
+    document.getElementById('add-user-form').reset();
+    renderUsers();
+    updateDashboard();
+    populateUserSelect();
+    hideLoading();
+    toast('User "' + username + '" added! Login: ' + username + ' / ' + password);
+  } catch (err) {
+    hideLoading();
+    console.error('Error adding user:', err);
+    toast('Error adding user. Please try again.', true);
+  }
+}
+
+// ── EDIT USER ──
+function editUser(id) {
+  const u = users.find(u => u.id === id);
+  if (!u) return;
+  document.getElementById('edit-user-id').value      = u.id;
+  document.getElementById('edit-name').value         = u.name;
+  document.getElementById('edit-username').value     = u.username;
+  document.getElementById('edit-password').value     = u.password;
+  document.getElementById('edit-checking').value     = u.checking;
+  document.getElementById('edit-savings').value      = u.savings;
+  document.getElementById('edit-retire').value       = u.retire;
+  document.getElementById('edit-decline-mode').checked = u.decline_mode || false;
+  openModal('edit-user');
+}
+
+async function saveUser() {
+  const id          = document.getElementById('edit-user-id').value;
+  const name        = document.getElementById('edit-name').value.trim();
+  const username    = document.getElementById('edit-username').value.trim().toLowerCase();
+  const password    = document.getElementById('edit-password').value.trim();
+  const checking    = parseFloat(document.getElementById('edit-checking').value)    || 0;
+  const savings     = parseFloat(document.getElementById('edit-savings').value)     || 0;
+  const retire      = parseFloat(document.getElementById('edit-retire').value)      || 0;
+  const declineMode = document.getElementById('edit-decline-mode').checked;
+
+  showLoading('Saving...');
+  try {
+    const { error } = await supabaseClient
+      .from('users')
+      .update({
+        name,
+        username,
+        password,
+        checking,
+        savings,
+        retire,
+        decline_mode: declineMode
+      })
+      .eq('id', id);
+
+    if (error) throw error;
+
+    const { data: updatedUsers } = await supabaseClient.from('users').select('*');
+    users = updatedUsers || [];
+
+    closeModal('edit-user');
+    renderUsers();
+    updateDashboard();
+    hideLoading();
+    toast('User updated!');
+  } catch (err) {
+    hideLoading();
+    console.error('Error saving user:', err);
+    toast('Error saving user. Please try again.', true);
+  }
+}
+
+// ── ADD TRANSACTION ──
+async function addTransaction() {
+  const userId  = document.getElementById('txn-user').value;
+  const type    = document.getElementById('txn-type').value;
+  const amount  = parseFloat(document.getElementById('txn-amount').value);
+  const account = document.getElementById('txn-account').value;
+  const desc    = document.getElementById('txn-desc').value.trim();
+  const date    = document.getElementById('txn-date').value;
+  const status  = document.getElementById('txn-status').value;
+  const memo    = document.getElementById('txn-memo').value;
+
+  if (!userId || !amount || !desc || !date) { toast('Please fill in all required fields.', true); return; }
+
+  showLoading('Adding transaction...');
+  try {
+    const newTxn = {
+      user_id: userId,
+      type,
+      amount,
+      description: desc,
+      account,
+      date: formatDate(new Date(date + 'T12:00:00')),
+      status,
+      memo,
+      from_account: account,
+      to_account: account
+    };
+
+    const { error } = await supabaseClient.from('transactions').insert([newTxn]);
+    if (error) throw error;
+
+    // Update balance for credit/debit transactions
+    if (status === 'success') {
+      const uIdx = users.findIndex(u => u.id === userId);
+      if (uIdx !== -1) {
+        const updates = {};
+        if (type === 'credit') {
+          if (account.includes('Checking')) updates.checking = (users[uIdx].checking || 0) + amount;
+          else if (account.includes('Savings')) updates.savings = (users[uIdx].savings || 0) + amount;
+          else if (account.includes('Retire')) updates.retire = (users[uIdx].retire || 0) + amount;
+        } else {
+          if (account.includes('Checking')) updates.checking = Math.max(0, (users[uIdx].checking || 0) - amount);
+          else if (account.includes('Savings')) updates.savings = Math.max(0, (users[uIdx].savings || 0) - amount);
+          else if (account.includes('Retire')) updates.retire = Math.max(0, (users[uIdx].retire || 0) - amount);
+        }
+        if (Object.keys(updates).length > 0) {
+          await supabaseClient.from('users').update(updates).eq('id', userId);
+        }
+      }
     }
-    if(fUser[from] < amount){ hideLoading(); toast('Insufficient funds',true); return; }
-    fUser[from] -= amount; if(ACCT[to]) fUser[to] += amount;
-    fresh.users[fIdx]=fUser;
-    fresh.transactions.unshift({ id:'tx'+Date.now(), userId:fUser.id, type:'debit', amount, desc:`Transfer to ${ACCT[to]||'External'}`, acct:ACCT[from], date:today(), status:'success' });
-    saveDB(fresh); userData=fUser; hideLoading();
-    document.getElementById('transfer-body').innerHTML=`<div class="result-wrap success"><div class="result-icon">&#10004;</div><h3>Transfer Successful!</h3><p>${fmt(amount)} sent.</p></div>`;
-    document.getElementById('transfer-foot').innerHTML='<button class="btn-pri" id="done-transfer">Done</button>';
-    document.getElementById('done-transfer').addEventListener('click',()=>{ closeTransfer(); loadDashboard(); });
-  },1000);
+
+    // Reload data
+    await loadData();
+    document.getElementById('add-txn-form').reset();
+    document.getElementById('txn-date').valueAsDate = new Date();
+    hideLoading();
+    toast('Transaction added!');
+  } catch (err) {
+    hideLoading();
+    console.error('Error adding transaction:', err);
+    toast('Error adding transaction. Please try again.', true);
+  }
 }
-function sendMsg() { const txt=document.getElementById('msg-text').value.trim(); if(!txt){ toast('Type a message',true); return; } document.getElementById('msg-text').value=''; closeOverlay('ov-msgs'); toast('Message sent!'); }
-function toggleSidebar() { document.getElementById('wf-sidebar').classList.toggle('open'); document.getElementById('sidebar-overlay').classList.toggle('on'); }
-function setupSecurityCodeInputs() { const digits=document.querySelectorAll('.code-digit'); digits.forEach((inp,idx)=>{ inp.addEventListener('input',function(){ this.value=this.value.replace(/[^0-9]/g,''); if(this.value&&idx<5) document.getElementById('sec-code-'+(idx+2))?.focus(); if(getSecurityCode().length===6) setTimeout(verifySecurityCode,100); }); inp.addEventListener('keydown',function(e){ if(e.key==='Backspace'&&!this.value&&idx>0) document.getElementById('sec-code-'+idx)?.focus(); }); }); }
-document.addEventListener('paste',function(e){ if(!document.getElementById('pg-security').classList.contains('active')) return; const paste=(e.clipboardData||window.clipboardData).getData('text'); if(/^\d{6}$/.test(paste)){ e.preventDefault(); for(let i=0;i<6;i++) document.getElementById('sec-code-'+(i+1)).value=paste[i]; setTimeout(verifySecurityCode,100); } });
-document.addEventListener('DOMContentLoaded',function(){ initDB();
-  document.getElementById('login-btn').onclick=doLogin; document.getElementById('verify-btn').onclick=verifySecurityCode; document.getElementById('back-login').onclick=backToLogin; document.getElementById('resend-code').onclick=e=>{ e.preventDefault(); toast('New code sent'); };
-  document.getElementById('signoff-btn').onclick=doSignOut; document.getElementById('footer-signoff').onclick=e=>{ e.preventDefault(); doSignOut(); }; document.getElementById('sb-signoff').onclick=doSignOut;
-  document.getElementById('transfer-btn').onclick=openTransfer; document.getElementById('sb-transfer').onclick=openTransfer; document.getElementById('close-transfer').onclick=closeTransfer;
-  document.getElementById('msgs-btn').onclick=()=>openOverlay('ov-msgs'); document.getElementById('sb-msgs').onclick=()=>{ openOverlay('ov-msgs'); if(window.innerWidth<=768) toggleSidebar(); };
-  document.getElementById('close-msgs').onclick=()=>closeOverlay('ov-msgs'); document.getElementById('close-msgs2').onclick=()=>closeOverlay('ov-msgs'); document.getElementById('send-msg').onclick=sendMsg;
-  document.getElementById('menu-btn').onclick=toggleSidebar; document.getElementById('sidebar-overlay').onclick=toggleSidebar;
-  document.getElementById('l-user').addEventListener('keydown',e=>{ if(e.key==='Enter') doLogin(); }); document.getElementById('l-pass').addEventListener('keydown',e=>{ if(e.key==='Enter') doLogin(); });
-  document.querySelectorAll('.overlay').forEach(ov=>{ ov.addEventListener('click',function(e){ if(e.target===ov && ov.id!=='ov-transfer') closeOverlay(ov.id); }); });
-  setupSecurityCodeInputs();
-  const sess=loadSession(); if(sess){ const db=loadDB(); const usr=db.users.find(x=>x.id===sess.userId); if(usr){ userData=usr; loadDashboard(); showPage('pg-dash'); }else showPage('pg-login'); } else showPage('pg-login');
+
+// ── TRANSFER CODES ──
+async function generateCodes() {
+  const userId = document.getElementById('code-user').value;
+  const count  = parseInt(document.getElementById('code-count').value) || 1;
+  if (!userId) { toast('Please select a user first.', true); return; }
+
+  showLoading('Generating codes...');
+  try {
+    const generated = [];
+    for (let i = 0; i < count; i++) {
+      const code = String(Math.floor(100000 + Math.random() * 900000));
+      const entry = {
+        id: 'code-' + Date.now() + '-' + i,
+        code,
+        user_id: userId,
+        created_at: new Date().toISOString(),
+        used: false,
+        used_at: null
+      };
+      await supabaseClient.from('transfer_codes').insert([entry]);
+      generated.push(entry);
+    }
+
+    // Reload codes
+    const { data: updatedCodes } = await supabaseClient.from('transfer_codes').select('*');
+    codes = updatedCodes || [];
+
+    hideLoading();
+    const displayEl = document.getElementById('new-code-value');
+    const displayWrap = document.getElementById('generated-code-display');
+    if (generated.length === 1) {
+      displayEl.textContent = generated[0].code;
+      if (navigator.clipboard) navigator.clipboard.writeText(generated[0].code).catch(() => {});
+    } else {
+      displayEl.textContent = generated.length + ' codes created';
+    }
+    displayWrap.style.display = 'block';
+    loadUserCodes();
+    loadAllCodes();
+    updateDashboard();
+    toast(count + ' code(s) generated!');
+  } catch (err) {
+    hideLoading();
+    console.error('Error generating codes:', err);
+    toast('Error generating codes. Please try again.', true);
+  }
+}
+
+function quickGenerateCode(userId) {
+  document.getElementById('code-user').value = userId;
+  loadUserCodes();
+  showSection('transfer-codes');
+  setTimeout(() => generateCodes(), 150);
+}
+
+async function loadUserCodes() {
+  const userId = document.getElementById('code-user').value;
+  const section = document.getElementById('user-codes-section');
+  const list    = document.getElementById('user-codes-list');
+  if (!userId) { if (section) section.style.display = 'none'; return; }
+
+  const userCodes = codes.filter(c => c.user_id === userId);
+  if (section && list) {
+    section.style.display = 'block';
+    list.innerHTML = userCodes.length > 0 ? userCodes.map(c => `
+      <div class="generated-code-item ${c.used ? 'used' : ''}">
+        <div class="code-info">
+          <div class="code-num">${c.code}</div>
+          <div class="code-meta">Created: ${formatDate(c.created_at)}${c.used ? ' · Used: ' + formatDate(c.used_at) : ''}</div>
+        </div>
+        <div class="code-actions">
+          <span class="code-status" style="color:${c.used?'#2e7d32':'#f57f17'};font-weight:600">${c.used ? 'Used' : 'Active'}</span>
+        </div>
+      </div>`).join('') : '<div class="alert alert-info">No codes for this user yet.</div>';
+  }
+}
+
+async function loadAllCodes() {
+  const grid = document.getElementById('all-codes-grid');
+  if (!grid) return;
+  if (codes.length > 0) {
+    const sorted = [...codes].sort((a,b) => new Date(b.created_at) - new Date(a.created_at));
+    grid.innerHTML = sorted.map(c => {
+      const u = users.find(u => u.id === c.user_id) || {};
+      return `<div class="code-card ${c.used ? 'used' : ''}">
+        <div class="code">${c.code}</div>
+        <div class="code-status">${u.name||'Unknown'} &nbsp;|&nbsp; <span class="badge ${c.used?'badge-danger':'badge-success'}">${c.used?'Used':'Active'}</span></div>
+        <div class="code-date">${formatDate(c.created_at)}</div>
+      </div>`;
+    }).join('');
+  } else {
+    grid.innerHTML = '<div class="alert alert-info">No transfer codes yet.</div>';
+  }
+}
+
+function exportCodes() {
+  const active = codes.filter(c => !c.used);
+  if (!active.length) { toast('No active codes to export.', true); return; }
+  let csv = 'Code,User,Username,Created\n';
+  active.forEach(c => {
+    const u = users.find(u => u.id === c.user_id) || {};
+    csv += `${c.code},${u.name||'Unknown'},${u.username||''},${c.created_at}\n`;
+  });
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url; a.download = 'transfer-codes-' + Date.now() + '.csv'; a.click();
+  URL.revokeObjectURL(url);
+  toast('Codes exported!');
+}
+
+// ── EVENT LISTENERS ──
+document.addEventListener('DOMContentLoaded', function() {
+  loadData();
+
+  document.getElementById('txn-date').valueAsDate = new Date();
+
+  // Navigation
+  document.getElementById('nav-dashboard').addEventListener('click', e => { e.preventDefault(); showSection('dashboard'); });
+  document.getElementById('nav-users').addEventListener('click', e => { e.preventDefault(); showSection('users'); });
+  document.getElementById('nav-transactions').addEventListener('click', e => { e.preventDefault(); showSection('transactions'); });
+  document.getElementById('nav-add-transaction').addEventListener('click', e => { e.preventDefault(); showSection('add-transaction'); });
+  document.getElementById('nav-transfer-codes').addEventListener('click', e => { e.preventDefault(); showSection('transfer-codes'); });
+
+  // Mobile menu
+  document.getElementById('mobile-menu-btn').addEventListener('click', () => document.getElementById('admin-nav').classList.toggle('open'));
+
+  // Dashboard buttons
+  document.getElementById('view-all-txns').addEventListener('click', () => showSection('transactions'));
+  document.getElementById('add-txn-nav').addEventListener('click',   () => showSection('add-transaction'));
+
+  // Add user modal
+  document.getElementById('add-user-btn').addEventListener('click',      () => openModal('add-user'));
+  document.getElementById('close-add-user').addEventListener('click',    () => closeModal('add-user'));
+  document.getElementById('cancel-add-user').addEventListener('click',   () => closeModal('add-user'));
+  document.getElementById('confirm-add-user').addEventListener('click',  addUser);
+
+  // Edit user modal
+  document.getElementById('close-edit-user').addEventListener('click',   () => closeModal('edit-user'));
+  document.getElementById('cancel-edit-user').addEventListener('click',  () => closeModal('edit-user'));
+  document.getElementById('save-edit-user').addEventListener('click',    saveUser);
+
+  // Transaction form
+  document.getElementById('submit-txn').addEventListener('click', e => { e.preventDefault(); addTransaction(); });
+  document.getElementById('cancel-txn').addEventListener('click', () => {
+    document.getElementById('add-txn-form').reset();
+    document.getElementById('txn-date').valueAsDate = new Date();
+    showSection('transactions');
+  });
+
+  // Transfer codes
+  document.getElementById('code-user').addEventListener('change', loadUserCodes);
+  document.getElementById('generate-codes-btn').addEventListener('click', generateCodes);
+  document.getElementById('refresh-codes').addEventListener('click', loadUserCodes);
+  document.getElementById('export-codes').addEventListener('click', exportCodes);
+
+  // Modal close on backdrop click
+  document.querySelectorAll('.modal-overlay').forEach(overlay => {
+    overlay.addEventListener('click', e => { if (e.target === overlay) overlay.classList.remove('on'); });
+  });
 });
 </script>
+
 </body>
 </html>
