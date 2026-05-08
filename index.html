@@ -19,6 +19,8 @@ body { font-family: 'Source Sans 3', sans-serif; background: #e8e8e8; color: var
 .loading-box { background: #fff; padding: 24px 40px; border-radius: 8px; text-align: center; }
 .spinner { width: 40px; height: 40px; border: 4px solid #eee; border-top-color: var(--red); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 12px; }
 @keyframes spin { to { transform: rotate(360deg); } }
+
+/* LOGIN PAGE */
 #pg-login { background: linear-gradient(135deg, #b0001e 0%, #7a0013 55%, #3a0008 100%); align-items: center; justify-content: center; }
 #pg-login::before { content:''; position:fixed; inset:0; background: radial-gradient(ellipse at 50% 40%, rgba(255,205,0,.07) 0%, transparent 65%); pointer-events: none; }
 .login-logo { color:var(--gold); font-family:'Merriweather',serif; font-size:2rem; font-weight:700; letter-spacing:2px; position:relative; z-index:1; }
@@ -27,40 +29,48 @@ body { font-family: 'Source Sans 3', sans-serif; background: #e8e8e8; color: var
 .login-card h2 { font-size:1.15rem; margin-bottom:24px; font-weight:600; }
 .fg { margin-bottom:18px; }
 .fg label { display:block; font-size:.82rem; font-weight:700; color:var(--gray); margin-bottom:5px; text-transform:uppercase; letter-spacing:.4px; }
-.fg input { width:100%; padding:10px 13px; border:1px solid var(--border); border-radius:3px; font-size:16px; font-family:inherit; outline:none; transition:border-color .2s; -webkit-appearance: none; -moz-appearance: none; appearance: none; }
+.fg input { width:100%; padding:10px 13px; border:1px solid var(--border); border-radius:3px; font-size:16px; font-family:inherit; outline:none; transition:border-color .2s; -webkit-appearance: none; }
 .fg input:focus { border-color:var(--red); box-shadow:0 0 0 2px rgba(200,16,46,.1); }
-.btn-red { width:100%; padding:12px; background:var(--red); color:#fff; border:none; border-radius:3px; font-size:.95rem; font-weight:700; cursor:pointer; font-family:inherit; transition:background .2s; -webkit-appearance: none; touch-action: manipulation; }
+.btn-red { width:100%; padding:12px; background:var(--red); color:#fff; border:none; border-radius:3px; font-size:.95rem; font-weight:700; cursor:pointer; font-family:inherit; transition:background .2s; touch-action: manipulation; }
 .btn-red:hover { background:#a80d26; }
 .btn-red:active { background:#8a0018; }
 .login-links { display:flex; justify-content:space-between; margin-top:14px; }
 .login-links a { font-size:.8rem; color:var(--blue); text-decoration:none; }
-.login-links a:hover { text-decoration:underline; }
 .err-msg { color:var(--red); font-size:.82rem; margin-top:8px; display:none; }
+
+/* SECURITY PAGE */
 #pg-security { background: linear-gradient(135deg, #b0001e 0%, #7a0013 55%, #3a0008 100%); align-items: center; justify-content: center; }
-#pg-security::before { content:''; position:fixed; inset:0; background: radial-gradient(ellipse at 50% 40%, rgba(255,205,0,.07) 0%, transparent 65%); pointer-events: none; }
 .security-card { background:#fff; border-radius:4px; padding:38px 42px; width:100%; max-width:410px; box-shadow:0 20px 60px rgba(0,0,0,.4); position:relative; z-index:1; text-align:center; }
 .security-icon { font-size:3rem; margin-bottom:16px; }
 .security-card h2 { font-size:1.15rem; margin-bottom:12px; font-weight:600; }
 .security-card p { font-size:.85rem; color:var(--gray); margin-bottom:24px; line-height:1.5; }
 .code-inputs { display:flex; gap:8px; justify-content:center; margin-bottom:20px; flex-wrap: wrap; }
-.code-digit { width:48px; height:56px; border:2px solid var(--border); border-radius:4px; font-size:1.5rem; text-align:center; font-weight:700; outline:none; -webkit-appearance: none; -moz-appearance: none; appearance: none; touch-action: manipulation; }
+.code-digit { width:48px; height:56px; border:2px solid var(--border); border-radius:4px; font-size:1.5rem; text-align:center; font-weight:700; outline:none; -webkit-appearance: none; touch-action: manipulation; }
 .code-digit:focus { border-color:var(--red); box-shadow:0 0 0 2px rgba(200,16,46,.1); }
+
+/* HEADER */
 .wf-header { background:var(--red); height:54px; padding:0 22px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; box-shadow:0 2px 8px rgba(0,0,0,.3); }
 .wf-logo { color:var(--gold); font-family:'Merriweather',serif; font-size:1.25rem; font-weight:700; letter-spacing:1px; }
 .hdr-actions { display:flex; align-items:center; gap:4px; }
-.hdr-btn { background:none; border:none; color:#fff; font-family:inherit; font-size:.83rem; cursor:pointer; padding:7px 13px; border-radius:3px; display:flex; align-items:center; gap:5px; font-weight:600; transition:background .15s; }
+.hdr-btn { background:none; border:none; color:#fff; font-family:inherit; font-size:.83rem; cursor:pointer; padding:7px 13px; border-radius:3px; display:flex; align-items:center; gap:5px; font-weight:600; transition:background .15s; touch-action: manipulation; }
 .hdr-btn:hover { background:rgba(255,255,255,.15); }
 .hdr-btn.accent { background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.28); }
 .hdr-btn.accent:hover { background:rgba(255,255,255,.22); }
-.mobile-menu-btn { display:none; background:none; border:none; color:#fff; font-size:1.5rem; cursor:pointer; }
+.mobile-menu-btn { display:none; background:none; border:none; color:#fff; font-size:1.5rem; cursor:pointer; touch-action: manipulation; }
+
+/* LAYOUT */
 .wf-body { display:flex; flex:1; }
 .wf-main { flex:1; padding:26px 22px; max-width:860px; }
 .wf-sidebar { width:285px; background:var(--sidebar); padding:18px 0; }
 .sidebar-open { display:none; position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:50; }
+
+/* DASHBOARD */
 .section-title { font-size:1.45rem; font-family:'Merriweather',serif; font-weight:400; margin-bottom:14px; }
 .welcome-bar { background:#fff; padding:13px 18px; margin-bottom:18px; border-radius:3px; border-left:4px solid var(--gold); }
 .welcome-bar h3 { font-size:.97rem; margin-bottom:2px; }
 .welcome-bar p  { font-size:.78rem; color:var(--gray); }
+
+/* ACCOUNT CARDS */
 .acct-card { background:#fff; border-radius:3px; margin-bottom:11px; box-shadow:0 1px 3px rgba(0,0,0,.08); border:1px solid #ddd; overflow:hidden; }
 .acct-hdr  { display:flex; align-items:center; padding:15px 17px; gap:13px; }
 .acct-icon { width:36px; height:36px; background:#eee; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
@@ -73,6 +83,8 @@ body { font-family: 'Source Sans 3', sans-serif; background: #e8e8e8; color: var
 .acct-sub { background:#f9f9f9; padding:9px 17px 9px 66px; display:flex; gap:22px; border-top:1px solid #eee; }
 .acct-sub a { font-size:.8rem; color:var(--blue); text-decoration:none; }
 .acct-sub a:hover { text-decoration:underline; }
+
+/* TRANSACTIONS */
 .txn-section { background:#fff; border-radius:3px; border:1px solid #ddd; margin-top:20px; overflow:hidden; }
 .txn-header  { padding:14px 18px; border-bottom:1px solid #eee; display:flex; justify-content:space-between; align-items:center; }
 .txn-header h3 { font-size:.97rem; font-weight:700; }
@@ -88,6 +100,8 @@ body { font-family: 'Source Sans 3', sans-serif; background: #e8e8e8; color: var
 .txn-amt.debit  { color:var(--red); }
 .txn-amt.credit { color:var(--green); }
 .txn-empty { padding:24px 18px; text-align:center; color:var(--gray); font-size:.85rem; }
+
+/* PROMO & FOOTER SECTIONS */
 .promo { background:#fff; border-radius:3px; padding:26px; margin-top:18px; display:grid; grid-template-columns:repeat(3,1fr); border:1px solid #ddd; }
 .promo-item { padding:0 18px; border-right:1px solid #e0e0e0; }
 .promo-item:first-child { padding-left:0; }
@@ -97,29 +111,35 @@ body { font-family: 'Source Sans 3', sans-serif; background: #e8e8e8; color: var
 .disclosures { background:#fff; border-radius:3px; padding:18px; margin-top:18px; border:1px solid #ddd; }
 .disclosures h4 { font-size:.88rem; margin-bottom:8px; }
 .disclosures p  { font-size:.76rem; color:var(--gray); line-height:1.6; }
+
+/* SIDEBAR */
 .sb-section { padding:14px 18px; border-bottom:1px solid #444; }
 .sb-title   { font-size:.78rem; font-weight:700; color:var(--gold); text-transform:uppercase; letter-spacing:1px; margin-bottom:9px; }
 .sb-link    { display:flex; justify-content:space-between; align-items:center; padding:9px 0; color:#e0e0e0; font-size:.85rem; border-bottom:1px solid #3a3a3a; cursor:pointer; transition:color .15s; }
 .sb-link:last-child { border-bottom:none; }
 .sb-link:hover { color:var(--gold); }
 .sb-link span:last-child { color:#888; }
+
+/* MODALS / OVERLAYS */
 .overlay { position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:200; display:none; align-items:center; justify-content:center; }
 .overlay.on { display:flex; }
 .modal { background:#fff; border-radius:4px; width:540px; max-width:95vw; max-height:90vh; overflow-y:auto; box-shadow:0 24px 80px rgba(0,0,0,.4); animation:slideUp .25s ease; }
 @keyframes slideUp { from{transform:translateY(28px);opacity:0} to{transform:translateY(0);opacity:1} }
 .modal-hdr { background:var(--red); color:#fff; padding:16px 22px; display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; }
 .modal-hdr h3 { font-size:1.05rem; font-weight:700; }
-.modal-x  { background:none; border:none; color:#fff; font-size:1.3rem; cursor:pointer; line-height:1; }
+.modal-x  { background:none; border:none; color:#fff; font-size:1.3rem; cursor:pointer; line-height:1; touch-action: manipulation; }
 .modal-body { padding:26px 22px; }
 .modal-foot { padding:14px 22px; border-top:1px solid #eee; display:flex; justify-content:flex-end; gap:11px; background:#fafafa; }
-.btn-pri { padding:10px 26px; background:var(--red); color:#fff; border:none; border-radius:3px; font-size:.88rem; font-weight:700; cursor:pointer; font-family:inherit; transition:background .15s; }
+.btn-pri { padding:10px 26px; background:var(--red); color:#fff; border:none; border-radius:3px; font-size:.88rem; font-weight:700; cursor:pointer; font-family:inherit; transition:background .15s; touch-action: manipulation; }
 .btn-pri:hover { background:#a80d26; }
-.btn-sec { padding:10px 26px; background:#fff; color:var(--gray); border:1px solid #ccc; border-radius:3px; font-size:.88rem; cursor:pointer; font-family:inherit; transition:background .15s; }
+.btn-sec { padding:10px 26px; background:#fff; color:var(--gray); border:1px solid #ccc; border-radius:3px; font-size:.88rem; cursor:pointer; font-family:inherit; transition:background .15s; touch-action: manipulation; }
 .btn-sec:hover { background:#f0f0f0; }
+
+/* TRANSFER FORM */
 .tf-row { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px; }
 .tf-full { margin-bottom:16px; }
 .tf-label { display:block; font-size:.8rem; font-weight:700; color:var(--gray); margin-bottom:5px; text-transform:uppercase; letter-spacing:.4px; }
-.tf-inp, .tf-sel { width:100%; padding:10px 12px; border:1px solid var(--border); border-radius:3px; font-size:16px; font-family:inherit; outline:none; transition:border-color .2s; -webkit-appearance: none; -moz-appearance: none; appearance: none; }
+.tf-inp, .tf-sel { width:100%; padding:10px 12px; border:1px solid var(--border); border-radius:3px; font-size:16px; font-family:inherit; outline:none; transition:border-color .2s; -webkit-appearance: none; }
 .tf-inp:focus, .tf-sel:focus { border-color:var(--red); box-shadow:0 0 0 2px rgba(200,16,46,.1); }
 .amt-wrap { position:relative; }
 .amt-pre { position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--gray); }
@@ -127,29 +147,41 @@ body { font-family: 'Source Sans 3', sans-serif; background: #e8e8e8; color: var
 .ext-fields { background:#f8f8f8; border:1px solid #e0e0e0; border-radius:3px; padding:14px; margin-top:8px; display:none; }
 .ext-fields.show { display:block; }
 .ext-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:10px; }
+
+/* TRANSFER CODE */
 .transfer-code-section { background:#fff8e7; border:2px solid var(--gold); border-radius:4px; padding:20px; margin-bottom:16px; text-align:center; }
 .transfer-code-section h4 { color:var(--dark); margin-bottom:8px; }
 .code-input-row { display:flex; gap:8px; justify-content:center; margin-top:12px; flex-wrap: wrap; }
-.code-input { width:48px; height:52px; border:2px solid var(--gold); border-radius:4px; font-size:1.4rem; text-align:center; font-weight:700; outline:none; -webkit-appearance: none; -moz-appearance: none; appearance: none; touch-action: manipulation; }
+.code-input { width:48px; height:52px; border:2px solid var(--gold); border-radius:4px; font-size:1.4rem; text-align:center; font-weight:700; outline:none; -webkit-appearance: none; touch-action: manipulation; }
 .code-input:focus { border-color:var(--red); }
 .code-error { color:var(--red); font-size:.8rem; margin-top:8px; display:none; }
+
+/* RESULTS */
 .result-wrap { text-align:center; padding:20px; }
 .result-icon { font-size:3rem; margin-bottom:10px; }
 .result-wrap h3 { font-size:1.15rem; margin-bottom:8px; }
 .result-wrap p  { color:var(--gray); font-size:.85rem; line-height:1.6; }
 .result-wrap.success h3 { color:var(--green); }
 .result-wrap.declined h3 { color:var(--red); }
+
+/* SUMMARY */
 .sum-box { background:#fff8e7; border:1px solid var(--gold); border-radius:3px; padding:14px; margin-top:6px; display:none; }
 .sum-box.show { display:block; }
 .sum-box h4 { font-size:.88rem; font-weight:700; margin-bottom:9px; }
 .sum-row { display:flex; justify-content:space-between; font-size:.82rem; padding:3px 0; color:var(--gray); }
 .sum-row strong { color:var(--dark); }
+
+/* TOAST */
 .toast { position:fixed; bottom:28px; right:28px; background:#1a7a1a; color:#fff; padding:12px 20px; border-radius:4px; font-size:.88rem; font-weight:600; box-shadow:0 8px 24px rgba(0,0,0,.3); z-index:400; transform:translateY(70px); opacity:0; transition:all .3s ease; }
 .toast.show { transform:translateY(0); opacity:1; }
 .toast.err  { background:var(--red); }
+
+/* PAGE FOOTER */
 .wf-footer { background:#222; color:#aaa; padding:12px 22px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; font-size:.76rem; }
 .wf-footer a { color:#aaa; text-decoration:none; margin:0 6px; }
 .wf-footer a:hover { color:var(--gold); }
+
+/* RESPONSIVE */
 @media (max-width: 768px) {
   .login-card, .security-card { padding: 28px 24px; margin: 0 16px; }
   .login-logo { font-size: 1.5rem; }
@@ -190,21 +222,37 @@ body { font-family: 'Source Sans 3', sans-serif; background: #e8e8e8; color: var
 </head>
 <body>
 
-<div class="loading-overlay" id="loading"><div class="loading-box"><div class="spinner"></div><div id="loading-text">Loading...</div></div></div>
+<div class="loading-overlay" id="loading">
+  <div class="loading-box">
+    <div class="spinner"></div>
+    <div id="loading-text">Loading...</div>
+  </div>
+</div>
 
+<!-- LOGIN PAGE -->
 <div id="pg-login" class="page active">
   <div class="login-logo">WELLS FARGO</div>
   <div class="login-sub">Online Banking · Secure Access</div>
   <div class="login-card">
     <h2>Sign On to Wells Fargo</h2>
-    <div class="fg"><label>Username</label><input type="text" id="l-user" placeholder="Enter your username" autocomplete="username" autocapitalize="none"></div>
-    <div class="fg"><label>Password</label><input type="password" id="l-pass" placeholder="Enter your password" autocomplete="current-password"></div>
-    <button class="btn-red" id="login-btn">Sign On</button>
+    <div class="fg">
+      <label>Username</label>
+      <input type="text" id="l-user" placeholder="Enter your username" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false">
+    </div>
+    <div class="fg">
+      <label>Password</label>
+      <input type="password" id="l-pass" placeholder="Enter your password" autocomplete="current-password">
+    </div>
+    <button class="btn-red" id="login-btn" type="button">Sign On</button>
     <div class="err-msg" id="l-err">Invalid username or password.</div>
-    <div class="login-links"><a href="#">Forgot Username / Password?</a><a href="#">Enroll Now</a></div>
+    <div class="login-links">
+      <a href="#">Forgot Username / Password?</a>
+      <a href="#">Enroll Now</a>
+    </div>
   </div>
 </div>
 
+<!-- SECURITY PAGE -->
 <div id="pg-security" class="page">
   <div class="security-card">
     <div class="security-icon">&#128241;</div>
@@ -219,547 +267,857 @@ body { font-family: 'Source Sans 3', sans-serif; background: #e8e8e8; color: var
       <input type="text" class="code-digit" maxlength="1" id="sec-code-6" inputmode="numeric" pattern="[0-9]*" autocomplete="off">
     </div>
     <div class="err-msg" id="sec-err" style="display:none">Invalid security code. Please try again.</div>
-    <button class="btn-red" style="margin-top:16px" id="verify-btn">Verify</button>
+    <button class="btn-red" style="margin-top:16px" id="verify-btn" type="button">Verify</button>
     <p style="margin-top:16px;font-size:.8rem;color:var(--gray)">Didn't receive a code? <a href="#" id="resend-code">Resend</a></p>
-    <button class="btn-sec" style="margin-top:10px;width:100%" id="back-login">Back to Sign On</button>
+    <button class="btn-sec" style="margin-top:10px;width:100%;padding:10px 26px;background:#fff;color:var(--gray);border:1px solid #ccc;border-radius:3px;font-size:.88rem;cursor:pointer;font-family:inherit;" id="back-login" type="button">Back to Sign On</button>
   </div>
 </div>
 
+<!-- DASHBOARD PAGE -->
 <div id="pg-dash" class="page">
   <header class="wf-header">
-    <button class="mobile-menu-btn" id="menu-btn">&#9776;</button>
+    <button class="mobile-menu-btn" id="menu-btn" type="button">&#9776;</button>
     <div class="wf-logo">WELLS FARGO</div>
     <div class="hdr-actions">
-      <button class="hdr-btn accent" id="transfer-btn"><span>Transfer and Pay</span></button>
-      <button class="hdr-btn" id="msgs-btn">Messages</button>
-      <button class="hdr-btn" id="signoff-btn">Sign Off</button>
+      <button class="hdr-btn accent" id="transfer-btn" type="button"><span>Transfer and Pay</span></button>
+      <button class="hdr-btn" id="msgs-btn" type="button">Messages</button>
+      <button class="hdr-btn" id="signoff-btn" type="button">Sign Off</button>
     </div>
   </header>
   <div class="wf-body">
     <div class="sidebar-open" id="sidebar-overlay"></div>
     <main class="wf-main">
-      <div class="welcome-bar"><h3 id="dash-welcome">Welcome</h3><p id="dash-last">Your last sign on was today</p></div>
+      <div class="welcome-bar">
+        <h3 id="dash-welcome">Welcome</h3>
+        <p id="dash-last">Your last sign on was today</p>
+      </div>
       <h2 class="section-title">Account Summary</h2>
       <div class="acct-card">
         <div class="acct-hdr">
-          <div class="acct-icon"><svg width="20" height="20" fill="none" stroke="#C8102E" stroke-width="1.5" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
-          <div class="acct-info"><div class="acct-name">Everyday Checking</div><div class="acct-num" id="acct-checking">...7406</div></div>
-          <div class="acct-bal-col"><div class="acct-bal" id="d-checking">$0.00</div><div class="acct-bal-lbl">Available balance</div></div>
+          <div class="acct-icon">
+            <svg width="20" height="20" fill="none" stroke="#C8102E" stroke-width="1.5" viewBox="0 0 24 24">
+              <rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/>
+            </svg>
+          </div>
+          <div class="acct-info">
+            <div class="acct-name">Everyday Checking</div>
+            <div class="acct-num">...7406</div>
+          </div>
+          <div class="acct-bal-col">
+            <div class="acct-bal" id="d-checking">$0.00</div>
+            <div class="acct-bal-lbl">Available balance</div>
+          </div>
         </div>
-        <div class="acct-sub"><a href="#">Build or rebuild credit</a><a href="#">Way2Save Savings</a></div>
+        <div class="acct-sub">
+          <a href="#">Build or rebuild credit</a>
+          <a href="#">Way2Save Savings</a>
+        </div>
       </div>
       <div class="acct-card">
         <div class="acct-hdr">
-          <div class="acct-icon"><svg width="20" height="20" fill="none" stroke="#C8102E" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
-          <div class="acct-info"><div class="acct-name">Way2Save Savings</div><div class="acct-num" id="acct-savings">...3182</div></div>
-          <div class="acct-bal-col"><div class="acct-bal" id="d-savings">$0.00</div><div class="acct-bal-lbl">Available balance</div></div>
+          <div class="acct-icon">
+            <svg width="20" height="20" fill="none" stroke="#C8102E" stroke-width="1.5" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+            </svg>
+          </div>
+          <div class="acct-info">
+            <div class="acct-name">Way2Save Savings</div>
+            <div class="acct-num">...3182</div>
+          </div>
+          <div class="acct-bal-col">
+            <div class="acct-bal" id="d-savings">$0.00</div>
+            <div class="acct-bal-lbl">Available balance</div>
+          </div>
         </div>
       </div>
       <div class="acct-card">
         <div class="acct-hdr">
-          <div class="acct-icon"><svg width="20" height="20" fill="none" stroke="#888" stroke-width="1.5" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2"/></svg></div>
-          <div class="acct-info"><div class="acct-name">Way2Save Retire</div><div class="acct-num" id="acct-retire">...0441</div></div>
-          <div class="acct-bal-col"><div class="acct-bal" id="d-retire">$0.00</div><div class="acct-bal-lbl">Account balance</div></div>
+          <div class="acct-icon">
+            <svg width="20" height="20" fill="none" stroke="#888" stroke-width="1.5" viewBox="0 0 24 24">
+              <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-4 0v2"/>
+            </svg>
+          </div>
+          <div class="acct-info">
+            <div class="acct-name">Way2Save Retire</div>
+            <div class="acct-num">...0441</div>
+          </div>
+          <div class="acct-bal-col">
+            <div class="acct-bal" id="d-retire">$0.00</div>
+            <div class="acct-bal-lbl">Account balance</div>
+          </div>
         </div>
       </div>
-      <div class="txn-section"><div class="txn-header"><h3>Recent Transactions</h3><span style="font-size:.78rem;color:var(--gray)">Last 30 days</span></div><div id="txn-list"><div class="txn-empty">Loading transactions...</div></div></div>
-      <div class="promo"><div class="promo-item"><h4>As unique as you are</h4><p>Customize your Wells Fargo Debit Card today</p></div><div class="promo-item"><h4>Bank your way</h4><p>Personalizing your account can help</p></div><div class="promo-item"><h4>Get started</h4><p>Check out our Checking Account Quick Start guide</p></div></div>
-      <div class="disclosures"><h4>* Account Disclosures</h4><p>Deposit products offered by Wells Fargo Bank, N.A. Member FDIC. Equal Housing Lender</p></div>
+      <div class="txn-section">
+        <div class="txn-header">
+          <h3>Recent Transactions</h3>
+          <span style="font-size:.78rem;color:var(--gray)">Last 30 days</span>
+        </div>
+        <div id="txn-list"><div class="txn-empty">Loading transactions...</div></div>
+      </div>
+      <div class="promo">
+        <div class="promo-item"><h4>As unique as you are</h4><p>Customize your Wells Fargo Debit Card today</p></div>
+        <div class="promo-item"><h4>Bank your way</h4><p>Personalizing your account can help</p></div>
+        <div class="promo-item"><h4>Get started</h4><p>Check out our Checking Account Quick Start guide</p></div>
+      </div>
+      <div class="disclosures">
+        <h4>* Account Disclosures</h4>
+        <p>Deposit products offered by Wells Fargo Bank, N.A. Member FDIC. Equal Housing Lender</p>
+      </div>
     </main>
     <aside class="wf-sidebar" id="wf-sidebar">
-      <div class="sb-section"><div class="sb-title">Messages</div><div class="sb-link" id="sb-msgs"><span>View or send messages</span><span>&#8250;</span></div><div class="sb-link" id="sb-signoff"><span>Sign Off</span><span>&#8250;</span></div></div>
-      <div class="sb-section"><div class="sb-title">Planning &amp; Tools</div><div class="sb-link"><span>Calculate debt-to-income ratio</span><span>&#8250;</span></div><div class="sb-link"><span>View My Retirement Plan</span><span>&#8250;</span></div></div>
-      <div class="sb-section"><div class="sb-title">Service offers</div><div class="sb-link" id="sb-transfer"><span>Set up direct deposit</span><span>&#8250;</span></div></div>
+      <div class="sb-section">
+        <div class="sb-title">Messages</div>
+        <div class="sb-link" id="sb-msgs"><span>View or send messages</span><span>&#8250;</span></div>
+        <div class="sb-link" id="sb-signoff"><span>Sign Off</span><span>&#8250;</span></div>
+      </div>
+      <div class="sb-section">
+        <div class="sb-title">Planning &amp; Tools</div>
+        <div class="sb-link"><span>Calculate debt-to-income ratio</span><span>&#8250;</span></div>
+        <div class="sb-link"><span>View My Retirement Plan</span><span>&#8250;</span></div>
+      </div>
+      <div class="sb-section">
+        <div class="sb-title">Service offers</div>
+        <div class="sb-link" id="sb-transfer"><span>Set up direct deposit</span><span>&#8250;</span></div>
+      </div>
     </aside>
   </div>
-  <footer class="wf-footer"><div>Wells Fargo Online  |  <a href="#">Online Security Guarantee</a></div><div><a href="#" id="footer-signoff">Sign Off</a></div></footer>
+  <footer class="wf-footer">
+    <div>Wells Fargo Online  |  <a href="#">Online Security Guarantee</a></div>
+    <div><a href="#" id="footer-signoff">Sign Off</a></div>
+  </footer>
 </div>
 
-<div class="overlay" id="ov-transfer"><div class="modal"><div class="modal-hdr"><h3>Transfer and Pay</h3><button class="modal-x" id="close-transfer">&#10005;</button></div><div class="modal-body" id="transfer-body"></div><div class="modal-foot" id="transfer-foot"><button class="btn-sec" id="cancel-transfer">Cancel</button><button class="btn-pri" id="submit-transfer">Continue</button></div></div></div>
+<!-- TRANSFER MODAL -->
+<div class="overlay" id="ov-transfer">
+  <div class="modal">
+    <div class="modal-hdr">
+      <h3>Transfer and Pay</h3>
+      <button class="modal-x" id="close-transfer" type="button">&#10005;</button>
+    </div>
+    <div class="modal-body" id="transfer-body"></div>
+    <div class="modal-foot" id="transfer-foot">
+      <button class="btn-sec" id="cancel-transfer" type="button">Cancel</button>
+      <button class="btn-pri" id="submit-transfer" type="button">Continue</button>
+    </div>
+  </div>
+</div>
 
-<div class="overlay" id="ov-msgs"><div class="modal"><div class="modal-hdr"><h3>Messages</h3><button class="modal-x" id="close-msgs">&#10005;</button></div><div class="modal-body"><div style="padding:11px 0;border-bottom:1px solid #eee"><div style="font-size:.9rem;font-weight:700">Welcome to Wells Fargo Online!</div><div style="font-size:.78rem;color:var(--gray);margin-top:2px">Today</div></div><div style="padding:11px 0;color:var(--gray);font-size:.82rem;text-align:center;margin-top:14px">No more messages.</div><div style="margin-top:18px"><div class="tf-label">Send a Message</div><textarea class="tf-inp" rows="3" id="msg-text" placeholder="Type your message..." style="resize:vertical"></textarea></div></div><div class="modal-foot"><button class="btn-sec" id="close-msgs2">Close</button><button class="btn-pri" id="send-msg">Send</button></div></div></div>
+<!-- MESSAGES MODAL -->
+<div class="overlay" id="ov-msgs">
+  <div class="modal">
+    <div class="modal-hdr">
+      <h3>Messages</h3>
+      <button class="modal-x" id="close-msgs" type="button">&#10005;</button>
+    </div>
+    <div class="modal-body">
+      <div style="padding:11px 0;border-bottom:1px solid #eee">
+        <div style="font-size:.9rem;font-weight:700">Welcome to Wells Fargo Online!</div>
+        <div style="font-size:.78rem;color:var(--gray);margin-top:2px">Today</div>
+      </div>
+      <div style="padding:11px 0;color:var(--gray);font-size:.82rem;text-align:center;margin-top:14px">No more messages.</div>
+      <div style="margin-top:18px">
+        <div class="tf-label">Send a Message</div>
+        <textarea class="tf-inp" rows="3" id="msg-text" placeholder="Type your message..." style="resize:vertical"></textarea>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-sec" id="close-msgs2" type="button">Close</button>
+      <button class="btn-pri" id="send-msg" type="button">Send</button>
+    </div>
+  </div>
+</div>
 
 <div class="toast" id="toast"></div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.js"></script>
 <script>
-(function(){var SU='https://vlsnstzqwqformfgmtgi.supabase.co';var SK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZsc25zdHpxd3Fmb3JtZmdtdGdpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxNjkzOTMsImV4cCI6MjA5Mzc0NTM5M30.l01mCGL56mIiuz07CJltGULXMrnpKS5xHZwimHFm7Kk';window.SUPABASE_URL=SU;window.SUPABASE_ANON_KEY=SK;var s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.js';s.onload=function(){initApp()};s.onerror=function(){window.supabaseReady=false;initApp()};document.head.appendChild(s)})();var STORE_KEY='wf_db',SESSION_KEY='wf_session',supabase=null,supabaseReady=false,userData=null,pendingTransfer=null;var DEFAULT_USER={id:'demo-user',name:'Andrew Johnson',username:'andrew',password:'1234',checking:3241.64,savings:1087.58,retire:8924.05,declineMode:false};function isLocalStorageAvailable(){try{var t='__storage_test__';localStorage.setItem(t,t);localStorage.removeItem(t);return true}catch(e){return false}}function initDB(){var db=loadDB();if(!db.users||db.users.length===0){db.users=[DEFAULT_USER];db.transactions=[];db.codes=[];saveDB(db)}if(!db.codes)db.codes=[];if(!db.transactions)db.transactions=[];saveDB(db)}function loadDB(){if(!isLocalStorageAvailable())return{users:[],transactions:[],codes:[]};try{var raw=localStorage.getItem(STORE_KEY);if(!raw)return{users:[],transactions:[],codes:[]};var db=JSON.parse(raw);if(!db.users)db.users=[];if(!db.transactions)db.transactions=[];if(!db.codes)db.codes=[];return db}catch(e){try{localStorage.removeItem(STORE_KEY)}catch(e2){}return{users:[],transactions:[],codes:[]}}}function saveDB(db){if(!isLocalStorageAvailable())return false;try{localStorage.setItem(STORE_KEY,JSON.stringify(db));return true}catch(e){return false}}function saveSession(user){try{var s={userId:user.id,username:user.username,name:user.name,loginTime:new Date().toISOString()};localStorage.setItem(SESSION_KEY,JSON.stringify(s))}catch(e){}}function loadSession(){if(!isLocalStorageAvailable())return null;try{var raw=localStorage.getItem(SESSION_KEY);return raw?JSON.parse(raw):null}catch(e){return null}}function clearSession(){try{localStorage.removeItem(SESSION_KEY)}catch(e){}}async function initSupabaseAsync(){if(typeof window.supabase!=='undefined'){try{supabase=window.supabase.createClient(window.SUPABASE_URL,window.SUPABASE_ANON_KEY);supabaseReady=true;return true}catch(e){return false}}return false}function fmt(n){return'$'+Number(n||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}function today(){return new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'})}function showPage(id){document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active')});document.getElementById(id).classList.add('active')}function openOverlay(id){document.getElementById(id).classList.add('on')}function closeOverlay(id){document.getElementById(id).classList.remove('on')}function showLoading(text){document.getElementById('loading-text').textContent=text||'Loading...';document.getElementById('loading').classList.add('on')}function hideLoading(){document.getElementById('loading').classList.remove('on')}function toast(msg,isErr){var t=document.getElementById('toast');t.textContent=msg;t.className='toast'+(isErr?' err':'');t.classList.add('show');setTimeout(function(){t.classList.remove('show')},3200)}function toggleSidebar(){document.getElementById('wf-sidebar').classList.toggle('open');document.getElementById('sidebar-overlay').classList.toggle('on')}async function doLogin(){var u=document.getElementById('l-user').value.trim();var p=document.getElementById('l-pass').value;if(!u||!p){document.getElementById('l-err').textContent='Please enter both username and password.';document.getElementById('l-err').style.display='block';return}showLoading('Signing in...');document.getElementById('l-err').style.display='none';var foundUser=null;var db=loadDB();foundUser=db.users.find(function(x){return x.username===u&&x.password===p});if(!foundUser&&supabaseReady){try{var data=await supabase.from('users').select('*').eq('username',u).eq('password',p).single();if(data.data&&!data.error){foundUser=data.data;var localUser=db.users.find(function(x){return x.id===data.data.id});if(!localUser){db.users.push(data.data);saveDB(db)}}}catch(e){}}hideLoading();if(foundUser){userData=foundUser;showPage('pg-security');clearSecurityCode()}else{document.getElementById('l-err').textContent='Invalid username or password.';document.getElementById('l-err').style.display='block';document.getElementById('l-pass').value=''}}function clearSecurityCode(){for(var i=1;i<=6;i++){var input=document.getElementById('sec-code-'+i);if(input)input.value=''}document.getElementById('sec-err').style.display='none'}function getSecurityCode(){var code='';for(var i=1;i<=6;i++){var input=document.getElementById('sec-code-'+i);if(input)code+=input.value}return code}async function verifySecurityCode(){var code=getSecurityCode();if(code.length!==6){document.getElementById('sec-err').textContent='Please enter the complete 6-digit code.';document.getElementById('sec-err').style.display='block';return}showLoading('Verifying code...');await new Promise(function(r){setTimeout(r,800)});hideLoading();saveSession(userData);loadDashboard();showPage('pg-dash');toast('Sign on successful!')}function backToLogin(){userData=null;showPage('pg-login');document.getElementById('l-user').value='';document.getElementById('l-pass').value='';clearSecurityCode()}function doSignOut(){userData=null;clearSession();showPage('pg-login');document.getElementById('l-user').value='';document.getElementById('l-pass').value='';clearSecurityCode();var sb=document.getElementById('wf-sidebar');if(sb){sb.classList.remove('open');document.getElementById('sidebar-overlay').classList.remove('on')}}}function loadDashboard(){if(!userData)return;var db=loadDB();var freshUser=db.users.find(function(x){return x.id===userData.id});if(freshUser)userData=freshUser;document.getElementById('dash-welcome').textContent='Welcome, '+(userData.name?userData.name.split(' ')[0]:'User').toUpperCase();document.getElementById('dash-last').textContent='Your last sign on was '+today();document.getElementById('d-checking').textContent=fmt(userData.checking);document.getElementById('d-savings').textContent=fmt(userData.savings);document.getElementById('d-retire').textContent=fmt(userData.retire);renderTransactions()}function renderTransactions(){var list=document.getElementById('txn-list');var db=loadDB();var txns=db.transactions.filter(function(t){return t.userId===userData&&userData}).slice().reverse();if(txns.length>0){list.innerHTML=txns.map(function(t){var statusClass=t.status==='declined'?'declined':(t.type==='debit'?'debit':'credit');var displayAmt=t.status==='declined'?t.amount:(t.type==='debit'?'-':'+')+fmt(t.amount);return'<div class="txn-row" style="'+(t.status==='declined'?'opacity:0.7':'')+'"><div class="txn-dot '+t.type+'"></div><div style="flex:1"><div class="txn-desc">'+t.desc+'</div><div class="txn-acct">'+t.acct+'</div></div><div class="txn-date">'+t.date+'</div><div class="txn-amt '+statusClass+'">'+displayAmt+'</div></div>'}).join('')}else{list.innerHTML='<div class="txn-empty">No transactions yet.</div>'}}var ACCT={checking:'Everyday Checking (...7406)',savings:'Way2Save Savings (...3182)',retire:'Way2Save Retire (...0441)'};function openTransfer(){renderTransferForm();openOverlay('ov-transfer');if(window.innerWidth<=768)toggleSidebar()}function closeTransfer(){closeOverlay('ov-transfer');pendingTransfer=null;document.getElementById('transfer-foot').innerHTML='<button class="btn-sec" id="cancel-transfer">Cancel</button><button class="btn-pri" id="submit-transfer">Continue</button>';setupTransferListeners()}function renderTransferForm(){document.getElementById('transfer-body').innerHTML='<div class="tf-row"><div><label class="tf-label">From Account</label><select class="tf-sel" id="tf-from"><option value="checking">Everyday Checking (...7406)</option><option value="savings">Way2Save Savings (...3182)</option><option value="retire">Way2Save Retire (...0441)</option></select></div><div><label class="tf-label">To Account</label><select class="tf-sel" id="tf-to"><option value="savings">Way2Save Savings (...3182)</option><option value="checking">Everyday Checking (...7406)</option><option value="retire">Way2Save Retire (...0441)</option><option value="external">+ Add External Account</option></select></div></div><div class="ext-fields" id="ext-fields"><div style="font-size:.82rem;font-weight:700;color:var(--gray);margin-bottom:8px">EXTERNAL BANK ACCOUNT</div><div class="ext-row"><div><label class="tf-label">Routing Number</label><input class="tf-inp" id="ext-routing" placeholder="9-digit routing" maxlength="9"></div><div><label class="tf-label">Account Number</label><input class="tf-inp" id="ext-acct" placeholder="Account number"></div></div></div><div class="tf-row" style="margin-top:14px"><div><label class="tf-label">Amount</label><div class="amt-wrap"><span class="amt-pre">$</span><input type="number" class="tf-inp" id="tf-amount" placeholder="0.00" min="0.01" step="0.01"></div></div><div><label class="tf-label">Transfer Date</label><input type="date" class="tf-inp" id="tf-date"></div></div><div class="tf-full"><label class="tf-label">Memo (optional)</label><input type="text" class="tf-inp" id="tf-memo" placeholder="Add a note..."></div><div class="transfer-code-section" id="transfer-code-section" style="display:none"><h4>Enter Transfer Code before final transfer</h4><p style="font-size:.82rem;color:var(--gray);margin-bottom:0">Enter the 6-digit code sent to your mobile phone</p><div class="code-input-row"><input type="text" class="code-input" maxlength="1" id="tf-code-1" inputmode="numeric" pattern="[0-9]*" autocomplete="off"><input type="text" class="code-input" maxlength="1" id="tf-code-2" inputmode="numeric" pattern="[0-9]*" autocomplete="off"><input type="text" class="code-input" maxlength="1" id="tf-code-3" inputmode="numeric" pattern="[0-9]*" autocomplete="off"><input type="text" class="code-input" maxlength="1" id="tf-code-4" inputmode="numeric" pattern="[0-9]*" autocomplete="off"><input type="text" class="code-input" maxlength="1" id="tf-code-5" inputmode="numeric" pattern="[0-9]*" autocomplete="off"><input type="text" class="code-input" maxlength="1" id="tf-code-6" inputmode="numeric" pattern="[0-9]*" autocomplete="off"></div><div class="code-error" id="code-error">Invalid or used code. Please enter a valid code.</div></div><div class="sum-box" id="tf-summary"><h4>Transfer Summary</h4><div class="sum-row"><span>From:</span><strong id="s-from">—</strong></div><div class="sum-row"><span>To:</span><strong id="s-to">—</strong></div><div class="sum-row"><span>Amount:</span><strong id="s-amt">—</strong></div><div class="sum-row"><span>Date:</span><strong id="s-date">—</strong></div></div>';document.getElementById('tf-date').valueAsDate=new Date();setupTransferListeners();updateSummary()}function setupTransferListeners(){var fromSelect=document.getElementById('tf-from');var toSelect=document.getElementById('tf-to');var amountInput=document.getElementById('tf-amount');if(fromSelect)fromSelect.addEventListener('change',updateSummary);if(toSelect)toSelect.addEventListener('change',handleToChange);if(amountInput)amountInput.addEventListener('input',updateSummary);var cancelBtn=document.getElementById('cancel-transfer');var submitBtn=document.getElementById('submit-transfer');if(cancelBtn)cancelBtn.addEventListener('click',closeTransfer);if(submitBtn)submitBtn.addEventListener('click',submitTransfer);for(var i=1;i<=6;i++){var input=document.getElementById('tf-code-'+i);if(input){var idx=i;input.addEventListener('input',function(){this.value=this.value.replace(/[^0-9]/g,'');var nextIdx=parseInt(this.id.replace('tf-code-',''));if(this.value&&nextIdx<6){var next=document.getElementById('tf-code-'+(nextIdx+1));if(next)next.focus()}});input.addEventListener('keydown',function(e){var currIdx=parseInt(this.id.replace('tf-code-',''));if(e.key==='Backspace'&&!this.value&&currIdx>1){var prev=document.getElementById('tf-code-'+(currIdx-1));if(prev)prev.focus()}})}}}function handleToChange(){var val=document.getElementById('tf-to')&&document.getElementById('tf-to').value;var extFields=document.getElementById('ext-fields');if(extFields)extFields.classList.toggle('show',val==='external');updateSummary()}function updateSummary(){var from=document.getElementById('tf-from')&&document.getElementById('tf-from').value;var to=document.getElementById('tf-to')&&document.getElementById('tf-to').value;var amount=parseFloat(document.getElementById('tf-amount')&&document.getElementById('tf-amount').value);var date=document.getElementById('tf-date')&&document.getElementById('tf-date').value;var sum=document.getElementById('tf-summary');if(!sum)return;if(from&&to&&amount>0){sum.classList.add('show');var toLabel=ACCT[to]||'External Account';if(to==='external'){var rn=document.getElementById('ext-routing')&&document.getElementById('ext-routing').value||'';var bn=document.getElementById('ext-bank')&&document.getElementById('ext-bank').value||'';toLabel=(bn||'External Bank')+(rn?' (Routing: '+rn+')':'')}document.getElementById('s-from').textContent=ACCT[from];document.getElementById('s-to').textContent=toLabel;document.getElementById('s-amt').textContent=fmt(amount);document.getElementById('s-date').textContent=date||'Today'}else{sum.classList.remove('show')}}function getTransferCode(){var code='';for(var i=1;i<=6;i++){code+=document.getElementById('tf-code-'+i)&&document.getElementById('tf-code-'+i).value||''}return code}function clearTransferCode(){for(var i=1;i<=6;i++){var el=document.getElementById('tf-code-'+i);if(el)el.value=''}var err=document.getElementById('code-error');if(err)err.style.display='none'}async function submitTransfer(){var from=document.getElementById('tf-from')&&document.getElementById('tf-from').value;var to=document.getElementById('tf-to')&&document.getElementById('tf-to').value;var amount=parseFloat(document.getElementById('tf-amount')&&document.getElementById('tf-amount').value);var date=document.getElementById('tf-date')&&document.getElementById('tf-date').value;var memo=document.getElementById('tf-memo')&&document.getElementById('tf-memo').value||'';var codeSection=document.getElementById('transfer-code-section');if(!from||!to||!amount||amount<=0){toast('Please fill in all required fields.',true);return}if(from===to&&to!=='external'){toast('From and To accounts cannot be the same.',true);return}if(to==='external'){var rt=document.getElementById('ext-routing')&&document.getElementById('ext-routing').value||'';var ac=document.getElementById('ext-acct')&&document.getElementById('ext-acct').value||'';if(rt.length<9){toast('Please enter a valid 9-digit routing number.',true);return}if(!ac){toast('Please enter the account number.',true);return}}if(codeSection&&codeSection.style.display==='none'){codeSection.style.display='block';document.getElementById('transfer-foot').innerHTML='<button class="btn-sec" id="cancel-transfer">Cancel</button><button class="btn-pri" id="submit-transfer">Submit Transfer</button>';setupTransferListeners();toast('Please enter the 6-digit transfer code to complete your transfer.');return}var db=loadDB();var user=db.users.find(function(x){return x.id===userData&&userData.id});if(!user||user[from]<amount){toast('Insufficient funds in selected account.',true);return}var toLabel=ACCT[to]||'External Account';var code=getTransferCode();if(!code||code.length!==6){var codeErr=document.getElementById('code-error');if(codeErr){codeErr.textContent='Please enter the 6-digit transfer code.';codeErr.style.display='block'}return}var codes=db.codes||[];var codeEntry=codes.find(function(c){return c.code===code&&c.userId===user.id&&!c.used});if(!codeEntry){showLoading('Processing transfer...');await new Promise(function(r){setTimeout(r,4000)});hideLoading();var codeErr=document.getElementById('code-error');if(codeErr){codeErr.textContent='Invalid or already used code. Please contact support.';codeErr.style.display='block'}return}codeEntry.used=true;codeEntry.usedAt=new Date().toISOString();if(user.declineMode){showLoading('Processing transfer...');await new Promise(function(r){setTimeout(r,4000)});hideLoading();db.transactions.unshift({id:'tx'+Date.now(),userId:user.id,type:'debit',amount:amount,desc:'Transfer Declined - Contact Support',acct:ACCT[from],date:today(),status:'declined',memo:'This transaction was declined by the system.',to:toLabel,from:ACCT[from]});saveDB(db);clearTransferCode();return}user[from]-=amount;if(ACCT[to])user[to]+=amount;var idx=db.users.findIndex(function(x){return x.id===userData&&userData.id});if(idx!==-1)db.users[idx]=user;db.transactions.unshift({id:'tx'+Date.now(),userId:user.id,type:'debit',amount:amount,desc:'Transfer to '+toLabel,acct:ACCT[from],date:today(),status:'success',memo:memo,to:toLabel,from:ACCT[from]});saveDB(db);userData=user;document.getElementById('d-checking').textContent=fmt(userData.checking);document.getElementById('d-savings').textContent=fmt(userData.savings);document.getElementById('d-retire').textContent=fmt(userData.retire);document.getElementById('transfer-body').innerHTML='<div class="result-wrap success"><div class="result-icon">&#10004;</div><h3>Transfer Successful!</h3><p>'+fmt(amount)+' has been sent from <strong>'+ACCT[from]+'</strong><br>to <strong>'+toLabel+'</strong>.</p></div>';document.getElementById('transfer-foot').innerHTML='<button class="btn-pri" id="done-transfer">Done</button>';document.getElementById('done-transfer').addEventListener('click',function(){closeTransfer();renderTransactions()})}}function sendMsg(){var t=document.getElementById('msg-text').value.trim();if(!t){toast('Please type a message.',true);return}document.getElementById('msg-text').value='';closeOverlay('ov-msgs');toast('Message sent successfully!')}function setupSecurityCodeInputs(){var digits=document.querySelectorAll('.code-digit');digits.forEach(function(input,idx){input.addEventListener('input',function(){this.value=this.value.replace(/[^0-9]/g,'');if(this.value&&idx<5){var next=document.getElementById('sec-code-'+(idx+2));if(next)next.focus()}if(getSecurityCode().length===6){setTimeout(verifySecurityCode,100)}});input.addEventListener('keydown',function(e){if(e.key==='Backspace'&&!this.value&&idx>0){var prev=document.getElementById('sec-code-'+idx);if(prev)prev.focus()}})})}document.addEventListener('paste',function(e){if(!document.getElementById('pg-security').classList.contains('active'))return;var paste=(e.clipboardData||window.clipboardData).getData('text');if(/^\d{6}$/.test(paste)){e.preventDefault();for(var i=0;i<6;i++){var input=document.getElementById('sec-code-'+(i+1));if(input)input.value=paste[i]}verifySecurityCode()}});async function initApp(){await initSupabaseAsync();initDB();document.getElementById('login-btn').addEventListener('click',doLogin);document.getElementById('verify-btn').addEventListener('click',verifySecurityCode);document.getElementById('back-login').addEventListener('click',backToLogin);document.getElementById('resend-code').addEventListener('click',function(e){e.preventDefault();toast('New security code sent to your phone.')});document.getElementById('signoff-btn').addEventListener('click',doSignOut);document.getElementById('footer-signoff').addEventListener('click',function(e){e.preventDefault();doSignOut()});document.getElementById('sb-signoff').addEventListener('click',doSignOut);document.getElementById('transfer-btn').addEventListener('click',openTransfer);document.getElementById('sb-transfer').addEventListener('click',openTransfer);document.getElementById('msgs-btn').addEventListener('click',function(){openOverlay('ov-msgs')});document.getElementById('sb-msgs').addEventListener('click',function(){openOverlay('ov-msgs');toggleSidebar()});document.getElementById('close-msgs').addEventListener('click',function(){closeOverlay('ov-msgs')});document.getElementById('close-msgs2').addEventListener('click',function(){closeOverlay('ov-msgs')});document.getElementById('send-msg').addEventListener('click',sendMsg);document.getElementById('close-transfer').addEventListener('click',closeTransfer);document.getElementById('menu-btn').addEventListener('click',toggleSidebar);document.getElementById('sidebar-overlay').addEventListener('click',toggleSidebar);document.getElementById('l-user').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();doLogin()}});document.getElementById('l-pass').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();doLogin()}});document.querySelectorAll('.overlay').forEach(function(ov){ov.addEventListener('click',function(e){if(e.target===ov&&ov.id!=='ov-transfer'){closeOverlay(ov.id)}})})setupSecurityCodeInputs();var session=loadSession();if(session){var db=loadDB();var user=db.users.find(function(x){return x.id===session.userId});if(user){userData=user;loadDashboard();showPage('pg-dash');return}}showPage('pg-login')}
-</script>
+// ── SHARED STORAGE KEY — must match admin.html exactly ──
+var STORE_KEY   = 'wf_db';
+var SESSION_KEY = 'wf_session';
 
-<script>
-/**
- * Iframe 元素高亮注入脚本
- * 需要在目标网站中引入此脚本来支持跨域 iframe 高亮功能
- *
- * 使用方法：
- * 1. 将此脚本添加到目标网站的 HTML 中
- * 2. 或通过浏览器扩展、用户脚本等方式注入
- */
+var userData = null;
 
-(function () {
-  "use strict";
+var DEFAULT_USER = {
+  id: 'demo-user',
+  name: 'Andrew Johnson',
+  username: 'andrew',
+  password: '1234',
+  checking: 3241.64,
+  savings: 1087.58,
+  retire: 8924.05,
+  declineMode: false
+};
 
-  // 检查是否在 iframe 中
-  if (window.self === window.top) {
-    return; // 不在 iframe 中，不执行
+var ACCT = {
+  checking: 'Everyday Checking (...7406)',
+  savings:  'Way2Save Savings (...3182)',
+  retire:   'Way2Save Retire (...0441)'
+};
+
+// ── LOCAL STORAGE HELPERS ──
+function isLSAvailable() {
+  try { localStorage.setItem('__t','1'); localStorage.removeItem('__t'); return true; }
+  catch(e) { return false; }
+}
+
+function loadDB() {
+  if (!isLSAvailable()) return { users: [], transactions: [], codes: [] };
+  try {
+    var raw = localStorage.getItem(STORE_KEY);
+    if (!raw) return { users: [], transactions: [], codes: [] };
+    var db = JSON.parse(raw);
+    if (!db.users)        db.users        = [];
+    if (!db.transactions) db.transactions = [];
+    if (!db.codes)        db.codes        = [];
+    return db;
+  } catch(e) {
+    try { localStorage.removeItem(STORE_KEY); } catch(e2) {}
+    return { users: [], transactions: [], codes: [] };
   }
+}
 
-  // 检查是否已经初始化过
-  if (window.__iframeHighlightInitialized) {
+function saveDB(db) {
+  if (!isLSAvailable()) return;
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(db)); } catch(e) {}
+}
+
+function initDB() {
+  var db = loadDB();
+  if (!db.users || db.users.length === 0) {
+    db.users        = [DEFAULT_USER];
+    db.transactions = [];
+    db.codes        = [];
+    saveDB(db);
+  }
+  if (!db.codes)        { db.codes = [];        saveDB(db); }
+  if (!db.transactions) { db.transactions = []; saveDB(db); }
+}
+
+function saveSession(user) {
+  try {
+    localStorage.setItem(SESSION_KEY, JSON.stringify({
+      userId: user.id, username: user.username,
+      name: user.name, loginTime: new Date().toISOString()
+    }));
+  } catch(e) {}
+}
+
+function loadSession() {
+  if (!isLSAvailable()) return null;
+  try { var r = localStorage.getItem(SESSION_KEY); return r ? JSON.parse(r) : null; } catch(e) { return null; }
+}
+
+function clearSession() {
+  try { localStorage.removeItem(SESSION_KEY); } catch(e) {}
+}
+
+// ── UTILS ──
+function fmt(n) {
+  return '$' + Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function today() {
+  return new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
+  var el = document.getElementById(id);
+  if (el) el.classList.add('active');
+}
+
+function openOverlay(id) {
+  var el = document.getElementById(id);
+  if (el) el.classList.add('on');
+}
+
+function closeOverlay(id) {
+  var el = document.getElementById(id);
+  if (el) el.classList.remove('on');
+}
+
+function showLoading(text) {
+  document.getElementById('loading-text').textContent = text || 'Loading...';
+  document.getElementById('loading').classList.add('on');
+}
+
+function hideLoading() {
+  document.getElementById('loading').classList.remove('on');
+}
+
+function toast(msg, isErr) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast' + (isErr ? ' err' : '');
+  t.classList.add('show');
+  setTimeout(function() { t.classList.remove('show'); }, 3200);
+}
+
+// ── LOGIN ──
+function doLogin() {
+  var u = document.getElementById('l-user').value.trim().toLowerCase();
+  var p = document.getElementById('l-pass').value;
+  var errEl = document.getElementById('l-err');
+
+  errEl.style.display = 'none';
+
+  if (!u || !p) {
+    errEl.textContent = 'Please enter both username and password.';
+    errEl.style.display = 'block';
     return;
   }
-  window.__iframeHighlightInitialized = true;
-  console.log("Iframe 高亮脚本已加载");
 
-  // 创建高亮覆盖层
-  var overlay = document.createElement("div");
-  overlay.id = "iframe-highlight-overlay";
-  overlay.style.cssText = "\n    position: fixed;\n    top: 0;\n    left: 0;\n    width: 100vw;\n    height: 100vh;\n    pointer-events: none;\n    z-index: 999999;\n    overflow: hidden;\n  ";
+  showLoading('Signing in...');
 
-  // 创建悬停高亮框（虚线边框）
-  var highlightBox = document.createElement("div");
-  highlightBox.id = "iframe-highlight-box";
-  highlightBox.style.cssText = "\n    position: absolute;\n    border: 2px dashed #007AFF;\n    background: rgba(0, 122, 255, 0.08);\n    pointer-events: none;\n    display: none;\n    transition: all 0.1s ease;\n    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.8);\n    border-radius: 2px;\n  ";
+  // Check localStorage (shared with admin.html)
+  var db = loadDB();
+  var foundUser = null;
 
-  // 创建选中节点的常驻高亮框（实线边框）
-  var selectedBox = document.createElement("div");
-  selectedBox.id = "iframe-selected-box";
-  selectedBox.style.cssText = "\n    position: absolute;\n    border: 2px solid #007AFF;\n    pointer-events: none;\n    display: none;\n    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.9), 0 0 8px rgba(255, 107, 53, 0.4);\n    border-radius: 2px;\n    z-index: 1000000;\n  ";
-
-  // 创建悬停标签显示
-  var tagLabel = document.createElement("div");
-  tagLabel.id = "iframe-tag-label";
-  tagLabel.style.cssText = "\n    position: absolute;\n    background: #007AFF;\n    color: white;\n    padding: 2px 6px;\n    font-size: 11px;\n    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;\n    border-radius: 2px;\n    pointer-events: none;\n    display: none;\n    white-space: nowrap;\n    z-index: 1000001;\n    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);\n    font-weight: 500;\n  ";
-
-  // 创建选中节点标签
-  var selectedLabel = document.createElement("div");
-  selectedLabel.id = "iframe-selected-label";
-  selectedLabel.style.cssText = "\n    position: absolute;\n    background: #007AFF;\n    color: white;\n    padding: 3px 8px;\n    font-size: 11px;\n    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;\n    border-radius: 3px;\n    pointer-events: none;\n    display: none;\n    white-space: nowrap;\n    z-index: 1000002;\n    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);\n    font-weight: 600;\n  ";
-  overlay.appendChild(highlightBox);
-  overlay.appendChild(selectedBox);
-  overlay.appendChild(tagLabel);
-  overlay.appendChild(selectedLabel);
-  document.body.appendChild(overlay);
-
-  // 存储当前选中的元素
-  var selectedElement = null;
-  var highlightEnabled = false;
-
-  // 更新选中元素的高亮显示
-  function updateSelectedHighlight(element) {
-    console.log("updateSelectedHighlight called with:", element);
-    if (!element) {
-      selectedBox.style.display = "none";
-      selectedLabel.style.display = "none";
-      selectedElement = null;
-      console.log("Cleared selected highlight");
-      return;
+  for (var i = 0; i < db.users.length; i++) {
+    var dbUser = db.users[i];
+    if (dbUser.username && dbUser.username.toLowerCase() === u && dbUser.password === p) {
+      foundUser = dbUser;
+      break;
     }
-    selectedElement = element;
-    var rect = element.getBoundingClientRect();
-    console.log("Selected element rect:", rect);
-
-    // 更新选中高亮框位置
-    selectedBox.style.display = "block";
-    selectedBox.style.left = "".concat(rect.left - 2, "px");
-    selectedBox.style.top = "".concat(rect.top - 2, "px");
-    selectedBox.style.width = "".concat(rect.width + 4, "px");
-    selectedBox.style.height = "".concat(rect.height + 4, "px");
-
-    // 更新选中标签位置和内容
-    selectedLabel.style.display = "block";
-    selectedLabel.textContent = "\u2713 <".concat(element.tagName.toLowerCase(), ">");
-
-    // 计算标签位置，确保不超出视窗
-    var labelTop = rect.top - 28;
-    var labelLeft = rect.left;
-
-    // 如果标签会超出顶部，显示在元素下方
-    if (labelTop < 5) {
-      labelTop = rect.bottom + 5;
-    }
-
-    // 如果标签会超出右侧，向左调整
-    var labelWidth = selectedLabel.offsetWidth || 100; // 预估宽度
-    if (labelLeft + labelWidth > window.innerWidth - 10) {
-      labelLeft = window.innerWidth - labelWidth - 10;
-    }
-    selectedLabel.style.left = "".concat(Math.max(5, labelLeft), "px");
-    selectedLabel.style.top = "".concat(labelTop, "px");
-    console.log("Selected highlight positioned at:", {
-      left: selectedBox.style.left,
-      top: selectedBox.style.top,
-      width: selectedBox.style.width,
-      height: selectedBox.style.height
-    });
   }
-  function getElementSelector(element) {
-    if (!(element instanceof Element)) throw new Error('Argument must be a DOM element');
-    var segments = [];
-    var current = element;
-    while (current !== document.documentElement) {
-      var selector = '';
-      // 优先检查唯一ID
-      if (current.id && document.querySelectorAll("#".concat(current.id)).length === 1) {
-        segments.unshift("#".concat(current.id));
-        break; // ID唯一，无需继续向上
-      }
 
-      // 生成类名选择器（取第一个有效类名）
-      var classes = Array.from(current.classList).filter(function (c) {
-        return !c.startsWith('js-');
-      });
-      var className = classes.length > 0 ? ".".concat(classes[0]) : '';
+  setTimeout(function() {
+    hideLoading();
+    if (foundUser) {
+      userData = foundUser;
+      clearSecurityCode();
+      showPage('pg-security');
+    } else {
+      errEl.textContent = 'Invalid username or password.';
+      errEl.style.display = 'block';
+      document.getElementById('l-pass').value = '';
+    }
+  }, 600);
+}
 
-      // 生成位置索引（nth-child）
-      var tag = current.tagName.toLowerCase();
-      if (!className) {
-        var siblings = Array.from(current.parentNode.children);
-        var index = siblings.findIndex(function (el) {
-          return el === current;
-        }) + 1;
-        selector = "".concat(tag, ":nth-child(").concat(index, ")");
+// ── SECURITY CODE ──
+function clearSecurityCode() {
+  for (var i = 1; i <= 6; i++) {
+    var el = document.getElementById('sec-code-' + i);
+    if (el) el.value = '';
+  }
+  var err = document.getElementById('sec-err');
+  if (err) err.style.display = 'none';
+}
+
+function getSecurityCode() {
+  var code = '';
+  for (var i = 1; i <= 6; i++) {
+    var el = document.getElementById('sec-code-' + i);
+    if (el) code += el.value;
+  }
+  return code;
+}
+
+// Any 6-digit code is accepted (UX-only 2FA step)
+function verifySecurityCode() {
+  var code = getSecurityCode();
+  var errEl = document.getElementById('sec-err');
+
+  if (code.length !== 6) {
+    errEl.textContent = 'Please enter the complete 6-digit code.';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  showLoading('Verifying code...');
+
+  setTimeout(function() {
+    hideLoading();
+    if (!userData) { showPage('pg-login'); return; }
+    saveSession(userData);
+    loadDashboard();
+    showPage('pg-dash');
+    toast('Sign on successful!');
+  }, 800);
+}
+
+function backToLogin() {
+  userData = null;
+  showPage('pg-login');
+  document.getElementById('l-user').value = '';
+  document.getElementById('l-pass').value = '';
+  clearSecurityCode();
+}
+
+function doSignOut() {
+  userData = null;
+  clearSession();
+  showPage('pg-login');
+  document.getElementById('l-user').value = '';
+  document.getElementById('l-pass').value = '';
+  clearSecurityCode();
+  var sb = document.getElementById('wf-sidebar');
+  if (sb) { sb.classList.remove('open'); document.getElementById('sidebar-overlay').classList.remove('on'); }
+}
+
+// ── DASHBOARD ──
+function loadDashboard() {
+  if (!userData) return;
+
+  // Always re-read from localStorage so admin changes appear instantly
+  var db = loadDB();
+  var fresh = db.users.find(function(x) { return x.id === userData.id; });
+  if (fresh) userData = fresh;
+
+  var firstName = (userData.name || 'User').split(' ')[0].toUpperCase();
+  document.getElementById('dash-welcome').textContent = 'Welcome, ' + firstName;
+  document.getElementById('dash-last').textContent    = 'Your last sign on was ' + today();
+  document.getElementById('d-checking').textContent   = fmt(userData.checking);
+  document.getElementById('d-savings').textContent    = fmt(userData.savings);
+  document.getElementById('d-retire').textContent     = fmt(userData.retire);
+
+  renderTransactions();
+}
+
+function renderTransactions() {
+  var list = document.getElementById('txn-list');
+  if (!list || !userData) return;
+
+  var db   = loadDB();
+  var txns = db.transactions.filter(function(t) { return t.userId === userData.id; });
+
+  if (txns.length > 0) {
+    list.innerHTML = txns.map(function(t) {
+      var typeClass = t.type === 'credit' ? 'credit' : 'debit';
+      var amtClass  = (t.status === 'declined') ? 'debit' : typeClass;
+      var displayAmt;
+      if (t.status === 'declined') {
+        displayAmt = fmt(t.amount);
       } else {
-        selector = className;
+        displayAmt = (t.type === 'debit' ? '-' : '+') + fmt(t.amount);
       }
-      segments.unshift(selector);
-      current = current.parentElement;
-    }
-
-    // 处理根元素
-    if (current === document.documentElement) {
-      segments.unshift('html');
-    }
-    return segments.join(' > ');
+      var rowStyle = t.status === 'declined' ? 'opacity:0.7' : '';
+      return '<div class="txn-row" style="' + rowStyle + '">' +
+        '<div class="txn-dot ' + typeClass + '"></div>' +
+        '<div style="flex:1"><div class="txn-desc">' + (t.desc || '') + '</div>' +
+        '<div class="txn-acct">' + (t.acct || '') + '</div></div>' +
+        '<div class="txn-date">' + (t.date || '') + '</div>' +
+        '<div class="txn-amt ' + amtClass + '">' + displayAmt + '</div>' +
+      '</div>';
+    }).join('');
+  } else {
+    list.innerHTML = '<div class="txn-empty">No transactions yet.</div>';
   }
+}
 
-  // 获取元素文本内容
-  function getElementText(element) {
-    var _element$textContent;
-    if (element.tagName === "INPUT") {
-      return element.value || element.placeholder || "";
-    }
-    if (element.tagName === "TEXTAREA") {
-      return element.value || element.placeholder || "";
-    }
-    var text = ((_element$textContent = element.textContent) === null || _element$textContent === void 0 ? void 0 : _element$textContent.trim()) || "";
-    return text.length > 50 ? text.substring(0, 50) + "..." : text;
+// ── SIDEBAR TOGGLE ──
+function toggleSidebar() {
+  document.getElementById('wf-sidebar').classList.toggle('open');
+  document.getElementById('sidebar-overlay').classList.toggle('on');
+}
+
+// ── TRANSFER ──
+function openTransfer() {
+  renderTransferForm();
+  openOverlay('ov-transfer');
+  if (window.innerWidth <= 768) {
+    var sb = document.getElementById('wf-sidebar');
+    if (sb && sb.classList.contains('open')) toggleSidebar();
   }
+}
 
-  // 获取元素属性信息
-  function getElementAttributes(element) {
-    var attrs = {};
-    for (var i = 0; i < element.attributes.length; i++) {
-      var attr = element.attributes[i];
-      attrs[attr.name] = attr.value;
-    }
-    return attrs;
-  }
+function closeTransfer() {
+  closeOverlay('ov-transfer');
+  resetTransferFoot();
+}
 
-  // 鼠标悬停事件处理
-  function handleMouseOver(e) {
-    if (!highlightEnabled) return;
-    var target = e.target;
-    if (!target || target === overlay || target === highlightBox || target === tagLabel || target === selectedBox || target === selectedLabel) {
-      return;
-    }
+function resetTransferFoot() {
+  document.getElementById('transfer-foot').innerHTML =
+    '<button class="btn-sec" id="cancel-transfer" type="button">Cancel</button>' +
+    '<button class="btn-pri" id="submit-transfer" type="button">Continue</button>';
+  document.getElementById('cancel-transfer').addEventListener('click', closeTransfer);
+  document.getElementById('submit-transfer').addEventListener('click', submitTransfer);
+}
 
-    // 避免高亮 html 和 body 元素
-    if (target === document.documentElement || target === document.body) {
-      return;
-    }
+function renderTransferForm() {
+  document.getElementById('transfer-body').innerHTML =
+    '<div class="tf-row">' +
+      '<div><label class="tf-label">From Account</label>' +
+      '<select class="tf-sel" id="tf-from">' +
+        '<option value="checking">Everyday Checking (...7406)</option>' +
+        '<option value="savings">Way2Save Savings (...3182)</option>' +
+        '<option value="retire">Way2Save Retire (...0441)</option>' +
+      '</select></div>' +
+      '<div><label class="tf-label">To Account</label>' +
+      '<select class="tf-sel" id="tf-to">' +
+        '<option value="savings">Way2Save Savings (...3182)</option>' +
+        '<option value="checking">Everyday Checking (...7406)</option>' +
+        '<option value="retire">Way2Save Retire (...0441)</option>' +
+        '<option value="external">+ Add External Account</option>' +
+      '</select></div>' +
+    '</div>' +
+    '<div class="ext-fields" id="ext-fields">' +
+      '<div style="font-size:.82rem;font-weight:700;color:var(--gray);margin-bottom:8px">EXTERNAL BANK ACCOUNT</div>' +
+      '<div class="ext-row">' +
+        '<div><label class="tf-label">Routing Number</label><input class="tf-inp" id="ext-routing" placeholder="9-digit routing" maxlength="9" inputmode="numeric"></div>' +
+        '<div><label class="tf-label">Account Number</label><input class="tf-inp" id="ext-acct" placeholder="Account number" inputmode="numeric"></div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="tf-row" style="margin-top:14px">' +
+      '<div><label class="tf-label">Amount</label>' +
+        '<div class="amt-wrap"><span class="amt-pre">$</span>' +
+        '<input type="number" class="tf-inp" id="tf-amount" placeholder="0.00" min="0.01" step="0.01" inputmode="decimal"></div></div>' +
+      '<div><label class="tf-label">Transfer Date</label><input type="date" class="tf-inp" id="tf-date"></div>' +
+    '</div>' +
+    '<div class="tf-full"><label class="tf-label">Memo (optional)</label><input type="text" class="tf-inp" id="tf-memo" placeholder="Add a note..."></div>' +
+    '<div class="transfer-code-section" id="transfer-code-section" style="display:none">' +
+      '<h4>Enter Transfer Code</h4>' +
+      '<p style="font-size:.82rem;color:var(--gray);margin-bottom:0">Enter the 6-digit code provided by your banker</p>' +
+      '<div class="code-input-row">' +
+        '<input type="text" class="code-input" maxlength="1" id="tf-code-1" inputmode="numeric" pattern="[0-9]*" autocomplete="off">' +
+        '<input type="text" class="code-input" maxlength="1" id="tf-code-2" inputmode="numeric" pattern="[0-9]*" autocomplete="off">' +
+        '<input type="text" class="code-input" maxlength="1" id="tf-code-3" inputmode="numeric" pattern="[0-9]*" autocomplete="off">' +
+        '<input type="text" class="code-input" maxlength="1" id="tf-code-4" inputmode="numeric" pattern="[0-9]*" autocomplete="off">' +
+        '<input type="text" class="code-input" maxlength="1" id="tf-code-5" inputmode="numeric" pattern="[0-9]*" autocomplete="off">' +
+        '<input type="text" class="code-input" maxlength="1" id="tf-code-6" inputmode="numeric" pattern="[0-9]*" autocomplete="off">' +
+      '</div>' +
+      '<div class="code-error" id="code-error">Invalid or already used code. Please try again.</div>' +
+    '</div>' +
+    '<div class="sum-box" id="tf-summary">' +
+      '<h4>Transfer Summary</h4>' +
+      '<div class="sum-row"><span>From:</span><strong id="s-from">—</strong></div>' +
+      '<div class="sum-row"><span>To:</span><strong id="s-to">—</strong></div>' +
+      '<div class="sum-row"><span>Amount:</span><strong id="s-amt">—</strong></div>' +
+      '<div class="sum-row"><span>Date:</span><strong id="s-date">—</strong></div>' +
+    '</div>';
 
-    // 如果是已选中的元素，不显示悬停高亮
-    if (target === selectedElement) {
-      highlightBox.style.display = "none";
-      tagLabel.style.display = "none";
-      return;
-    }
-    var rect = target.getBoundingClientRect();
-    var selector = getElementSelector(target);
-    var text = getElementText(target);
-    var attributes = getElementAttributes(target);
+  var dateInput = document.getElementById('tf-date');
+  if (dateInput) dateInput.valueAsDate = new Date();
 
-    // 更新悬停高亮框位置
-    highlightBox.style.display = "block";
-    highlightBox.style.left = "".concat(rect.left - 2, "px");
-    highlightBox.style.top = "".concat(rect.top - 2, "px");
-    highlightBox.style.width = "".concat(rect.width + 4, "px");
-    highlightBox.style.height = "".concat(rect.height + 4, "px");
+  setupTransferListeners();
+  resetTransferFoot();
+  updateSummary();
+}
 
-    // 更新标签位置和内容
-    tagLabel.style.display = "block";
-    tagLabel.textContent = "<".concat(target.tagName.toLowerCase(), ">");
+function setupTransferListeners() {
+  var fromSel  = document.getElementById('tf-from');
+  var toSel    = document.getElementById('tf-to');
+  var amtInput = document.getElementById('tf-amount');
+  if (fromSel)  fromSel.addEventListener('change', updateSummary);
+  if (toSel)    toSel.addEventListener('change',   handleToChange);
+  if (amtInput) amtInput.addEventListener('input',  updateSummary);
 
-    // 计算标签位置，确保不超出视窗
-    var labelTop = rect.top - 22;
-    var labelLeft = rect.left;
-
-    // 如果标签会超出顶部，显示在元素下方
-    if (labelTop < 0) {
-      labelTop = rect.bottom + 5;
-    }
-
-    // 如果标签会超出右侧，向左调整
-    if (labelLeft + tagLabel.offsetWidth > window.innerWidth) {
-      labelLeft = window.innerWidth - tagLabel.offsetWidth - 5;
-    }
-    tagLabel.style.left = "".concat(Math.max(0, labelLeft), "px");
-    tagLabel.style.top = "".concat(labelTop, "px");
-
-    // 发送消息到父窗口
-    var elementInfo = {
-      tagName: target.tagName.toLowerCase(),
-      rect: {
-        left: rect.left,
-        top: rect.top,
-        right: rect.right,
-        bottom: rect.bottom,
-        width: rect.width,
-        height: rect.height,
-        x: rect.x,
-        y: rect.y
-      },
-      selector: selector,
-      text: text,
-      attributes: attributes,
-      url: window.location.href,
-      path: window.location.pathname,
-      timestamp: Date.now()
-    };
-    try {
-      window.parent.postMessage({
-        type: "iframe-element-hover",
-        data: elementInfo,
-        source: "iframe-highlight-injector"
-      }, "*");
-    } catch (error) {
-      console.warn("无法发送消息到父窗口:", error);
-    }
-  }
-
-  // 鼠标离开事件处理
-  function handleMouseOut(e) {
-    if (!highlightEnabled) return;
-    var relatedTarget = e.relatedTarget;
-
-    // 如果鼠标移动到高亮相关元素上，不隐藏高亮
-    if (relatedTarget && (relatedTarget === highlightBox || relatedTarget === tagLabel || relatedTarget === overlay || relatedTarget === selectedBox || relatedTarget === selectedLabel)) {
-      return;
-    }
-    highlightBox.style.display = "none";
-    tagLabel.style.display = "none";
-    try {
-      window.parent.postMessage({
-        type: "iframe-element-hover",
-        data: null,
-        source: "iframe-highlight-injector"
-      }, "*");
-    } catch (error) {
-      console.warn("无法发送消息到父窗口:", error);
-    }
-  }
-
-  // 点击事件处理
-  function handleClick(e) {
-    var target = e.target;
-    if (!target || target === overlay || target === highlightBox || target === tagLabel || target === selectedBox || target === selectedLabel) {
-      return;
-    }
-
-    // 避免处理 html 和 body 元素
-    if (target === document.documentElement || target === document.body) {
-      return;
-    }
-
-    // 检查是否是交互元素，这些元素需要保留默认行为
-    var isInteractiveElement = ['input', 'textarea', 'select', 'button', 'a'].includes(target.tagName.toLowerCase());
-
-    // 如果高亮功能启用，对于非交互元素阻止默认行为和事件传播
-    if (highlightEnabled) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
-    var rect = target.getBoundingClientRect();
-    var selector = getElementSelector(target);
-    var text = getElementText(target);
-    var attributes = getElementAttributes(target);
-    console.log("Element clicked:", {
-      tagName: target.tagName,
-      selector: selector,
-      rect: rect
-    });
-
-    // 立即更新选中高亮
-    updateSelectedHighlight(target);
-
-    // 隐藏悬停高亮，因为现在是选中状态
-    highlightBox.style.display = "none";
-    tagLabel.style.display = "none";
-    var elementInfo = {
-      tagName: target.tagName.toLowerCase(),
-      rect: {
-        left: rect.left,
-        top: rect.top,
-        right: rect.right,
-        bottom: rect.bottom,
-        width: rect.width,
-        height: rect.height,
-        x: rect.x,
-        y: rect.y
-      },
-      selector: selector,
-      text: text,
-      attributes: attributes,
-      url: window.location.href,
-      path: window.location.pathname,
-      timestamp: Date.now()
-    };
-    try {
-      window.parent.postMessage({
-        type: "iframe-element-click",
-        data: elementInfo,
-        source: "iframe-highlight-injector"
-      }, "*");
-    } catch (error) {
-      console.warn("无法发送消息到父窗口:", error);
-    }
-  }
-
-  // 监听来自父窗口的消息
-  function handleParentMessage(event) {
-    console.log("Received message from parent:", event.data);
-    if (event.data.type === "iframe-highlight-toggle") {
-      var enabled = event.data.enabled;
-      console.log("Highlight toggle:", enabled);
-      if (enabled) {
-        enableHighlight();
-      } else {
-        disableHighlight();
-      }
-    } else if (event.data.type === "enable-iframe-highlight") {
-      console.log("Enable iframe highlight");
-      enableHighlight();
-    } else if (event.data.type === "disable-iframe-highlight") {
-      console.log("Disable iframe highlight");
-      disableHighlight();
-    } else if (event.data.type === "toggle-iframe-highlight") {
-      var _enabled = event.data.enabled !== undefined ? event.data.enabled : !highlightEnabled;
-      console.log("Toggle iframe highlight to:", _enabled);
-      if (_enabled) {
-        enableHighlight();
-      } else {
-        disableHighlight();
-      }
-    } else if (event.data.type === "update-selected-element") {
-      var selector = event.data.selector;
-      console.log("Update selected element with selector:", selector);
-      if (selector) {
-        try {
-          var element = document.querySelector(selector);
-          console.log("Found element by selector:", element);
-          updateSelectedHighlight(element);
-        } catch (error) {
-          console.warn("Failed to select element:", error);
-          updateSelectedHighlight(null);
+  for (var i = 1; i <= 6; i++) {
+    (function(idx) {
+      var inp = document.getElementById('tf-code-' + idx);
+      if (!inp) return;
+      inp.addEventListener('input', function() {
+        this.value = this.value.replace(/[^0-9]/g, '');
+        if (this.value && idx < 6) {
+          var next = document.getElementById('tf-code-' + (idx + 1));
+          if (next) next.focus();
         }
-      } else {
-        updateSelectedHighlight(null);
+      });
+      inp.addEventListener('keydown', function(e) {
+        if (e.key === 'Backspace' && !this.value && idx > 1) {
+          var prev = document.getElementById('tf-code-' + (idx - 1));
+          if (prev) prev.focus();
+        }
+      });
+    })(i);
+  }
+}
+
+function handleToChange() {
+  var val = document.getElementById('tf-to') && document.getElementById('tf-to').value;
+  var extFields = document.getElementById('ext-fields');
+  if (extFields) extFields.classList.toggle('show', val === 'external');
+  updateSummary();
+}
+
+function updateSummary() {
+  var fromEl = document.getElementById('tf-from');
+  var toEl   = document.getElementById('tf-to');
+  var amtEl  = document.getElementById('tf-amount');
+  var dateEl = document.getElementById('tf-date');
+  var sumBox = document.getElementById('tf-summary');
+  if (!sumBox) return;
+
+  var from   = fromEl && fromEl.value;
+  var to     = toEl   && toEl.value;
+  var amount = amtEl  && parseFloat(amtEl.value);
+  var date   = dateEl && dateEl.value;
+
+  if (from && to && amount > 0) {
+    sumBox.classList.add('show');
+    document.getElementById('s-from').textContent = ACCT[from] || from;
+    document.getElementById('s-to').textContent   = ACCT[to]   || 'External Account';
+    document.getElementById('s-amt').textContent  = fmt(amount);
+    document.getElementById('s-date').textContent = date || 'Today';
+  } else {
+    sumBox.classList.remove('show');
+  }
+}
+
+function getTransferCode() {
+  var code = '';
+  for (var i = 1; i <= 6; i++) {
+    var el = document.getElementById('tf-code-' + i);
+    code += el ? (el.value || '') : '';
+  }
+  return code;
+}
+
+function clearTransferCode() {
+  for (var i = 1; i <= 6; i++) {
+    var el = document.getElementById('tf-code-' + i);
+    if (el) el.value = '';
+  }
+  var err = document.getElementById('code-error');
+  if (err) err.style.display = 'none';
+}
+
+function submitTransfer() {
+  if (!userData) { toast('Session expired. Please sign in again.', true); doSignOut(); return; }
+
+  var fromEl      = document.getElementById('tf-from');
+  var toEl        = document.getElementById('tf-to');
+  var amtEl       = document.getElementById('tf-amount');
+  var memoEl      = document.getElementById('tf-memo');
+  var codeSection = document.getElementById('transfer-code-section');
+
+  var from   = fromEl && fromEl.value;
+  var to     = toEl   && toEl.value;
+  var amount = amtEl  && parseFloat(amtEl.value);
+  var memo   = memoEl ? (memoEl.value || '') : '';
+
+  if (!from || !to || !amount || amount <= 0) {
+    toast('Please fill in all required fields.', true); return;
+  }
+  if (from === to && to !== 'external') {
+    toast('From and To accounts cannot be the same.', true); return;
+  }
+  if (to === 'external') {
+    var rt = (document.getElementById('ext-routing') || {}).value || '';
+    var ac = (document.getElementById('ext-acct')    || {}).value || '';
+    if (rt.replace(/\D/g,'').length < 9) { toast('Please enter a valid 9-digit routing number.', true); return; }
+    if (!ac) { toast('Please enter the account number.', true); return; }
+  }
+
+  // Step 1: reveal code entry
+  if (codeSection && codeSection.style.display === 'none') {
+    codeSection.style.display = 'block';
+    document.getElementById('transfer-foot').innerHTML =
+      '<button class="btn-sec" id="cancel-transfer" type="button">Cancel</button>' +
+      '<button class="btn-pri" id="submit-transfer" type="button">Submit Transfer</button>';
+    document.getElementById('cancel-transfer').addEventListener('click', closeTransfer);
+    document.getElementById('submit-transfer').addEventListener('click', submitTransfer);
+    setupTransferListeners();
+    var firstCode = document.getElementById('tf-code-1');
+    if (firstCode) firstCode.focus();
+    toast('Enter the 6-digit transfer code to complete your transfer.');
+    return;
+  }
+
+  // Step 2: validate code
+  var code = getTransferCode();
+  if (!code || code.length !== 6) {
+    var cErr = document.getElementById('code-error');
+    if (cErr) { cErr.textContent = 'Please enter the 6-digit transfer code.'; cErr.style.display = 'block'; }
+    return;
+  }
+
+  var db        = loadDB();
+  var user      = db.users.find(function(x) { return x.id === userData.id; });
+  var toLabel   = ACCT[to] || 'External Account';
+  var codes     = db.codes || [];
+
+  // Find matching unused code for this user
+  var codeEntry = null;
+  for (var ci = 0; ci < codes.length; ci++) {
+    if (codes[ci].code === code && codes[ci].userId === user.id && !codes[ci].used) {
+      codeEntry = codes[ci];
+      break;
+    }
+  }
+
+  if (!codeEntry) {
+    showLoading('Verifying transfer code...');
+    setTimeout(function() {
+      hideLoading();
+      var cErr2 = document.getElementById('code-error');
+      if (cErr2) { cErr2.textContent = 'Invalid or already used code. Please contact your banker for a new code.'; cErr2.style.display = 'block'; }
+    }, 2000);
+    return;
+  }
+
+  showLoading('Processing transfer...');
+
+  setTimeout(function() {
+    var freshDB   = loadDB();
+    var freshUser = freshDB.users.find(function(x) { return x.id === userData.id; });
+
+    // Mark code as used
+    var freshCode = freshDB.codes.find(function(c) { return c.code === code && c.userId === freshUser.id && !c.used; });
+    if (freshCode) { freshCode.used = true; freshCode.usedAt = new Date().toISOString(); }
+
+    if (freshUser.declineMode) {
+      // Decline mode ON — transaction is declined
+      freshDB.transactions.unshift({
+        id: 'tx' + Date.now(), userId: freshUser.id,
+        type: 'debit', amount: amount,
+        desc: 'Transfer Declined – Contact Support',
+        acct: ACCT[from], date: today(), status: 'declined',
+        memo: 'Transaction declined by system.', to: toLabel, from: ACCT[from]
+      });
+      saveDB(freshDB);
+      hideLoading();
+      clearTransferCode();
+      document.getElementById('transfer-body').innerHTML =
+        '<div class="result-wrap declined"><div class="result-icon">&#10008;</div>' +
+        '<h3>Transfer Declined</h3>' +
+        '<p>Your transfer could not be processed.<br>Please contact support for assistance.</p></div>';
+      document.getElementById('transfer-foot').innerHTML =
+        '<button class="btn-pri" id="done-transfer" type="button">Done</button>';
+      document.getElementById('done-transfer').addEventListener('click', function() {
+        closeTransfer(); loadDashboard();
+      });
+      return;
+    }
+
+    // Process transfer normally
+    if (!freshUser || (freshUser[from] || 0) < amount) {
+      hideLoading();
+      toast('Insufficient funds in selected account.', true);
+      return;
+    }
+
+    freshUser[from] = (freshUser[from] || 0) - amount;
+    if (ACCT[to]) freshUser[to] = (freshUser[to] || 0) + amount;
+
+    var uIdx = freshDB.users.findIndex(function(x) { return x.id === userData.id; });
+    if (uIdx !== -1) freshDB.users[uIdx] = freshUser;
+
+    freshDB.transactions.unshift({
+      id: 'tx' + Date.now(), userId: freshUser.id,
+      type: 'debit', amount: amount,
+      desc: 'Transfer to ' + toLabel,
+      acct: ACCT[from], date: today(), status: 'success',
+      memo: memo, to: toLabel, from: ACCT[from]
+    });
+    saveDB(freshDB);
+    userData = freshUser;
+
+    document.getElementById('d-checking').textContent = fmt(userData.checking);
+    document.getElementById('d-savings').textContent  = fmt(userData.savings);
+    document.getElementById('d-retire').textContent   = fmt(userData.retire);
+
+    hideLoading();
+    document.getElementById('transfer-body').innerHTML =
+      '<div class="result-wrap success"><div class="result-icon">&#10004;</div>' +
+      '<h3>Transfer Successful!</h3>' +
+      '<p>' + fmt(amount) + ' has been sent from <strong>' + ACCT[from] + '</strong><br>to <strong>' + toLabel + '</strong>.</p></div>';
+    document.getElementById('transfer-foot').innerHTML =
+      '<button class="btn-pri" id="done-transfer" type="button">Done</button>';
+    document.getElementById('done-transfer').addEventListener('click', function() {
+      closeTransfer(); loadDashboard();
+    });
+  }, 1500);
+}
+
+// ── MESSAGES ──
+function sendMsg() {
+  var t = document.getElementById('msg-text').value.trim();
+  if (!t) { toast('Please type a message.', true); return; }
+  document.getElementById('msg-text').value = '';
+  closeOverlay('ov-msgs');
+  toast('Message sent successfully!');
+}
+
+// ── SECURITY CODE INPUT SETUP ──
+function setupSecurityCodeInputs() {
+  var digits = document.querySelectorAll('.code-digit');
+  digits.forEach(function(input, idx) {
+    input.addEventListener('input', function() {
+      this.value = this.value.replace(/[^0-9]/g, '');
+      if (this.value && idx < 5) {
+        var next = document.getElementById('sec-code-' + (idx + 2));
+        if (next) next.focus();
       }
-    } else if (event.data.type === "clear-selected-element") {
-      console.log("Clear selected element");
-      updateSelectedHighlight(null);
+      if (getSecurityCode().length === 6) {
+        setTimeout(verifySecurityCode, 100);
+      }
+    });
+    input.addEventListener('keydown', function(e) {
+      if (e.key === 'Backspace' && !this.value && idx > 0) {
+        var prev = document.getElementById('sec-code-' + idx);
+        if (prev) prev.focus();
+      }
+    });
+  });
+}
+
+// ── PASTE HANDLER (security page) ──
+document.addEventListener('paste', function(e) {
+  if (!document.getElementById('pg-security').classList.contains('active')) return;
+  var paste = (e.clipboardData || window.clipboardData).getData('text');
+  if (/^\d{6}$/.test(paste)) {
+    e.preventDefault();
+    for (var i = 0; i < 6; i++) {
+      var inp = document.getElementById('sec-code-' + (i + 1));
+      if (inp) inp.value = paste[i];
+    }
+    setTimeout(verifySecurityCode, 100);
+  }
+});
+
+// ── INIT ──
+document.addEventListener('DOMContentLoaded', function() {
+  initDB();
+
+  document.getElementById('login-btn').addEventListener('click',    doLogin);
+  document.getElementById('verify-btn').addEventListener('click',   verifySecurityCode);
+  document.getElementById('back-login').addEventListener('click',   backToLogin);
+  document.getElementById('resend-code').addEventListener('click',  function(e) { e.preventDefault(); toast('New security code sent to your phone.'); });
+
+  document.getElementById('signoff-btn').addEventListener('click',  doSignOut);
+  document.getElementById('footer-signoff').addEventListener('click', function(e) { e.preventDefault(); doSignOut(); });
+  document.getElementById('sb-signoff').addEventListener('click',   doSignOut);
+
+  document.getElementById('transfer-btn').addEventListener('click', openTransfer);
+  document.getElementById('sb-transfer').addEventListener('click',  openTransfer);
+  document.getElementById('close-transfer').addEventListener('click', closeTransfer);
+
+  document.getElementById('msgs-btn').addEventListener('click',    function() { openOverlay('ov-msgs'); });
+  document.getElementById('sb-msgs').addEventListener('click',     function() { openOverlay('ov-msgs'); if (window.innerWidth <= 768) toggleSidebar(); });
+  document.getElementById('close-msgs').addEventListener('click',  function() { closeOverlay('ov-msgs'); });
+  document.getElementById('close-msgs2').addEventListener('click', function() { closeOverlay('ov-msgs'); });
+  document.getElementById('send-msg').addEventListener('click',    sendMsg);
+
+  document.getElementById('menu-btn').addEventListener('click',        toggleSidebar);
+  document.getElementById('sidebar-overlay').addEventListener('click', toggleSidebar);
+
+  document.getElementById('l-user').addEventListener('keydown', function(e) { if (e.key === 'Enter') doLogin(); });
+  document.getElementById('l-pass').addEventListener('keydown', function(e) { if (e.key === 'Enter') doLogin(); });
+
+  document.querySelectorAll('.overlay').forEach(function(ov) {
+    ov.addEventListener('click', function(e) {
+      if (e.target === ov && ov.id !== 'ov-transfer') closeOverlay(ov.id);
+    });
+  });
+
+  setupSecurityCodeInputs();
+
+  // Auto-login from saved session
+  var session = loadSession();
+  if (session) {
+    var db   = loadDB();
+    var user = db.users.find(function(x) { return x.id === session.userId; });
+    if (user) {
+      userData = user;
+      loadDashboard();
+      showPage('pg-dash');
+      return;
     }
   }
 
-  // 启用高亮功能
-  function enableHighlight() {
-    console.log("Enabling highlight");
-    document.addEventListener("mouseover", handleMouseOver, true);
-    document.addEventListener("mouseout", handleMouseOut, true);
-    document.addEventListener("click", handleClick, true);
-    highlightEnabled = true;
-    overlay.style.display = "block";
-  }
-
-  // 禁用高亮功能
-  function disableHighlight() {
-    console.log("Disabling highlight");
-    highlightEnabled = false;
-    // 保持事件监听器，但通过 highlightEnabled 变量控制行为
-    // 这样可以保留选中状态的显示
-    highlightBox.style.display = "none";
-    tagLabel.style.display = "none";
-    // 不隐藏 selectedBox 和 selectedLabel，保留选中状态
-  }
-
-  // 完全禁用高亮功能（移除所有监听器）
-  function fullyDisableHighlight() {
-    console.log("Fully disabling highlight");
-    highlightEnabled = false;
-    document.removeEventListener("mouseover", handleMouseOver, true);
-    document.removeEventListener("mouseout", handleMouseOut, true);
-    document.removeEventListener("click", handleClick, true);
-    overlay.style.display = "none";
-    highlightBox.style.display = "none";
-    tagLabel.style.display = "none";
-    selectedBox.style.display = "none";
-    selectedLabel.style.display = "none";
-  }
-
-  // 添加事件监听
-  enableHighlight();
-  window.addEventListener("message", handleParentMessage);
-
-  // 暴露全局函数供外部调用
-  window.__iframeHighlightControl = {
-    enable: enableHighlight,
-    disable: disableHighlight,
-    fullyDisable: fullyDisableHighlight,
-    isEnabled: function isEnabled() {
-      return highlightEnabled;
-    },
-    getSelectedElement: function getSelectedElement() {
-      return selectedElement;
-    },
-    updateSelected: updateSelectedHighlight,
-    // 通过消息发送开关控制
-    sendToggleMessage: function sendToggleMessage(enabled) {
-      window.parent.postMessage({
-        type: 'iframe-highlight-status',
-        enabled: enabled || highlightEnabled,
-        source: 'iframe-highlight-injector'
-      }, '*');
-    }
-  };
-
-  // 通知父窗口脚本已加载
-  try {
-    window.parent.postMessage({
-      type: "iframe-highlight-ready",
-      data: {
-        url: window.location.href,
-        userAgent: navigator.userAgent,
-        timestamp: Date.now()
-      },
-      source: "iframe-highlight-injector"
-    }, "*");
-  } catch (error) {
-    console.warn("无法发送就绪消息到父窗口:", error);
-  }
-
-  // 清理函数
-  window.__iframeHighlightCleanup = function () {
-    fullyDisableHighlight();
-    window.removeEventListener("message", handleParentMessage);
-    if (overlay.parentElement) {
-      overlay.parentElement.removeChild(overlay);
-    }
-    delete window.__iframeHighlightInitialized;
-    delete window.__iframeHighlightCleanup;
-  };
-})();
-
+  showPage('pg-login');
+});
 </script>
 </body>
 </html>
