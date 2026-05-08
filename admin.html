@@ -806,30 +806,52 @@ async function addTransaction() {
       to_account: account
     };
 
-    const { error } = await supabaseClient.from('transactions').insert([newTxn]);
-    if (error) throw error;
+    const { error: txnError } = await supabaseClient.from('transactions').insert([newTxn]);
+    if (txnError) throw txnError;
 
-    // Update balance for credit/debit transactions
+    // Update user balance in Supabase directly
     if (status === 'success') {
-      const uIdx = users.findIndex(u => u.id === userId);
-      if (uIdx !== -1) {
-        const updates = {};
-        if (type === 'credit') {
-          if (account.includes('Checking')) updates.checking = (users[uIdx].checking || 0) + amount;
-          else if (account.includes('Savings')) updates.savings = (users[uIdx].savings || 0) + amount;
-          else if (account.includes('Retire')) updates.retire = (users[uIdx].retire || 0) + amount;
-        } else {
-          if (account.includes('Checking')) updates.checking = Math.max(0, (users[uIdx].checking || 0) - amount);
-          else if (account.includes('Savings')) updates.savings = Math.max(0, (users[uIdx].savings || 0) - amount);
-          else if (account.includes('Retire')) updates.retire = Math.max(0, (users[uIdx].retire || 0) - amount);
-        }
-        if (Object.keys(updates).length > 0) {
-          await supabaseClient.from('users').update(updates).eq('id', userId);
-        }
+      // First, get the current user data
+      const { data: targetUser, error: userError } = await supabaseClient
+        .from('users')
+        .select('*')
+        .eq('id', userId)
+        .single();
+
+      if (userError) throw userError;
+
+      let newChecking = targetUser.checking || 0;
+      let newSavings = targetUser.savings || 0;
+      let newRetire = targetUser.retire || 0;
+
+      // Determine which field to update based on account
+      let updateField = null;
+      if (account.includes('Checking')) updateField = 'checking';
+      else if (account.includes('Savings')) updateField = 'savings';
+      else if (account.includes('Retire')) updateField = 'retire';
+
+      if (updateField && type === 'credit') {
+        // Add to the balance
+        const updateObj = {};
+        updateObj[updateField] = (targetUser[updateField] || 0) + amount;
+        const { error: updateError } = await supabaseClient
+          .from('users')
+          .update(updateObj)
+          .eq('id', userId);
+        if (updateError) throw updateError;
+      } else if (updateField && type === 'debit') {
+        // Subtract from the balance (but don't go negative)
+        const updateObj = {};
+        updateObj[updateField] = Math.max(0, (targetUser[updateField] || 0) - amount);
+        const { error: updateError } = await supabaseClient
+          .from('users')
+          .update(updateObj)
+          .eq('id', userId);
+        if (updateError) throw updateError;
       }
     }
 
-    // Reload data
+    // Reload all data from Supabase
     await loadData();
     document.getElementById('add-txn-form').reset();
     document.getElementById('txn-date').valueAsDate = new Date();
